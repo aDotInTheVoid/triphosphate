@@ -11,6 +11,8 @@ cd ..
 rm -rf ./lexicons/
 mv atproto/lexicons/ ./lexicons/
 
+curl "https://raw.githubusercontent.com/bluesky-social/atproto/main/LICENSE" > ./lexicons/LICENSE
+
 git add ./lexicons/
 
 git commit -m "Update lexicons to commit ${commit}
