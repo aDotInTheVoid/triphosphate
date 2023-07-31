@@ -9,57 +9,30 @@ use serde::{Deserialize, Serialize};
 // https://github.com/serde-rs/serde/pull/2525
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
-struct Lexicon {
+struct LexiconDoc {
     #[serde(rename = "lexicon")]
     version: u32,
 
-    id: String,
+    id: String, // Actually NSID
 
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
 
-    defs: BTreeMap<String, DefKind>,
+    defs: BTreeMap<String, UserType>,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
-#[serde(tag = "type")]
-#[serde(rename_all = "kebab-case")]
-/**
-```bnf
-LexUserType =LexRecord
-  | LexXrpcQuery
-  | LexXrpcProcedure
-  | LexXrpcSubscription
-  | LexBlob
-  | LexArray
-  | LexToken
-  | LexObject
-  | LexBoolean
-  | LexInteger
-  | LexString
-  | LexBytes
-  | LexCidLink
-  | LexUnknown
-```
-*/
+/////
+// Primitives
+/////
 
-enum DefKind {
-    Array(Array),
-    Blob(Blob),
-    Bytes(Bytes),
-    Boolean(Boolean),
-    Integer(Integer),
-    Object(Object),
-    Procedure(XprcProcedure),
-    Query(Query),
-    Record(Record),
-    Ref(Ref),
-    String(LexString),
-    Subscription(XrpcSubscription),
-    CidLink(CidLink),
-    Token(Token),
-    Union(Union),
-    Unknown(Unknown),
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+struct Boolean {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    default: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    r#const: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -109,19 +82,15 @@ struct LexString {
     known_values: Vec<String>,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
-struct Object {
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    required: Vec<String>,
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+struct Unknown {
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    nullable: Vec<String>,
-    properties: BTreeMap<String, DefKind>, // TODO: Percise Union here
-
-    #[serde(default, rename = "type", skip_serializing_if = "String::is_empty")]
-    _type: String, // Hacky hackity hack
 }
+
+/////
+// From IPLD
+/////
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -140,12 +109,28 @@ pub struct CidLink {
     description: Option<String>,
 }
 
+/////
+// References
+/////
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Ref {
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     r#ref: String,
 }
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+struct RefUnion {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+    refs: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    closed: Option<bool>,
+}
+
+/////
+// Blob
+/////
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -158,6 +143,10 @@ pub struct Blob {
     accept: Option<Vec<String>>,
 }
 
+/////
+// Complex Types
+/////
+
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Array {
@@ -167,7 +156,37 @@ pub struct Array {
     min_lenght: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
     max_length: Option<u64>,
-    items: Box<DefKind>, // TODO: We can be more specific here.
+    items: ArrayItem,
+}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[serde(tag = "type", rename_all = "kebab-case")]
+enum ArrayItem {
+    // Primitive
+    Boolean(Boolean),
+    Integer(Integer),
+    String(LexString),
+    Unknown(Unknown),
+    // Ipld
+    Bytes(Bytes),
+    CidLink(CidLink),
+    // Blob
+    Blob(Blob),
+    // RefVariant
+    Ref(Ref),
+    Union(RefUnion),
+}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct PrimitveArray {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    min_lenght: Option<u64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    max_length: Option<u64>,
+    items: Primitive,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
@@ -175,6 +194,117 @@ pub struct Array {
 pub struct Token {
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+struct Object {
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    required: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    nullable: Vec<String>,
+    properties: BTreeMap<String, ObjectProperty>,
+
+    #[serde(default, rename = "type", skip_serializing_if = "String::is_empty")]
+    _type: String, // Hacky hackity hack
+}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[serde(tag = "type", rename_all = "kebab-case")]
+enum ObjectProperty {
+    // RefVariant
+    Ref(Ref),
+    Union(RefUnion),
+    // Ipld
+    Bytes(Bytes),
+    CidLink(CidLink),
+    // Array
+    Array(Array),
+    // Blob
+    Blob(Blob),
+    // Primitive
+    Boolean(Boolean),
+    Integer(Integer),
+    String(LexString),
+    Unknown(Unknown),
+}
+
+/////
+// XRPC
+/////
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct XrpcParameters {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    required: Option<Vec<String>>,
+    properties: BTreeMap<String, ParameterProperty>,
+
+    #[serde(rename = "type")]
+    _type: String, // Hacky hackity hack
+}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[serde(tag = "type", rename_all = "kebab-case")]
+enum ParameterProperty {
+    // Primitive
+    Boolean(Boolean),
+    Integer(Integer),
+    String(LexString),
+    Unknown(Unknown),
+
+    Array(PrimitveArray),
+}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+pub struct XrpcBody {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+    encoding: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    schema: Option<XrpcBodySchema>,
+}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+struct XrpcSubscriptionMessage {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+    schema: Option<XrpcBodySchema>,
+}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[serde(tag = "type", rename_all = "kebab-case")]
+enum XrpcBodySchema {
+    // RefVariant
+    Ref(Ref),
+    Union(RefUnion),
+    // Object
+    Object(Object),
+}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+struct XrpcError {
+    name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "camelCase")]
+struct XrpcQuery {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    parameters: Option<XrpcParameters>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    output: Option<XrpcBody>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    errors: Option<Vec<XrpcError>>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
@@ -193,78 +323,6 @@ pub struct XprcProcedure {
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = "camelCase")]
-pub struct XrpcParameters {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    required: Option<Vec<String>>,
-    properties: BTreeMap<String, DefKind>, // TODO: We can be more specific here.
-
-    #[serde(rename = "type")]
-    _type: String, // Hacky hackity hack
-}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = "camelCase")]
-pub struct XrpcBody {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    encoding: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    schema: Option<Box<DefKind>>, // TODO: Percise union here
-}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = "camelCase")]
-struct Query {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    parameters: Option<XrpcParameters>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    output: Option<XrpcBody>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    errors: Option<Vec<XrpcError>>,
-}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-#[serde(rename_all = "camelCase")]
-struct XrpcError {
-    name: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-struct Record {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    key: Option<String>,
-    record: Object,
-}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-struct Boolean {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    default: Option<bool>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    r#const: Option<bool>,
-}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-struct Union {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    refs: Vec<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    closed: Option<bool>,
-}
-
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
 struct XrpcSubscription {
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
@@ -278,17 +336,49 @@ struct XrpcSubscription {
     errors: Vec<XrpcError>,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
-struct XrpcSubscriptionMessage {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    schema: Option<Box<DefKind>>, // TODO: Percise union here
-}
+//////
+// Database
+//////
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
-struct Unknown {
+struct Record {
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    key: Option<String>,
+    record: Object,
+}
+
+/////
+// Core
+/////
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(tag = "type", rename_all = "kebab-case")]
+enum UserType {
+    Record(Record),
+    Query(XrpcQuery),
+    Procedure(XprcProcedure),
+    Subscription(XrpcSubscription),
+    Blob(Blob),
+    Array(Array),
+    Token(Token),
+    Object(Object),
+    Boolean(Boolean),
+    Integer(Integer),
+    String(LexString),
+    Bytes(Bytes),
+    CidLink(CidLink),
+    Unknown(Unknown),
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(tag = "type", rename_all = "kebab-case")]
+enum Primitive {
+    Boolean(Boolean),
+    Integer(Integer),
+    String(LexString),
+    Unknown(Unknown),
 }
 
 #[cfg(test)]
@@ -305,7 +395,7 @@ mod tests {
             let json_path = Path::new(base_dir).join("lexicons").join(i);
             let json = fs::read(&json_path).unwrap();
 
-            let lex = match serde_json::from_slice::<Lexicon>(&json) {
+            let lex = match serde_json::from_slice::<LexiconDoc>(&json) {
                 Ok(lex) => lex,
                 Err(e) => panic!("can't parse lexicon {i}: {e}"),
             };
@@ -316,11 +406,7 @@ mod tests {
             let json_roundtrip: serde_json::Value =
                 serde_json::from_slice(&json_roundtrip).unwrap();
 
-            assert_eq!(
-                json,
-                json_roundtrip,
-                "\nlexicon {i} different",
-            );
+            assert_eq!(json, json_roundtrip, "\nlexicon {i} different",);
         }
     }
 }
