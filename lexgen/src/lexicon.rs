@@ -9,16 +9,16 @@ use serde::{Deserialize, Serialize};
 // https://github.com/serde-rs/serde/pull/2525
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
-struct LexiconDoc {
+pub struct LexiconDoc {
     #[serde(rename = "lexicon")]
-    version: u32,
+    pub version: u32,
 
-    id: String, // Actually NSID
+    pub id: String, // Actually NSID
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
 
-    defs: BTreeMap<String, UserType>,
+    pub defs: BTreeMap<String, UserType>,
 }
 
 /////
@@ -26,30 +26,30 @@ struct LexiconDoc {
 /////
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
-struct Boolean {
+pub struct Boolean {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    default: Option<bool>,
+    pub default: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
     r#const: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
-struct Integer {
+pub struct Integer {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    default: Option<i64>,
+    pub default: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    minimum: Option<i64>,
+    pub minimum: Option<i64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    maximum: Option<i64>,
+    pub maximum: Option<i64>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "kebab-case")]
-enum StringFormat {
+pub enum StringFormat {
     Datetime,
     Uri,
     AtUri,
@@ -63,29 +63,29 @@ enum StringFormat {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-struct LexString {
+pub struct LexString {
     #[serde(skip_serializing_if = "Option::is_none")]
-    format: Option<StringFormat>,
+    pub format: Option<StringFormat>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    default: Option<String>,
+    pub default: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    min_length: Option<u64>,
+    pub min_length: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    max_length: Option<u64>,
+    pub max_length: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    min_graphemes: Option<u64>,
+    pub min_graphemes: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    max_graphemes: Option<u64>,
+    pub max_graphemes: Option<u64>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    known_values: Vec<String>,
+    pub known_values: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
-struct Unknown {
+pub struct Unknown {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
 }
 
 /////
@@ -96,17 +96,17 @@ struct Unknown {
 #[serde(rename_all = "camelCase")]
 pub struct Bytes {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    min_length: Option<u64>,
+    pub min_length: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    max_length: Option<u64>,
+    pub max_length: Option<u64>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct CidLink {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
 }
 
 /////
@@ -115,17 +115,17 @@ pub struct CidLink {
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct Ref {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     r#ref: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
-struct RefUnion {
+pub struct RefUnion {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    refs: Vec<String>,
+    pub description: Option<String>,
+    pub refs: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    closed: Option<bool>,
+    pub closed: Option<bool>,
 }
 
 /////
@@ -136,11 +136,11 @@ struct RefUnion {
 #[serde(rename_all = "camelCase")]
 pub struct Blob {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    max_size: Option<u64>,
+    pub max_size: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    accept: Option<Vec<String>>,
+    pub accept: Option<Vec<String>>,
 }
 
 /////
@@ -151,17 +151,17 @@ pub struct Blob {
 #[serde(rename_all = "camelCase")]
 pub struct Array {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    min_lenght: Option<u64>,
+    pub min_lenght: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    max_length: Option<u64>,
-    items: ArrayItem,
+    pub max_length: Option<u64>,
+    pub items: ArrayItem,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
-enum ArrayItem {
+pub enum ArrayItem {
     // Primitive
     Boolean(Boolean),
     Integer(Integer),
@@ -181,30 +181,30 @@ enum ArrayItem {
 #[serde(rename_all = "camelCase")]
 pub struct PrimitveArray {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    min_lenght: Option<u64>,
+    pub min_lenght: Option<u64>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    max_length: Option<u64>,
-    items: Primitive,
+    pub max_length: Option<u64>,
+    pub items: Primitive,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Token {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
-struct Object {
+pub struct Object {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    required: Vec<String>,
+    pub required: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    nullable: Vec<String>,
-    properties: BTreeMap<String, ObjectProperty>,
+    pub nullable: Vec<String>,
+    pub properties: BTreeMap<String, ObjectProperty>,
 
     #[serde(default, rename = "type", skip_serializing_if = "String::is_empty")]
     _type: String, // Hacky hackity hack
@@ -212,7 +212,7 @@ struct Object {
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
-enum ObjectProperty {
+pub enum ObjectProperty {
     // RefVariant
     Ref(Ref),
     Union(RefUnion),
@@ -238,10 +238,10 @@ enum ObjectProperty {
 #[serde(rename_all = "camelCase")]
 pub struct XrpcParameters {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    required: Option<Vec<String>>,
-    properties: BTreeMap<String, ParameterProperty>,
+    pub required: Option<Vec<String>>,
+    pub properties: BTreeMap<String, ParameterProperty>,
 
     #[serde(rename = "type")]
     _type: String, // Hacky hackity hack
@@ -249,7 +249,7 @@ pub struct XrpcParameters {
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
-enum ParameterProperty {
+pub enum ParameterProperty {
     // Primitive
     Boolean(Boolean),
     Integer(Integer),
@@ -263,22 +263,22 @@ enum ParameterProperty {
 #[serde(rename_all = "camelCase")]
 pub struct XrpcBody {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    encoding: String,
+    pub description: Option<String>,
+    pub encoding: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    schema: Option<XrpcBodySchema>,
+    pub schema: Option<XrpcBodySchema>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
-struct XrpcSubscriptionMessage {
+pub struct XrpcSubscriptionMessage {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    schema: Option<XrpcBodySchema>,
+    pub description: Option<String>,
+    pub schema: Option<XrpcBodySchema>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
-enum XrpcBodySchema {
+pub enum XrpcBodySchema {
     // RefVariant
     Ref(Ref),
     Union(RefUnion),
@@ -288,52 +288,52 @@ enum XrpcBodySchema {
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
-struct XrpcError {
-    name: String,
+pub struct XrpcError {
+    pub name: String,
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
-struct XrpcQuery {
+pub struct XrpcQuery {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    parameters: Option<XrpcParameters>,
+    pub parameters: Option<XrpcParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    output: Option<XrpcBody>,
+    pub output: Option<XrpcBody>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    errors: Option<Vec<XrpcError>>,
+    pub errors: Option<Vec<XrpcError>>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct XprcProcedure {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    parameters: Option<XrpcParameters>,
+    pub parameters: Option<XrpcParameters>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    input: Option<XrpcBody>,
+    pub input: Option<XrpcBody>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    output: Option<XrpcBody>,
+    pub output: Option<XrpcBody>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    errors: Vec<XrpcError>,
+    pub errors: Vec<XrpcError>,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
-struct XrpcSubscription {
+pub struct XrpcSubscription {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    parameters: Option<XrpcParameters>,
+    pub parameters: Option<XrpcParameters>,
 
     #[serde(skip_serializing_if = "Option::is_none")]
-    message: Option<XrpcSubscriptionMessage>,
+    pub message: Option<XrpcSubscriptionMessage>,
 
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    errors: Vec<XrpcError>,
+    pub errors: Vec<XrpcError>,
 }
 
 //////
@@ -341,12 +341,12 @@ struct XrpcSubscription {
 //////
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
-struct Record {
+pub struct Record {
     #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    key: Option<String>,
-    record: Object,
+    pub key: Option<String>,
+    pub record: Object,
 }
 
 /////
@@ -355,7 +355,7 @@ struct Record {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(tag = "type", rename_all = "kebab-case")]
-enum UserType {
+pub enum UserType {
     Record(Record),
     Query(XrpcQuery),
     Procedure(XprcProcedure),
@@ -374,7 +374,7 @@ enum UserType {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(tag = "type", rename_all = "kebab-case")]
-enum Primitive {
+pub enum Primitive {
     Boolean(Boolean),
     Integer(Integer),
     String(LexString),
