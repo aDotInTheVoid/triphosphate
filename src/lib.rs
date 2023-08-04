@@ -1,2 +1,2 @@
 pub mod lex;
-mod vocab;
+pub mod vocab;

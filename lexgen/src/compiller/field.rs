@@ -32,11 +32,14 @@ pub(super) struct Field {
 
 impl quote::ToTokens for Field {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
-        let ty = if self.required {
-            self.ty.to_token_stream()
+        let (ty, serde_optional) = if self.required {
+            (self.ty.to_token_stream(), quote!())
         } else {
             let ty = &self.ty;
-            quote!(Option<#ty>)
+            (
+                quote!(Option<#ty>),
+                quote!(#[serde(default, skip_serializing_if = "Option::is_none")]),
+            )
         };
 
         let (name, serde_name) = field_name(&self.name);
@@ -45,6 +48,7 @@ impl quote::ToTokens for Field {
 
         quote!(
             #serde_name
+            #serde_optional
             #doc
             pub #name: #ty
         )

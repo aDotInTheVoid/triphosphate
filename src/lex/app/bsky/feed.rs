@@ -7,11 +7,16 @@ use super::super::super::_lex;
 pub struct Post {
     #[serde(rename = "createdAt")]
     pub created_at: _lex::_rt::Datetime,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub embed: Option<()>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     #[doc = "Deprecated: replaced by app.bsky.richtext.facet."]
     pub entities: Option<()>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub facets: Option<()>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub langs: Option<()>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub reply: Option<_lex::app::bsky::feed::post::ReplyRef>,
     pub text: ::std::string::String,
 }
