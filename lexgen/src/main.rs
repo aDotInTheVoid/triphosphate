@@ -1,4 +1,9 @@
+use camino::Utf8Path;
+use lexicon::LexiconDoc;
+
+mod compiller;
 mod lexicon;
+mod writer;
 
 // fd -e json | sd "(.*)" '"$1",'
 const ALL_LEXICONS: &[&str] = &[
@@ -123,5 +128,15 @@ const ALL_LEXICONS: &[&str] = &[
 ];
 
 fn main() {
-    println!("Hello, world!");
+    let d: LexiconDoc =
+        serde_json::from_str(include_str!("../lexicons/app/bsky/feed/post.json")).unwrap();
+
+    let m = compiller::lower_lexicon(&d);
+
+    writer::write_to(
+        &Utf8Path::new(env!("CARGO_WORKSPACE_DIR"))
+            .join("src")
+            .join("lex"),
+        &m,
+    );
 }
