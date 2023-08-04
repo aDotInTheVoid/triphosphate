@@ -125,9 +125,6 @@ fn path_for(components: &[String]) -> Utf8PathBuf {
 mod tests {
     use super::*;
 
-    fn s(s: &str) -> String {
-        s.to_owned()
-    }
     fn ss(s: &[&str]) -> Vec<String> {
         s.into_iter().map(|s| s.to_string()).collect()
     }

@@ -3,7 +3,7 @@ use quote::{format_ident, quote, ToTokens};
 
 use crate::lexicon::ObjectProperty;
 
-use super::{doc_comment, ident, path_for_def, snake, ItemPath, Mod};
+use super::{doc_comment, ident, path_for_def, snake, ItemPath};
 
 pub(super) fn lower_field(
     name: &str,
