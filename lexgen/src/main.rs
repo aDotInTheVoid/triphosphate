@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use camino::Utf8Path;
 use lexicon::LexiconDoc;
 
@@ -128,15 +130,24 @@ const ALL_LEXICONS: &[&str] = &[
 ];
 
 fn main() {
-    let d: LexiconDoc =
-        serde_json::from_str(include_str!("../lexicons/app/bsky/feed/post.json")).unwrap();
+    let mut map = BTreeMap::new();
 
-    let m = compiller::lower_lexicon(&d);
+    for s in [
+        include_str!("../lexicons/app/bsky/feed/post.json"),
+        include_str!("../lexicons/com/atproto/repo/strongRef.json"),
+    ] {
+        let d: LexiconDoc = serde_json::from_str(s).unwrap();
+        let m = compiller::lower_lexicon(&d);
+
+        for (k, v) in m {
+            compiller::insert_new(&mut map, k, v);
+        }
+    }
 
     writer::write_to(
         &Utf8Path::new(env!("CARGO_WORKSPACE_DIR"))
             .join("src")
             .join("lex"),
-        &m,
+        &map,
     );
 }

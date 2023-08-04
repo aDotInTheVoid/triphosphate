@@ -32,7 +32,7 @@ pub struct Boolean {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default: Option<bool>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    r#const: Option<bool>,
+    pub r#const: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -116,7 +116,7 @@ pub struct CidLink {
 pub struct Ref {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    r#ref: String,
+    pub r#ref: String,
 }
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]

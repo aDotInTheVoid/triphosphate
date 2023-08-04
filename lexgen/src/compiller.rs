@@ -8,6 +8,8 @@ use quote::{format_ident, quote};
 
 use crate::lexicon::{self, UserType};
 
+mod field;
+
 pub(crate) fn lower_lexicon(
     lex: &lexicon::LexiconDoc,
 ) -> BTreeMap<ItemPath, proc_macro2::TokenStream> {
@@ -16,7 +18,7 @@ pub(crate) fn lower_lexicon(
     for (name, ty) in &lex.defs {
         let path = path_for_def(&lex.id, name, ty.item_kind());
 
-        let item = lower_item(&path, ty);
+        let item = lower_item(&path, ty, &lex.id);
 
         insert_new(&mut map, path, item);
     }
@@ -24,29 +26,38 @@ pub(crate) fn lower_lexicon(
     map
 }
 
-fn lower_item(path: &ItemPath, ty: &lexicon::UserType) -> proc_macro2::TokenStream {
+fn lower_item(path: &ItemPath, ty: &lexicon::UserType, doc_id: &str) -> proc_macro2::TokenStream {
     match ty {
-        UserType::Record(r) => lower_record(path, r),
-        UserType::Object(o) => lower_object(path, o, &o.description),
+        UserType::Record(r) => lower_record(path, r, doc_id),
+        UserType::Object(o) => lower_object(path, o, &o.description, doc_id),
         _ => todo!("lower_item: {ty:?}"),
     }
 }
 
-fn lower_record(path: &ItemPath, r: &lexicon::Record) -> proc_macro2::TokenStream {
-    lower_object(path, &r.record, &r.description)
+fn lower_record(path: &ItemPath, r: &lexicon::Record, doc_id: &str) -> proc_macro2::TokenStream {
+    lower_object(path, &r.record, &r.description, doc_id)
 }
 
 fn lower_object(
     path: &ItemPath,
     o: &lexicon::Object,
     desc: &Option<String>,
+    doc_id: &str,
 ) -> proc_macro2::TokenStream {
     let name = path.name();
     let doc = doc_comment(desc);
 
+    let fields = o
+        .properties
+        .iter()
+        .map(|(name, prop)| field::lower_field(name, prop, o, doc_id));
+
     quote!(
         #doc
-        pub struct #name;
+        #[derive(::serde::Deserialize, ::serde::Serialize)]
+        pub struct #name {
+            #(#fields),*
+        }
     )
 }
 
@@ -72,7 +83,7 @@ impl fmt::Display for ItemPath {
 
 impl ItemPath {
     fn name(&self) -> Ident {
-        format_ident!("{}", self.1)
+        ident(&self.1)
     }
 }
 
@@ -114,8 +125,8 @@ fn path_for_def(lex_id: &str, def_name: &str, kind: ItemKind) -> ItemPath {
 impl quote::ToTokens for ItemPath {
     fn to_tokens(&self, tokens: &mut proc_macro2::TokenStream) {
         let ItemPath(Mod(mod_), name) = self;
-        let mod_ = mod_.iter().map(|s| format_ident!("{}", s));
-        let name = format_ident!("{}", name);
+        let mod_ = mod_.iter().map(|s| ident(s));
+        let name = ident(name);
         (quote! { #(#mod_::)* #name }).to_tokens(tokens);
     }
 }
@@ -131,7 +142,7 @@ fn pascal(s: &str) -> String {
     heck::ToPascalCase::to_pascal_case(s)
 }
 #[track_caller]
-fn insert_new<K: Ord + Debug, V>(m: &mut BTreeMap<K, V>, k: K, v: V) {
+pub fn insert_new<K: Ord + Debug, V>(m: &mut BTreeMap<K, V>, k: K, v: V) {
     match m.entry(k) {
         Entry::Vacant(e) => {
             e.insert(v);
@@ -139,6 +150,12 @@ fn insert_new<K: Ord + Debug, V>(m: &mut BTreeMap<K, V>, k: K, v: V) {
         Entry::Occupied(e) => {
             panic!("duplicate key: {:?}", e.key())
         }
+    }
+}
+
+fn ident(s: &str) -> Ident {
+    match s {
+        _ => format_ident!("{}", s),
     }
 }
 
@@ -154,7 +171,6 @@ fn doc_comment(desc: &Option<String>) -> proc_macro2::TokenStream {
 
 #[cfg(test)]
 mod tests {
-    use quote::ToTokens;
 
     use super::*;
 
