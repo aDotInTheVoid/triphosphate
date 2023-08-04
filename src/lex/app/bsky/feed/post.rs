@@ -8,8 +8,8 @@ pub struct Entity {
     pub index: _lex::app::bsky::feed::post::TextSlice,
     #[serde(rename = "type")]
     #[doc = "Expected values are 'mention' and 'link'."]
-    pub type_: (),
-    pub value: (),
+    pub type_: ::std::string::String,
+    pub value: ::std::string::String,
 }
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ReplyRef {

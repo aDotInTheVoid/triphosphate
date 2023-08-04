@@ -4,6 +4,6 @@
 use super::super::super::_lex;
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct StrongRef {
-    pub cid: (),
-    pub uri: (),
+    pub cid: _lex::_rt::Cid,
+    pub uri: _lex::_rt::AtUri,
 }

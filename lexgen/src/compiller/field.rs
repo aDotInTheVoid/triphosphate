@@ -1,7 +1,7 @@
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote, ToTokens};
 
-use crate::lexicon::ObjectProperty;
+use crate::lexicon::{ObjectProperty, StringFormat};
 
 use super::{doc_comment, ident, path_for_def, snake, ItemPath};
 
@@ -73,7 +73,9 @@ fn field_name(name: &str) -> (Ident, TokenStream) {
 enum FieldType {
     Ref(ItemPath),
 
-    Unit, // TODO: Remove
+    Unit,
+    RtType(StringFormat),
+    StdString, // TODO: Remove
 }
 
 impl FieldType {
@@ -82,14 +84,24 @@ impl FieldType {
             ObjectProperty::Ref(path) => {
                 (FieldType::Ref(type_ref(path, doc_id)), &path.description)
             }
+            ObjectProperty::String(s) => (Self::str(s), &s.description),
 
             ObjectProperty::Integer(i) => (FieldType::Unit, &i.description),
-            ObjectProperty::String(s) => (FieldType::Unit, &s.description),
             ObjectProperty::Union(u) => (FieldType::Unit, &u.description),
             ObjectProperty::Array(a) => (FieldType::Unit, &a.description),
 
             _ => todo!("FieldType::from_prop: {prop:?}"),
         }
+    }
+
+    fn str(s: &crate::lexicon::LexString) -> FieldType {
+        if let Some(format) = &s.format {
+            return FieldType::RtType(*format);
+        }
+
+        // TODO: Do more here.
+
+        FieldType::StdString
     }
 }
 
@@ -112,6 +124,13 @@ impl ToTokens for FieldType {
             FieldType::Ref(path) => path.to_tokens(tokens),
 
             FieldType::Unit => quote!(()).to_tokens(tokens),
+
+            FieldType::RtType(format) => {
+                let name = ident(&format!("{format:?}"));
+                quote!(_lex::_rt::#name).to_tokens(tokens);
+            }
+
+            FieldType::StdString => quote!(::std::string::String).to_tokens(tokens),
         }
     }
 }

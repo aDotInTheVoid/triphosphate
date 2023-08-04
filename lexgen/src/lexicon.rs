@@ -47,7 +47,7 @@ pub struct Integer {
     pub maximum: Option<i64>,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Clone, Copy)]
 #[serde(rename_all = "kebab-case")]
 pub enum StringFormat {
     Datetime,

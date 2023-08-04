@@ -6,12 +6,12 @@ use super::super::super::_lex;
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct Post {
     #[serde(rename = "createdAt")]
-    pub created_at: (),
+    pub created_at: _lex::_rt::Datetime,
     pub embed: Option<()>,
     #[doc = "Deprecated: replaced by app.bsky.richtext.facet."]
     pub entities: Option<()>,
     pub facets: Option<()>,
     pub langs: Option<()>,
     pub reply: Option<_lex::app::bsky::feed::post::ReplyRef>,
-    pub text: (),
+    pub text: ::std::string::String,
 }

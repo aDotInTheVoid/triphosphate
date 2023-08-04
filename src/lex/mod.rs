@@ -3,6 +3,7 @@ pub mod app;
 pub mod com;
 
 mod _lex {
-    pub use super::app;
-    pub use super::com;
+    pub(crate) use super::super::vocab as _rt;
+    pub(crate) use super::app;
+    pub(crate) use super::com;
 }
