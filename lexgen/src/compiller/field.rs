@@ -76,6 +76,11 @@ enum FieldType {
     Unit,
     RtType(StringFormat),
     StdString, // TODO: Remove
+
+    U8,
+    U16,
+    U32,
+    U64,
 }
 
 impl FieldType {
@@ -86,7 +91,7 @@ impl FieldType {
             }
             ObjectProperty::String(s) => (Self::str(s), &s.description),
 
-            ObjectProperty::Integer(i) => (FieldType::Unit, &i.description),
+            ObjectProperty::Integer(i) => (Self::int(i), &i.description),
             ObjectProperty::Union(u) => (FieldType::Unit, &u.description),
             ObjectProperty::Array(a) => (FieldType::Unit, &a.description),
 
@@ -102,6 +107,18 @@ impl FieldType {
         // TODO: Do more here.
 
         FieldType::StdString
+    }
+
+    fn int(i: &crate::lexicon::Integer) -> FieldType {
+        if i.minimum == Some(0) {
+            if i.maximum == None {
+                FieldType::U64 // Sensible fallback.
+            } else {
+                todo!()
+            }
+        } else {
+            todo!();
+        }
     }
 }
 
@@ -131,6 +148,11 @@ impl ToTokens for FieldType {
             }
 
             FieldType::StdString => quote!(::std::string::String).to_tokens(tokens),
+
+            FieldType::U8 => quote!(u8).to_tokens(tokens),
+            FieldType::U16 => quote!(u16).to_tokens(tokens),
+            FieldType::U32 => quote!(u32).to_tokens(tokens),
+            FieldType::U64 => quote!(u64).to_tokens(tokens),
         }
     }
 }

@@ -19,6 +19,6 @@ pub struct ReplyRef {
 #[doc = "Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings."]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct TextSlice {
-    pub end: (),
-    pub start: (),
+    pub end: u64,
+    pub start: u64,
 }
