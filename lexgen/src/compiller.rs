@@ -5,9 +5,11 @@ use std::{
 };
 
 use proc_macro2::{Ident, TokenStream};
-use quote::{format_ident, quote};
+use quote::{format_ident, quote, ToTokens};
 
-use crate::lexicon::{self, UserType};
+use crate::lexicon::{self, Array, Token, UserType};
+
+use self::field::FieldType;
 
 mod field;
 
@@ -42,6 +44,9 @@ impl Compiler {
         match ty {
             UserType::Record(r) => self.lower_record(path, r),
             UserType::Object(o) => self.lower_object(path, o, &o.description),
+            UserType::Array(arr) => self.lower_array(path, arr),
+            UserType::String(str) => self.lower_string(path, str),
+            UserType::Token(t) => self.lower_token(path, t),
             _ => todo!("lower_item: {ty:?}"),
         }
     }
@@ -71,6 +76,46 @@ impl Compiler {
                 #(#fields),*
             }
         )
+    }
+
+    fn lower_array(&self, path: &ItemPath, arr: &Array) -> TokenStream {
+        let op = &lexicon::ObjectProperty::Array(arr.clone());
+
+        let (field, desc) = FieldType::from_prop(op, &self.doc.id);
+
+        let name = path.name();
+
+        let docs = doc_comment(desc);
+
+        quote!(
+            #docs
+            pub type #name = ::std::vec::Vec<#field>;
+        )
+        .to_token_stream()
+    }
+
+    fn lower_string(&self, path: &ItemPath, str: &lexicon::LexString) -> TokenStream {
+        let docs = doc_comment(&str.description);
+        let name = path.name();
+
+        // TODO: Use fields.
+
+        quote!(
+            #docs
+            pub type #name = ::std::string::String;
+        )
+        .to_token_stream()
+    }
+
+    fn lower_token(&self, path: &ItemPath, tk: &Token) -> TokenStream {
+        let name = path.name();
+        let docs = doc_comment(&tk.description);
+
+        quote!(
+            #docs
+            pub struct #name;
+        )
+        .to_token_stream()
     }
 }
 

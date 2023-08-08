@@ -76,30 +76,41 @@ fn field_name(name: &str) -> (Ident, TokenStream) {
     )
 }
 
-enum FieldType {
+pub(super) enum FieldType {
     Ref(ItemPath),
 
     Unit,
     RtType(StringFormat),
     StdString, // TODO: Remove
 
-    U8,
-    U16,
-    U32,
+    // U8,
+    // U16,
+    // U32,
     U64,
+    Blob,
+    Unknown,
+    Bool,
 }
 
 impl FieldType {
-    fn from_prop<'a>(prop: &'a ObjectProperty, doc_id: &str) -> (Self, &'a Option<String>) {
+    pub fn from_prop<'a>(prop: &'a ObjectProperty, doc_id: &str) -> (Self, &'a Option<String>) {
         match prop {
             ObjectProperty::Ref(path) => {
                 (FieldType::Ref(type_ref(path, doc_id)), &path.description)
             }
-            ObjectProperty::String(s) => (Self::str(s), &s.description),
 
+            ObjectProperty::String(s) => (Self::str(s), &s.description),
             ObjectProperty::Integer(i) => (Self::int(i), &i.description),
             ObjectProperty::Union(u) => (FieldType::Unit, &u.description),
             ObjectProperty::Array(a) => (FieldType::Unit, &a.description),
+
+            // TODO: Handle default, const
+            ObjectProperty::Boolean(b) => (FieldType::Bool, &b.description),
+
+            ObjectProperty::Unknown(u) => (FieldType::Unknown, &u.description),
+
+            // TODO: Blob details.
+            ObjectProperty::Blob(b) => (FieldType::Blob, &b.description),
 
             _ => todo!("FieldType::from_prop: {prop:?}"),
         }
@@ -123,7 +134,7 @@ impl FieldType {
                 todo!()
             }
         } else {
-            todo!();
+            todo!("{i:?}");
         }
     }
 }
@@ -153,11 +164,14 @@ impl ToTokens for FieldType {
                 quote!(_lex::_rt::#name).to_tokens(tokens);
             }
 
-            FieldType::StdString => quote!(::std::string::String).to_tokens(tokens),
+            FieldType::Blob => quote!(_lex::_rt::Blob).to_tokens(tokens),
+            FieldType::Unknown => quote!(_lex::_rt::Unknown).to_tokens(tokens),
 
-            FieldType::U8 => quote!(u8).to_tokens(tokens),
-            FieldType::U16 => quote!(u16).to_tokens(tokens),
-            FieldType::U32 => quote!(u32).to_tokens(tokens),
+            FieldType::StdString => quote!(::std::string::String).to_tokens(tokens),
+            FieldType::Bool => quote!(bool).to_tokens(tokens),
+            // FieldType::U8 => quote!(u8).to_tokens(tokens),
+            // FieldType::U16 => quote!(u16).to_tokens(tokens),
+            // FieldType::U32 => quote!(u32).to_tokens(tokens),
             FieldType::U64 => quote!(u64).to_tokens(tokens),
         }
     }

@@ -6,7 +6,21 @@ pub struct AtUri;
 #[derive(Deserialize, Serialize)]
 pub struct Cid;
 
+#[derive(Deserialize, Serialize)]
+pub struct Did;
+
+#[derive(Deserialize, Serialize)]
+pub struct Handle;
+
+#[derive(Deserialize, Serialize)]
+pub struct Uri;
+
+#[derive(Deserialize, Serialize)]
+pub struct Blob;
+
 pub type Datetime = chrono::DateTime<chrono::FixedOffset>;
+
+pub type Unknown = serde_json::Value; // TODO
 
 #[cfg(test)]
 mod tests {
