@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 // Needs https://github.com/serde-rs/serde/issues/745 probably.
 // https://github.com/serde-rs/serde/pull/2525
 
+/// Represents a single `.json` file.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct LexiconDoc {
     #[serde(rename = "lexicon")]

@@ -1,64 +1,77 @@
 use std::{
     collections::{btree_map::Entry, BTreeMap},
     fmt::{self, Debug},
+    sync::Arc,
 };
 
-use proc_macro2::Ident;
+use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote};
 
 use crate::lexicon::{self, UserType};
 
 mod field;
 
+struct Compiler {
+    doc: Arc<lexicon::LexiconDoc>,
+    items: BTreeMap<ItemPath, TokenStream>,
+}
+
 pub(crate) fn lower_lexicon(
-    lex: &lexicon::LexiconDoc,
+    lex: lexicon::LexiconDoc,
 ) -> BTreeMap<ItemPath, proc_macro2::TokenStream> {
-    let mut map = BTreeMap::new();
+    let lex = Arc::new(lex);
+
+    let mut compiler = Compiler {
+        doc: Arc::clone(&lex),
+        items: BTreeMap::new(),
+    };
 
     for (name, ty) in &lex.defs {
-        let path = path_for_def(&lex.id, name, ty.item_kind());
+        let path = compiler.path_for_def(name, ty.item_kind());
 
-        let item = lower_item(&path, ty, &lex.id);
+        let item = compiler.lower_item(&path, ty);
 
-        insert_new(&mut map, path, item);
+        insert_new(&mut compiler.items, path, item);
     }
 
-    map
+    compiler.items
 }
 
-fn lower_item(path: &ItemPath, ty: &lexicon::UserType, doc_id: &str) -> proc_macro2::TokenStream {
-    match ty {
-        UserType::Record(r) => lower_record(path, r, doc_id),
-        UserType::Object(o) => lower_object(path, o, &o.description, doc_id),
-        _ => todo!("lower_item: {ty:?}"),
-    }
-}
-
-fn lower_record(path: &ItemPath, r: &lexicon::Record, doc_id: &str) -> proc_macro2::TokenStream {
-    lower_object(path, &r.record, &r.description, doc_id)
-}
-
-fn lower_object(
-    path: &ItemPath,
-    o: &lexicon::Object,
-    desc: &Option<String>,
-    doc_id: &str,
-) -> proc_macro2::TokenStream {
-    let name = path.name();
-    let doc = doc_comment(desc);
-
-    let fields = o
-        .properties
-        .iter()
-        .map(|(name, prop)| field::lower_field(name, prop, o, doc_id));
-
-    quote!(
-        #doc
-        #[derive(::serde::Deserialize, ::serde::Serialize)]
-        pub struct #name {
-            #(#fields),*
+impl Compiler {
+    fn lower_item(&self, path: &ItemPath, ty: &lexicon::UserType) -> proc_macro2::TokenStream {
+        match ty {
+            UserType::Record(r) => self.lower_record(path, r),
+            UserType::Object(o) => self.lower_object(path, o, &o.description),
+            _ => todo!("lower_item: {ty:?}"),
         }
-    )
+    }
+
+    fn lower_record(&self, path: &ItemPath, r: &lexicon::Record) -> proc_macro2::TokenStream {
+        self.lower_object(path, &r.record, &r.description)
+    }
+
+    fn lower_object(
+        &self,
+        path: &ItemPath,
+        o: &lexicon::Object,
+        desc: &Option<String>,
+    ) -> proc_macro2::TokenStream {
+        let name = path.name();
+        let doc = doc_comment(desc);
+
+        let fields = o
+            .properties
+            .iter()
+            .map(|(name, prop)| self.lower_field(name, prop, o));
+
+        quote!(
+            #doc
+            #[derive(::serde::Deserialize, ::serde::Serialize)]
+            pub struct #name {
+                #(#fields),*
+            }
+        )
+    }
 }
 
 /////
@@ -120,6 +133,11 @@ fn path_for_def(lex_id: &str, def_name: &str, kind: ItemKind) -> ItemPath {
             ItemKind::Func => snake(main_part),
         },
     )
+}
+impl Compiler {
+    fn path_for_def(&self, def_name: &str, kind: ItemKind) -> ItemPath {
+        path_for_def(&self.doc.id, def_name, kind)
+    }
 }
 
 impl quote::ToTokens for ItemPath {

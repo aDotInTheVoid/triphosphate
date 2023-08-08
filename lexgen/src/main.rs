@@ -137,7 +137,7 @@ fn main() {
         include_str!("../lexicons/com/atproto/repo/strongRef.json"),
     ] {
         let d: LexiconDoc = serde_json::from_str(s).unwrap();
-        let m = compiller::lower_lexicon(&d);
+        let m = compiller::lower_lexicon(d);
 
         for (k, v) in m {
             compiller::insert_new(&mut map, k, v);

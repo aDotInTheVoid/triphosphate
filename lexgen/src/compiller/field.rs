@@ -3,23 +3,25 @@ use quote::{format_ident, quote, ToTokens};
 
 use crate::lexicon::{ObjectProperty, StringFormat};
 
-use super::{doc_comment, ident, path_for_def, snake, ItemPath};
+use super::{doc_comment, ident, path_for_def, snake, Compiler, ItemPath};
 
-pub(super) fn lower_field(
-    name: &str,
-    prop: &ObjectProperty,
-    o: &crate::lexicon::Object,
-    doc_id: &str,
-) -> Field {
-    let required = o.required.contains(&name.to_owned());
+impl Compiler {
+    pub(super) fn lower_field(
+        &self,
+        name: &str,
+        prop: &ObjectProperty,
+        o: &crate::lexicon::Object,
+    ) -> Field {
+        let required = o.required.contains(&name.to_owned());
 
-    let (ty, docs) = FieldType::from_prop(prop, doc_id);
+        let (ty, docs) = FieldType::from_prop(prop, &self.doc.id);
 
-    Field {
-        name: name.to_owned(),
-        docs: docs.to_owned(),
-        ty,
-        required,
+        Field {
+            name: name.to_owned(),
+            docs: docs.to_owned(),
+            ty,
+            required,
+        }
     }
 }
 
