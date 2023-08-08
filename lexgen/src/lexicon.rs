@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 // https://github.com/serde-rs/serde/pull/2525
 
 /// Represents a single `.json` file.
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct LexiconDoc {
     #[serde(rename = "lexicon")]
     pub version: u32,
@@ -26,7 +26,7 @@ pub struct LexiconDoc {
 // Primitives
 /////
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct Boolean {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -36,7 +36,7 @@ pub struct Boolean {
     pub r#const: Option<bool>,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct Integer {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -48,7 +48,7 @@ pub struct Integer {
     pub maximum: Option<i64>,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug, Clone, Copy)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Copy)]
 #[serde(rename_all = "kebab-case")]
 pub enum StringFormat {
     Datetime,
@@ -62,7 +62,7 @@ pub enum StringFormat {
     Language,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct LexString {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -83,7 +83,7 @@ pub struct LexString {
     pub known_values: Vec<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct Unknown {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -93,7 +93,7 @@ pub struct Unknown {
 // From IPLD
 /////
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Bytes {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -104,7 +104,7 @@ pub struct Bytes {
     pub max_length: Option<u64>,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct CidLink {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -113,14 +113,14 @@ pub struct CidLink {
 /////
 // References
 /////
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct Ref {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     pub r#ref: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct RefUnion {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -133,7 +133,7 @@ pub struct RefUnion {
 // Blob
 /////
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Blob {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -148,7 +148,7 @@ pub struct Blob {
 // Complex Types
 /////
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Array {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -160,7 +160,7 @@ pub struct Array {
     pub items: ArrayItem,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
 pub enum ArrayItem {
     // Primitive
@@ -178,7 +178,7 @@ pub enum ArrayItem {
     Union(RefUnion),
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct PrimitveArray {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -190,14 +190,14 @@ pub struct PrimitveArray {
     pub items: Primitive,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Token {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct Object {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub required: Vec<String>,
@@ -211,7 +211,7 @@ pub struct Object {
     _type: String, // Hacky hackity hack
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
 pub enum ObjectProperty {
     // RefVariant
@@ -235,7 +235,7 @@ pub enum ObjectProperty {
 // XRPC
 /////
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct XrpcParameters {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -248,7 +248,7 @@ pub struct XrpcParameters {
     _type: String, // Hacky hackity hack
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
 pub enum ParameterProperty {
     // Primitive
@@ -260,7 +260,7 @@ pub enum ParameterProperty {
     Array(PrimitveArray),
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct XrpcBody {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -270,14 +270,14 @@ pub struct XrpcBody {
     pub schema: Option<XrpcBodySchema>,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct XrpcSubscriptionMessage {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     pub schema: Option<XrpcBodySchema>,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
 pub enum XrpcBodySchema {
     // RefVariant
@@ -287,7 +287,7 @@ pub enum XrpcBodySchema {
     Object(Object),
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct XrpcError {
     pub name: String,
@@ -295,7 +295,7 @@ pub struct XrpcError {
     pub description: Option<String>,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct XrpcQuery {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -308,7 +308,7 @@ pub struct XrpcQuery {
     pub errors: Option<Vec<XrpcError>>,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct XprcProcedure {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -323,7 +323,7 @@ pub struct XprcProcedure {
     pub errors: Vec<XrpcError>,
 }
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct XrpcSubscription {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -341,7 +341,7 @@ pub struct XrpcSubscription {
 // Database
 //////
 
-#[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct Record {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -354,7 +354,7 @@ pub struct Record {
 // Core
 /////
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
 pub enum UserType {
     Record(Record),
@@ -373,7 +373,7 @@ pub enum UserType {
     Unknown(Unknown),
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 #[serde(tag = "type", rename_all = "kebab-case")]
 pub enum Primitive {
     Boolean(Boolean),
