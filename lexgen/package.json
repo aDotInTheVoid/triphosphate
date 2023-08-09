@@ -1,13 +1,14 @@
 {
   "name": "lexgen-validator",
   "scripts": {
-    "generate": "lex  gen-api ./validator/lexicon ./lexicons/*/*/*/*"
+    "generate": "lex  gen-api ./validator/lexicon ./lexicons/*/*/*/*",
+    "build": "esbuild ./validator/index.ts --bundle --minify --outfile=./dist/validator.js --platform=node"
   },
   "dependencies": {
     "@atproto/lexicon": "^0.2.0"
   },
   "devDependencies": {
     "@atproto/lex-cli": "^0.2.0",
-    "typescript": "^5.1.6"
+    "esbuild": "0.19.0"
   }
 }

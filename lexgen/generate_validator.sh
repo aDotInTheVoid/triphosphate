@@ -6,3 +6,5 @@ npm run generate
 rm -rf ./validator/lexicon/types/
 rm ./validator/lexicon/index.ts
 rm ./validator/lexicon/util.ts
+
+npm run build
