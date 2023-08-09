@@ -59,7 +59,7 @@ impl Files {
             self.link_mod(&components[..i - 1], &components[i - 1]);
         }
 
-        let path = path_for(&path);
+        let path = path_for(path);
         self.files.get_mut(&path).unwrap()
     }
 
@@ -86,7 +86,7 @@ impl File {
         for m in &self.mods {
             contents.push_str(&format!("pub mod {};\n", m));
         }
-        contents.push_str("\n");
+        contents.push('\n');
 
         if depth != 0 {
             contents.push_str("#[allow(unused_imports)]\n");
@@ -106,7 +106,7 @@ impl File {
 
         for item in &self.item {
             contents.push_str(&item.to_string());
-            contents.push_str("\n");
+            contents.push('\n');
         }
 
         contents
@@ -127,13 +127,13 @@ mod tests {
     use super::*;
 
     fn ss(s: &[&str]) -> Vec<String> {
-        s.into_iter().map(|s| s.to_string()).collect()
+        s.iter().map(|s| s.to_string()).collect()
     }
     fn p(s: &str) -> &Utf8Path {
         Utf8Path::new(s)
     }
     fn bs(s: &[&str]) -> BTreeSet<String> {
-        s.into_iter().map(|s| s.to_string()).collect()
+        s.iter().map(|s| s.to_string()).collect()
     }
 
     #[test]

@@ -128,7 +128,7 @@ impl FieldType {
 
     fn int(i: &crate::lexicon::Integer) -> FieldType {
         if i.minimum == Some(0) {
-            if i.maximum == None {
+            if i.maximum.is_none() {
                 FieldType::U64 // Sensible fallback.
             } else {
                 todo!()

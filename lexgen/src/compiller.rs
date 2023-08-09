@@ -217,9 +217,7 @@ pub fn insert_new<K: Ord + Debug, V>(m: &mut BTreeMap<K, V>, k: K, v: V) {
 }
 
 fn ident(s: &str) -> Ident {
-    match s {
-        _ => format_ident!("{}", s),
-    }
+    format_ident!("{}", s)
 }
 
 fn doc_comment(desc: &Option<String>) -> proc_macro2::TokenStream {
