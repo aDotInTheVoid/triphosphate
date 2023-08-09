@@ -1,11 +1,8 @@
 {
   "name": "lexgen-validator",
-  "scripts": {
-    "generate": "lex  gen-api ./validator/lexicon ./lexicons/*/*/*/*",
-    "build": "esbuild ./validator/index.ts --bundle --minify --outfile=./dist/validator.js --platform=node"
-  },
   "dependencies": {
-    "@atproto/lexicon": "^0.2.0"
+    "@atproto/lexicon": "^0.2.0",
+    "text-encoding-utf-8": "^1.0.2"
   },
   "devDependencies": {
     "@atproto/lex-cli": "^0.2.0",
