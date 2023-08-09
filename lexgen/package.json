@@ -1,0 +1,13 @@
+{
+  "name": "lexgen-validator",
+  "scripts": {
+    "generate": "lex  gen-api ./validator/lexicon ./lexicons/*/*/*/*"
+  },
+  "dependencies": {
+    "@atproto/lexicon": "^0.2.0"
+  },
+  "devDependencies": {
+    "@atproto/lex-cli": "^0.2.0",
+    "typescript": "^5.1.6"
+  }
+}
