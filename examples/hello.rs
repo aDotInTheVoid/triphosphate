@@ -1,5 +1,5 @@
 use chrono::Local;
-use triphosphate::lex::app::bsky::feed::Post;
+use triphosphate::{lex::app::bsky::feed::Post, vocab::Datetime};
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
@@ -9,12 +9,13 @@ async fn main() {
         .unwrap();
 
     let post = Post {
-        created_at: Local::now().fixed_offset(),
+        created_at: Datetime::now(),
         embed: None,
         entities: None,
         facets: None,
         langs: None,
         reply: None,
+        labels: None,
         text: "Hello from Triphosphate!!".to_string(),
     };
 
