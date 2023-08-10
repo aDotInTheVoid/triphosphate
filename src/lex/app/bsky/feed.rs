@@ -15,6 +15,8 @@ pub struct Post {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub facets: Option<()>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub labels: Option<()>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     pub langs: Option<()>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub reply: Option<_lex::app::bsky::feed::post::ReplyRef>,

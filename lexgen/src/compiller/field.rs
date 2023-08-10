@@ -86,6 +86,7 @@ pub(super) enum FieldType {
     // U8,
     // U16,
     // U32,
+    I64,
     U64,
     Blob,
     Unknown,
@@ -127,14 +128,28 @@ impl FieldType {
     }
 
     fn int(i: &crate::lexicon::Integer) -> FieldType {
-        if i.minimum == Some(0) {
-            if i.maximum.is_none() {
-                FieldType::U64 // Sensible fallback.
-            } else {
-                todo!()
-            }
-        } else {
-            todo!("{i:?}");
+        // if i.minimum == Some(0) {
+        //     if i.maximum.is_none() {
+        //         FieldType::U64 // Sensible fallback.
+        //     } else {
+        //         todo!()
+        //     }
+        // } else {
+        //     todo!("{i:?}");
+        // }
+
+        // Max int size is 64 bits when not stated: https://atproto.com/specs/data-model#data-types.
+
+        match i.minimum {
+            Some(0) => match i.maximum {
+                None => FieldType::U64,
+                _ => todo!(),
+            },
+            None => match i.maximum {
+                None => FieldType::I64,
+                _ => todo!(),
+            },
+            _ => todo!(),
         }
     }
 }
@@ -169,10 +184,8 @@ impl ToTokens for FieldType {
 
             FieldType::StdString => quote!(::std::string::String).to_tokens(tokens),
             FieldType::Bool => quote!(bool).to_tokens(tokens),
-            // FieldType::U8 => quote!(u8).to_tokens(tokens),
-            // FieldType::U16 => quote!(u16).to_tokens(tokens),
-            // FieldType::U32 => quote!(u32).to_tokens(tokens),
             FieldType::U64 => quote!(u64).to_tokens(tokens),
+            FieldType::I64 => quote!(i64).to_tokens(tokens),
         }
     }
 }

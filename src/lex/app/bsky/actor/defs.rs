@@ -59,10 +59,10 @@ pub struct ProfileViewDetailed {
     pub display_name: Option<::std::string::String>,
     #[serde(rename = "followersCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub followers_count: Option<u64>,
+    pub followers_count: Option<i64>,
     #[serde(rename = "followsCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub follows_count: Option<u64>,
+    pub follows_count: Option<i64>,
     pub handle: _lex::_rt::Handle,
     #[serde(rename = "indexedAt")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -71,7 +71,7 @@ pub struct ProfileViewDetailed {
     pub labels: Option<()>,
     #[serde(rename = "postsCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub posts_count: Option<u64>,
+    pub posts_count: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub viewer: Option<_lex::app::bsky::actor::defs::ViewerState>,
 }
