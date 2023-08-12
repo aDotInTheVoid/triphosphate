@@ -16,6 +16,7 @@ fn main() {
         include_str!("../lexicons/app/bsky/embed/images.json"),
         include_str!("../lexicons/app/bsky/embed/record.json"),
         include_str!("../lexicons/app/bsky/embed/recordWithMedia.json"),
+        include_str!("../lexicons/app/bsky/feed/defs.json"),
         include_str!("../lexicons/app/bsky/feed/post.json"),
         include_str!("../lexicons/app/bsky/graph/defs.json"),
         include_str!("../lexicons/com/atproto/repo/strongRef.json"),
