@@ -23,5 +23,3 @@ pub type Unknown = serde_json::Value; // TODO
 mod datetime;
 
 pub use datetime::Datetime;
-
-pub use crate::LexItem; // TODO: Seperate vocab from _lex::_rt;

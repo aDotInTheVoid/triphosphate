@@ -100,7 +100,7 @@ impl File {
             for m in &self.mods {
                 contents.push_str(&format!("pub(crate) use super::{m};\n"));
             }
-            contents.push_str("pub(crate) use super::super::vocab as _rt;\n");
+            contents.push_str("pub(crate) use crate::rt as _rt;\n");
             contents.push_str("}\n");
         }
 
