@@ -8,10 +8,14 @@ pub struct View {
 }
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ViewBlocked {
+    pub author: _lex::app::bsky::feed::defs::BlockedAuthor,
+    pub blocked: bool,
     pub uri: _lex::_rt::AtUri,
 }
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ViewNotFound {
+    #[serde(rename = "notFound")]
+    pub not_found: bool,
     pub uri: _lex::_rt::AtUri,
 }
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]

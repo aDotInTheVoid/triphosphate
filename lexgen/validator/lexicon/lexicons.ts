@@ -715,21 +715,33 @@ export const schemaDict = {
       },
       viewNotFound: {
         type: 'object',
-        required: ['uri'],
+        required: ['uri', 'notFound'],
         properties: {
           uri: {
             type: 'string',
             format: 'at-uri',
           },
+          notFound: {
+            type: 'boolean',
+            const: true,
+          },
         },
       },
       viewBlocked: {
         type: 'object',
-        required: ['uri'],
+        required: ['uri', 'blocked', 'author'],
         properties: {
           uri: {
             type: 'string',
             format: 'at-uri',
+          },
+          blocked: {
+            type: 'boolean',
+            const: true,
+          },
+          author: {
+            type: 'ref',
+            ref: 'lex:app.bsky.feed.defs#blockedAuthor',
           },
         },
       },
@@ -944,7 +956,7 @@ export const schemaDict = {
       },
       blockedPost: {
         type: 'object',
-        required: ['uri', 'blocked'],
+        required: ['uri', 'blocked', 'author'],
         properties: {
           uri: {
             type: 'string',
@@ -953,6 +965,24 @@ export const schemaDict = {
           blocked: {
             type: 'boolean',
             const: true,
+          },
+          author: {
+            type: 'ref',
+            ref: 'lex:app.bsky.feed.defs#blockedAuthor',
+          },
+        },
+      },
+      blockedAuthor: {
+        type: 'object',
+        required: ['did'],
+        properties: {
+          did: {
+            type: 'string',
+            format: 'did',
+          },
+          viewer: {
+            type: 'ref',
+            ref: 'lex:app.bsky.actor.defs#viewerState',
           },
         },
       },
