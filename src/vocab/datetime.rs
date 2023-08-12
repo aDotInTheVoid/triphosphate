@@ -21,7 +21,7 @@ pub struct Datetime {
 }
 
 impl Datetime {
-    fn new(time: chrono::DateTime<chrono::FixedOffset>) -> Self {
+    pub fn new(time: chrono::DateTime<chrono::FixedOffset>) -> Self {
         let repr = time.to_rfc3339();
         Self { time, repr }
     }

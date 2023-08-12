@@ -1,7 +1,9 @@
 use rquickjs::{Context, Exception, Function, Object, Runtime};
 use serde::Serialize;
+use triphosphate::LexItem;
 
 mod bridge;
+mod post;
 
 const BUNDLE_JS: &str = include_str!("../../lexgen/dist/bundle.js");
 
@@ -43,4 +45,13 @@ fn validate<T: Serialize>(uri: &str, item: &T) -> ValidationResult {
             )
         }
     })
+}
+
+#[track_caller]
+fn check<T: LexItem>(item: &T) {
+    let result = validate(T::URI, item);
+    match result {
+        ValidationResult::Valid => {}
+        ValidationResult::Invalid(err) => panic!("validation failed: {}", err),
+    }
 }
