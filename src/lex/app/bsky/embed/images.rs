@@ -7,13 +7,22 @@ pub struct Image {
     pub alt: ::std::string::String,
     pub image: _lex::_rt::Blob,
 }
+impl _lex::_rt::LexItem for Image {
+    const URI: &'static str = "app.bsky.embed.images#image";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct View {
     pub images: (),
+}
+impl _lex::_rt::LexItem for View {
+    const URI: &'static str = "app.bsky.embed.images#view";
 }
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ViewImage {
     pub alt: ::std::string::String,
     pub fullsize: ::std::string::String,
     pub thumb: ::std::string::String,
+}
+impl _lex::_rt::LexItem for ViewImage {
+    const URI: &'static str = "app.bsky.embed.images#viewImage";
 }

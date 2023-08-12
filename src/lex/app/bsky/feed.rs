@@ -23,3 +23,6 @@ pub struct Post {
     pub reply: Option<_lex::app::bsky::feed::post::ReplyRef>,
     pub text: ::std::string::String,
 }
+impl _lex::_rt::LexItem for Post {
+    const URI: &'static str = "app.bsky.feed.post";
+}

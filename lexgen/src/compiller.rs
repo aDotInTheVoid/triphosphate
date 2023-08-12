@@ -31,7 +31,7 @@ pub(crate) fn lower_lexicon(
     for (name, ty) in &lex.defs {
         let path = compiler.path_for_def(name, ty.item_kind());
 
-        let item = compiler.lower_item(&path, ty);
+        let item = compiler.lower_item(&path, ty, name);
 
         insert_new(&mut compiler.items, path, item);
     }
@@ -40,14 +40,33 @@ pub(crate) fn lower_lexicon(
 }
 
 impl Compiler {
-    fn lower_item(&self, path: &ItemPath, ty: &lexicon::UserType) -> proc_macro2::TokenStream {
-        match ty {
+    fn lower_item(
+        &self,
+        path: &ItemPath,
+        ty: &lexicon::UserType,
+        lex_name: &str,
+    ) -> proc_macro2::TokenStream {
+        let item = match ty {
             UserType::Record(r) => self.lower_record(path, r),
             UserType::Object(o) => self.lower_object(path, o, &o.description),
             UserType::Array(arr) => self.lower_array(path, arr),
             UserType::String(str) => self.lower_string(path, str),
             UserType::Token(t) => self.lower_token(path, t),
             _ => todo!("lower_item: {ty:?}"),
+        };
+
+        let name = path.name();
+        let uri = self.uri(lex_name);
+
+        let lex_impl = quote! {
+            impl _lex::_rt::LexItem for #name {
+                const URI: &'static str = #uri;
+            }
+        };
+
+        quote! {
+            #item
+            #lex_impl
         }
     }
 
@@ -113,6 +132,7 @@ impl Compiler {
 
         quote!(
             #docs
+            #[derive(::serde::Deserialize, ::serde::Serialize)]
             pub struct #name;
         )
         .to_token_stream()
@@ -182,6 +202,14 @@ fn path_for_def(lex_id: &str, def_name: &str, kind: ItemKind) -> ItemPath {
 impl Compiler {
     fn path_for_def(&self, def_name: &str, kind: ItemKind) -> ItemPath {
         path_for_def(&self.doc.id, def_name, kind)
+    }
+
+    fn uri(&self, name: &str) -> String {
+        if name == "main" {
+            self.doc.id.clone()
+        } else {
+            format!("{}#{name}", self.doc.id)
+        }
     }
 }
 

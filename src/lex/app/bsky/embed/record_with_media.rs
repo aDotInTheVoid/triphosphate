@@ -7,3 +7,6 @@ pub struct View {
     pub media: (),
     pub record: _lex::app::bsky::embed::record::View,
 }
+impl _lex::_rt::LexItem for View {
+    const URI: &'static str = "app.bsky.embed.recordWithMedia#view";
+}

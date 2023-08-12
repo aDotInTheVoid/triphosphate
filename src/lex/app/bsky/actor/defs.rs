@@ -6,12 +6,21 @@ use super::super::super::super::_lex;
 pub struct AdultContentPref {
     pub enabled: bool,
 }
+impl _lex::_rt::LexItem for AdultContentPref {
+    const URI: &'static str = "app.bsky.actor.defs#adultContentPref";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ContentLabelPref {
     pub label: ::std::string::String,
     pub visibility: ::std::string::String,
 }
+impl _lex::_rt::LexItem for ContentLabelPref {
+    const URI: &'static str = "app.bsky.actor.defs#contentLabelPref";
+}
 pub type Preferences = ::std::vec::Vec<()>;
+impl _lex::_rt::LexItem for Preferences {
+    const URI: &'static str = "app.bsky.actor.defs#preferences";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ProfileView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -31,6 +40,9 @@ pub struct ProfileView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub viewer: Option<_lex::app::bsky::actor::defs::ViewerState>,
 }
+impl _lex::_rt::LexItem for ProfileView {
+    const URI: &'static str = "app.bsky.actor.defs#profileView";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ProfileViewBasic {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -44,6 +56,9 @@ pub struct ProfileViewBasic {
     pub labels: Option<()>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub viewer: Option<_lex::app::bsky::actor::defs::ViewerState>,
+}
+impl _lex::_rt::LexItem for ProfileViewBasic {
+    const URI: &'static str = "app.bsky.actor.defs#profileViewBasic";
 }
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ProfileViewDetailed {
@@ -75,10 +90,16 @@ pub struct ProfileViewDetailed {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub viewer: Option<_lex::app::bsky::actor::defs::ViewerState>,
 }
+impl _lex::_rt::LexItem for ProfileViewDetailed {
+    const URI: &'static str = "app.bsky.actor.defs#profileViewDetailed";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct SavedFeedsPref {
     pub pinned: (),
     pub saved: (),
+}
+impl _lex::_rt::LexItem for SavedFeedsPref {
+    const URI: &'static str = "app.bsky.actor.defs#savedFeedsPref";
 }
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ViewerState {
@@ -97,4 +118,7 @@ pub struct ViewerState {
     #[serde(rename = "mutedByList")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub muted_by_list: Option<_lex::app::bsky::graph::defs::ListViewBasic>,
+}
+impl _lex::_rt::LexItem for ViewerState {
+    const URI: &'static str = "app.bsky.actor.defs#viewerState";
 }

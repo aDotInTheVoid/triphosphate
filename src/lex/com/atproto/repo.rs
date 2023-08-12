@@ -7,3 +7,6 @@ pub struct StrongRef {
     pub cid: _lex::_rt::Cid,
     pub uri: _lex::_rt::AtUri,
 }
+impl _lex::_rt::LexItem for StrongRef {
+    const URI: &'static str = "com.atproto.repo.strongRef";
+}

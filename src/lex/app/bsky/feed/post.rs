@@ -11,14 +11,23 @@ pub struct Entity {
     pub type_: ::std::string::String,
     pub value: ::std::string::String,
 }
+impl _lex::_rt::LexItem for Entity {
+    const URI: &'static str = "app.bsky.feed.post#entity";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ReplyRef {
     pub parent: _lex::com::atproto::repo::StrongRef,
     pub root: _lex::com::atproto::repo::StrongRef,
+}
+impl _lex::_rt::LexItem for ReplyRef {
+    const URI: &'static str = "app.bsky.feed.post#replyRef";
 }
 #[doc = "Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings."]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct TextSlice {
     pub end: u64,
     pub start: u64,
+}
+impl _lex::_rt::LexItem for TextSlice {
+    const URI: &'static str = "app.bsky.feed.post#textSlice";
 }

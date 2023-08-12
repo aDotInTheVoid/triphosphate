@@ -10,9 +10,15 @@ pub struct External {
     pub title: ::std::string::String,
     pub uri: _lex::_rt::Uri,
 }
+impl _lex::_rt::LexItem for External {
+    const URI: &'static str = "app.bsky.embed.external#external";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct View {
     pub external: _lex::app::bsky::embed::external::ViewExternal,
+}
+impl _lex::_rt::LexItem for View {
+    const URI: &'static str = "app.bsky.embed.external#view";
 }
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ViewExternal {
@@ -21,4 +27,7 @@ pub struct ViewExternal {
     pub thumb: Option<::std::string::String>,
     pub title: ::std::string::String,
     pub uri: _lex::_rt::Uri,
+}
+impl _lex::_rt::LexItem for ViewExternal {
+    const URI: &'static str = "app.bsky.embed.external#viewExternal";
 }

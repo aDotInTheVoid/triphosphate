@@ -10,16 +10,28 @@ use super::super::super::_lex;
 pub struct External {
     pub external: _lex::app::bsky::embed::external::External,
 }
+impl _lex::_rt::LexItem for External {
+    const URI: &'static str = "app.bsky.embed.external";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct Images {
     pub images: (),
+}
+impl _lex::_rt::LexItem for Images {
+    const URI: &'static str = "app.bsky.embed.images";
 }
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct Record {
     pub record: _lex::com::atproto::repo::StrongRef,
 }
+impl _lex::_rt::LexItem for Record {
+    const URI: &'static str = "app.bsky.embed.record";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct RecordWithMedia {
     pub media: (),
     pub record: _lex::app::bsky::embed::Record,
+}
+impl _lex::_rt::LexItem for RecordWithMedia {
+    const URI: &'static str = "app.bsky.embed.recordWithMedia";
 }

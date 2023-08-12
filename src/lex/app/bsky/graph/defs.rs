@@ -6,7 +6,13 @@ use super::super::super::super::_lex;
 pub struct ListItemView {
     pub subject: _lex::app::bsky::actor::defs::ProfileView,
 }
+impl _lex::_rt::LexItem for ListItemView {
+    const URI: &'static str = "app.bsky.graph.defs#listItemView";
+}
 pub type ListPurpose = ::std::string::String;
+impl _lex::_rt::LexItem for ListPurpose {
+    const URI: &'static str = "app.bsky.graph.defs#listPurpose";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ListView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -26,6 +32,9 @@ pub struct ListView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub viewer: Option<_lex::app::bsky::graph::defs::ListViewerState>,
 }
+impl _lex::_rt::LexItem for ListView {
+    const URI: &'static str = "app.bsky.graph.defs#listView";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ListViewBasic {
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -40,10 +49,20 @@ pub struct ListViewBasic {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub viewer: Option<_lex::app::bsky::graph::defs::ListViewerState>,
 }
+impl _lex::_rt::LexItem for ListViewBasic {
+    const URI: &'static str = "app.bsky.graph.defs#listViewBasic";
+}
 #[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ListViewerState {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub muted: Option<bool>,
 }
+impl _lex::_rt::LexItem for ListViewerState {
+    const URI: &'static str = "app.bsky.graph.defs#listViewerState";
+}
 #[doc = "A list of actors to apply an aggregate moderation action (mute/block) on"]
+#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
 pub struct Modlist;
+impl _lex::_rt::LexItem for Modlist {
+    const URI: &'static str = "app.bsky.graph.defs#modlist";
+}
