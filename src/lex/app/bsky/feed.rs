@@ -4,7 +4,7 @@ pub mod post;
 
 #[allow(unused_imports)]
 use super::super::super::_lex;
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct Post {
     #[serde(rename = "createdAt")]
     pub created_at: _lex::_rt::Datetime,

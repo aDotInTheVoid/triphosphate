@@ -90,7 +90,7 @@ impl Compiler {
 
         quote!(
             #doc
-            #[derive(::serde::Deserialize, ::serde::Serialize)]
+            #[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
             pub struct #name {
                 #(#fields),*
             }
@@ -132,7 +132,7 @@ impl Compiler {
 
         quote!(
             #docs
-            #[derive(::serde::Deserialize, ::serde::Serialize)]
+            #[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
             pub struct #name;
         )
         .to_token_stream()

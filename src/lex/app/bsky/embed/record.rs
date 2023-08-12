@@ -2,14 +2,14 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct View {
     pub record: (),
 }
 impl _lex::_rt::LexItem for View {
     const URI: &'static str = "app.bsky.embed.record#view";
 }
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ViewBlocked {
     pub author: _lex::app::bsky::feed::defs::BlockedAuthor,
     pub blocked: bool,
@@ -18,7 +18,7 @@ pub struct ViewBlocked {
 impl _lex::_rt::LexItem for ViewBlocked {
     const URI: &'static str = "app.bsky.embed.record#viewBlocked";
 }
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ViewNotFound {
     #[serde(rename = "notFound")]
     pub not_found: bool,
@@ -27,7 +27,7 @@ pub struct ViewNotFound {
 impl _lex::_rt::LexItem for ViewNotFound {
     const URI: &'static str = "app.bsky.embed.record#viewNotFound";
 }
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ViewRecord {
     pub author: _lex::app::bsky::actor::defs::ProfileViewBasic,
     pub cid: _lex::_rt::Cid,

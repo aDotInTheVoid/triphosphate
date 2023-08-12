@@ -3,7 +3,7 @@
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
 #[doc = "Deprecated: use facets instead."]
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct Entity {
     pub index: _lex::app::bsky::feed::post::TextSlice,
     #[serde(rename = "type")]
@@ -14,7 +14,7 @@ pub struct Entity {
 impl _lex::_rt::LexItem for Entity {
     const URI: &'static str = "app.bsky.feed.post#entity";
 }
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ReplyRef {
     pub parent: _lex::com::atproto::repo::StrongRef,
     pub root: _lex::com::atproto::repo::StrongRef,
@@ -23,7 +23,7 @@ impl _lex::_rt::LexItem for ReplyRef {
     const URI: &'static str = "app.bsky.feed.post#replyRef";
 }
 #[doc = "Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings."]
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct TextSlice {
     pub end: u64,
     pub start: u64,

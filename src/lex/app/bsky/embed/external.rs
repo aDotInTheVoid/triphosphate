@@ -2,7 +2,7 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct External {
     pub description: ::std::string::String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -13,14 +13,14 @@ pub struct External {
 impl _lex::_rt::LexItem for External {
     const URI: &'static str = "app.bsky.embed.external#external";
 }
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct View {
     pub external: _lex::app::bsky::embed::external::ViewExternal,
 }
 impl _lex::_rt::LexItem for View {
     const URI: &'static str = "app.bsky.embed.external#view";
 }
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct ViewExternal {
     pub description: ::std::string::String,
     #[serde(default, skip_serializing_if = "Option::is_none")]

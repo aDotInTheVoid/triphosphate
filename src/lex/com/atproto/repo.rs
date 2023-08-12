@@ -2,7 +2,7 @@
 
 #[allow(unused_imports)]
 use super::super::super::_lex;
-#[derive(:: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
 pub struct StrongRef {
     pub cid: _lex::_rt::Cid,
     pub uri: _lex::_rt::AtUri,
