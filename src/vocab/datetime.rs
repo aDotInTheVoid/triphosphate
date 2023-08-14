@@ -1,5 +1,3 @@
-use serde::de::Error;
-
 #[derive(Debug, Clone)] // TODO: What't the right PartialEq here?
 pub struct Datetime {
     time: chrono::DateTime<chrono::FixedOffset>,
@@ -31,24 +29,21 @@ impl Datetime {
     }
 }
 
-impl serde::Serialize for Datetime {
-    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        self.repr.serialize(serializer)
+impl super::StringFormat for Datetime {
+    fn as_str(&self) -> &str {
+        &self.repr
+    }
+
+    type Error = chrono::ParseError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Error> {
+        let time = chrono::DateTime::parse_from_rfc3339(s)?;
+        let repr = s.to_owned();
+        Ok(Self { time, repr })
     }
 }
 
-impl<'de> serde::Deserialize<'de> for Datetime {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: serde::Deserializer<'de>,
-    {
-        let repr = String::deserialize(deserializer)?;
-        let time = chrono::DateTime::parse_from_rfc3339(&repr).map_err(D::Error::custom)?;
-        // let time = repr.parse().map_err(D::Error::custom)?;
-
-        Ok(Self { repr, time })
-    }
-}
+serde_impls! { Datetime }
 
 #[cfg(test)]
 mod tests {
