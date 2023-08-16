@@ -11,9 +11,6 @@ pub struct Uri;
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Blob;
 
-#[derive(Clone, Deserialize, Serialize)]
-pub struct AtUri;
-
 pub type Unknown = serde_json::Value; // TODO
 
 // TODO: Should this be pub?
@@ -34,11 +31,13 @@ impl fmt::Display for ParseError {
 }
 impl std::error::Error for ParseError {}
 
+mod at_uri;
 mod datetime;
 mod did;
 mod handle;
 mod nsid;
 
+pub use at_uri::AtUri;
 pub use datetime::Datetime;
 pub use did::Did;
 pub use handle::Handle;
@@ -78,6 +77,7 @@ macro_rules! serde_impls {
 }
 
 serde_impls! {
+    AtUri
     Datetime
     Did
     Handle
