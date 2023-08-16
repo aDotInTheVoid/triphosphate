@@ -1,8 +1,8 @@
-use std::{fmt, sync::OnceLock};
+use winnow::Parser;
 
-use regex::Regex;
+use crate::parsing;
 
-use super::StringFormat;
+use super::{ParseError, StringFormat};
 
 /// A [Namespaced Identifier](atproto_docs).
 ///
@@ -11,7 +11,6 @@ pub struct Nsid {
     repr: String,
     last_dot: usize,
 }
-serde_impls! { Nsid }
 
 impl Nsid {
     /// The domain authority of the NSID.
@@ -38,9 +37,6 @@ impl Nsid {
     }
 }
 
-#[derive(Debug)]
-pub struct ParseError(());
-
 impl StringFormat for Nsid {
     fn as_str(&self) -> &str {
         &self.repr
@@ -49,47 +45,24 @@ impl StringFormat for Nsid {
     type Error = ParseError;
 
     fn from_str(s: &str) -> Result<Self, Self::Error> {
-        static RE: OnceLock<Regex> = OnceLock::new();
+        match parsing::nsid.parse(s) {
+            Ok(_) => {
+                let last_dot = s.rfind('.').unwrap();
 
-        let re = RE.get_or_init(|| {
-            Regex::new(
-                r#"(?x)
-                ^
-                [a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?
-                (\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+
-                (?<dot>\.)
-                [a-zA-Z]([a-zA-Z]{0,61}[a-zA-Z])?
-                $"#,
-            )
-            .unwrap()
-        });
-
-        let caps = re.captures(s).ok_or(ParseError(()))?;
-
-        let dot_idx = caps.name("dot").unwrap().range();
-
-        debug_assert_eq!(dot_idx.start + 1, dot_idx.end);
-
-        if s.len() > 253 + 1 + 63 {
-            return Err(ParseError(()));
+                Ok(Nsid {
+                    repr: s.to_owned(),
+                    last_dot,
+                })
+            }
+            Err(_) => Err(ParseError(())),
         }
-
-        Ok(Nsid {
-            repr: s.to_owned(),
-            last_dot: dot_idx.start,
-        })
     }
 }
-
-impl fmt::Display for ParseError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "failed to parse NSID")
-    }
-}
-impl std::error::Error for ParseError {}
 
 #[cfg(test)]
 mod tests {
+    // https://github.com/bluesky-social/atproto/blob/ea9d96e3a44119ca6189e7a3989a1bd9b54989a9/packages/nsid/tests/nsid.test.ts#L38
+
     use super::*;
 
     #[test]

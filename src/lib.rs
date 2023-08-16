@@ -1,6 +1,8 @@
 pub mod lex;
 pub mod vocab;
 
+mod parsing;
+
 pub trait LexItem: serde::Serialize + serde::de::DeserializeOwned {
     const URI: &'static str;
 }

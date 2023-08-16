@@ -1,19 +1,18 @@
+use std::fmt;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Cid;
 
 #[derive(Clone, Deserialize, Serialize)]
-pub struct Did;
-
-#[derive(Clone, Deserialize, Serialize)]
-pub struct Handle;
-
-#[derive(Clone, Deserialize, Serialize)]
 pub struct Uri;
 
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Blob;
+
+#[derive(Clone, Deserialize, Serialize)]
+pub struct AtUri;
 
 pub type Unknown = serde_json::Value; // TODO
 
@@ -26,8 +25,27 @@ pub trait StringFormat: Sized {
     fn from_str(s: &str) -> Result<Self, Self::Error>;
 }
 
+#[derive(Debug)]
+pub struct ParseError(());
+impl fmt::Display for ParseError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "failed to parse NSID")
+    }
+}
+impl std::error::Error for ParseError {}
+
+mod datetime;
+mod did;
+mod handle;
+mod nsid;
+
+pub use datetime::Datetime;
+pub use did::Did;
+pub use handle::Handle;
+pub use nsid::Nsid;
+
 macro_rules! serde_impls {
-    ($name:path) => {
+    ($($name:path)*) => {$(
         impl ::serde::Serialize for $name {
             fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
                 ::serde::Serialize::serialize($crate::vocab::StringFormat::as_str(self), serializer)
@@ -56,13 +74,12 @@ macro_rules! serde_impls {
                 ::serde::Deserializer::deserialize_str(deserializer, Visitor)
             }
         }
-    };
+    )*};
 }
 
-mod at_uri;
-mod datetime;
-mod nsid;
-
-pub use at_uri::AtUri;
-pub use datetime::Datetime;
-pub use nsid::Nsid;
+serde_impls! {
+    Datetime
+    Did
+    Handle
+    Nsid
+}

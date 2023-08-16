@@ -51,15 +51,15 @@ pub struct Integer {
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Copy)]
 #[serde(rename_all = "kebab-case")]
 pub enum StringFormat {
-    Datetime,
-    Uri,
+    AtIdentifier,
     AtUri,
+    Cid,
+    Datetime,
     Did,
     Handle,
-    AtIdentifier,
-    Nsid,
-    Cid,
     Language,
+    Nsid,
+    Uri,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]

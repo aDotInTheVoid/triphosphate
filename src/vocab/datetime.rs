@@ -43,8 +43,6 @@ impl super::StringFormat for Datetime {
     }
 }
 
-serde_impls! { Datetime }
-
 #[cfg(test)]
 mod tests {
     use super::*;
