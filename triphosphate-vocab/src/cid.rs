@@ -1,4 +1,6 @@
-#[derive(Debug, Clone)]
+use std::fmt;
+
+#[derive(Clone)]
 pub struct Cid {
     repr: String,
     cid: cid::Cid,
@@ -23,6 +25,12 @@ impl super::StringFormat for Cid {
 impl Cid {
     pub fn version(&self) -> cid::Version {
         self.cid.version()
+    }
+}
+
+impl fmt::Debug for Cid {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Cid({:?})", self.repr)
     }
 }
 

@@ -18,7 +18,7 @@ async fn main() -> anyhow::Result<()> {
         langs: None,
         reply: None,
         labels: None,
-        text: "Now no longer hard coding NSID's into createRecord!".to_string(),
+        text: "test, langs=None".to_string(),
     };
 
     let my_repo = AtIdentifier::Did(creds.did);

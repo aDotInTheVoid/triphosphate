@@ -223,7 +223,7 @@ impl Compiler {
             let mut fields = Vec::new();
             let mut inserters = Vec::new();
             for (lex_name, prop) in &params.properties {
-                let ty = self.lower_param_prop(lex_name, prop, &params);
+                let ty = self.lower_param_prop(lex_name, prop, params);
 
                 let name = ty.name();
 

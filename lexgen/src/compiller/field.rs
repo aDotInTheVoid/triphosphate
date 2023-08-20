@@ -145,7 +145,7 @@ impl FieldType {
         }
     }
 
-    fn from_param_prop<'a>(prop: &'a ParameterProperty) -> (Self, &'a Option<String>) {
+    fn from_param_prop(prop: &ParameterProperty) -> (Self, &Option<String>) {
         match prop {
             ParameterProperty::Boolean(b) => Self::bool(b),
             ParameterProperty::Integer(i) => Self::integer(i),
