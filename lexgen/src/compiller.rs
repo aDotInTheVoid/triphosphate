@@ -232,7 +232,6 @@ impl Compiler {
                     FieldType::RtType(_) => {
                         quote!(_lex::_rt::StringFormat::as_str(#name).to_owned())
                     }
-                    // FieldType::Bool => quote!(#name.to_string()),
                     _ => todo!("{ty:?}"),
                 };
 

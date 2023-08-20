@@ -3,17 +3,3 @@ pub mod defs;
 
 #[allow(unused_imports)]
 use super::super::super::_lex;
-///A social follow.
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
-pub struct Follow {
-    #[serde(rename = "createdAt")]
-    pub created_at: _lex::_rt::Datetime,
-    pub subject: _lex::_rt::Did,
-}
-impl _lex::_rt::LexRecord for Follow {
-    const NSID: _lex::_rt::Nsid =
-        _lex::_rt::Nsid::__new_unchecked("app.bsky.graph.follow", 14usize);
-}
-impl _lex::_rt::LexItem for Follow {
-    const URI: &'static str = "app.bsky.graph.follow";
-}
