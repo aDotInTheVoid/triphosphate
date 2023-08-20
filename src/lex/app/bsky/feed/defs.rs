@@ -44,7 +44,7 @@ pub struct GeneratorView {
     pub description: Option<::std::string::String>,
     #[serde(rename = "descriptionFacets")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub description_facets: Option<()>,
+    pub description_facets: Option<Vec<_lex::app::bsky::richtext::Facet>>,
     pub did: _lex::_rt::Did,
     #[serde(rename = "displayName")]
     pub display_name: ::std::string::String,
@@ -89,7 +89,7 @@ pub struct PostView {
     #[serde(rename = "indexedAt")]
     pub indexed_at: _lex::_rt::Datetime,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub labels: Option<()>,
+    pub labels: Option<Vec<_lex::com::atproto::label::defs::Label>>,
     #[serde(rename = "likeCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub like_count: Option<i64>,
@@ -151,7 +151,7 @@ pub struct ThreadViewPost {
     pub parent: Option<()>,
     pub post: _lex::app::bsky::feed::defs::PostView,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub replies: Option<()>,
+    pub replies: Option<Vec<()>>,
 }
 impl _lex::_rt::LexItem for ThreadViewPost {
     const URI: &'static str = "app.bsky.feed.defs#threadViewPost";

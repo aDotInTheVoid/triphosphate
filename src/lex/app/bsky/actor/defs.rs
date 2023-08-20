@@ -19,7 +19,7 @@ impl _lex::_rt::LexItem for ContentLabelPref {
     const URI: &'static str = "app.bsky.actor.defs#contentLabelPref";
 }
 
-pub type Preferences = ::std::vec::Vec<()>;
+pub type Preferences = Vec<()>;
 impl _lex::_rt::LexItem for Preferences {
     const URI: &'static str = "app.bsky.actor.defs#preferences";
 }
@@ -39,7 +39,7 @@ pub struct ProfileView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub indexed_at: Option<_lex::_rt::Datetime>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub labels: Option<()>,
+    pub labels: Option<Vec<_lex::com::atproto::label::defs::Label>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub viewer: Option<_lex::app::bsky::actor::defs::ViewerState>,
 }
@@ -57,7 +57,7 @@ pub struct ProfileViewBasic {
     pub display_name: Option<::std::string::String>,
     pub handle: _lex::_rt::Handle,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub labels: Option<()>,
+    pub labels: Option<Vec<_lex::com::atproto::label::defs::Label>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub viewer: Option<_lex::app::bsky::actor::defs::ViewerState>,
 }
@@ -88,7 +88,7 @@ pub struct ProfileViewDetailed {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub indexed_at: Option<_lex::_rt::Datetime>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub labels: Option<()>,
+    pub labels: Option<Vec<_lex::com::atproto::label::defs::Label>>,
     #[serde(rename = "postsCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub posts_count: Option<i64>,
@@ -101,8 +101,8 @@ impl _lex::_rt::LexItem for ProfileViewDetailed {
 
 #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct SavedFeedsPref {
-    pub pinned: (),
-    pub saved: (),
+    pub pinned: Vec<_lex::_rt::AtUri>,
+    pub saved: Vec<_lex::_rt::AtUri>,
 }
 impl _lex::_rt::LexItem for SavedFeedsPref {
     const URI: &'static str = "app.bsky.actor.defs#savedFeedsPref";

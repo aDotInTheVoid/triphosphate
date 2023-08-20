@@ -35,11 +35,11 @@ pub struct ViewRecord {
     pub author: _lex::app::bsky::actor::defs::ProfileViewBasic,
     pub cid: _lex::_rt::Cid,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub embeds: Option<()>,
+    pub embeds: Option<Vec<()>>,
     #[serde(rename = "indexedAt")]
     pub indexed_at: _lex::_rt::Datetime,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub labels: Option<()>,
+    pub labels: Option<Vec<_lex::com::atproto::label::defs::Label>>,
     pub uri: _lex::_rt::AtUri,
     pub value: _lex::_rt::Unknown,
 }

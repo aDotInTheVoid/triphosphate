@@ -8,6 +8,9 @@ pub struct Uri;
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Blob;
 
+#[derive(Debug, Clone, Deserialize, Serialize)]
+pub struct Language;
+
 pub type Unknown = serde_json::Value; // TODO
 
 // TODO: Should this be pub?

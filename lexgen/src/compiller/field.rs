@@ -1,7 +1,9 @@
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote, ToTokens};
 
-use crate::lexicon::{Boolean, ObjectProperty, ParameterProperty, StringFormat, XrpcParameters};
+use crate::lexicon::{
+    ArrayItem, Boolean, ObjectProperty, ParameterProperty, StringFormat, XrpcParameters,
+};
 
 use super::{doc_comment, ident, path_for_def, snake, Compiler, ItemPath};
 
@@ -106,6 +108,8 @@ fn field_name(name: &str) -> (Ident, TokenStream) {
 pub(super) enum FieldType {
     Ref(ItemPath),
 
+    Vec(Box<FieldType>),
+
     Unit,
     RtType(StringFormat),
     StdString, // TODO: Remove
@@ -123,18 +127,14 @@ pub(super) enum FieldType {
 impl FieldType {
     pub fn from_obj_prop<'a>(prop: &'a ObjectProperty, doc_id: &str) -> (Self, &'a Option<String>) {
         match prop {
-            ObjectProperty::Ref(path) => {
-                (FieldType::Ref(type_ref(path, doc_id)), &path.description)
-            }
-
-            // Shared with param_prop
+            ObjectProperty::Ref(path) => Self::ref_(path, doc_id),
             ObjectProperty::Boolean(b) => Self::bool(b),
             ObjectProperty::String(s) => Self::string(s),
             ObjectProperty::Integer(i) => Self::integer(i),
+            ObjectProperty::Array(a) => Self::array(a, doc_id),
 
             // TODO: Implement.
             ObjectProperty::Union(u) => (FieldType::Unit, &u.description),
-            ObjectProperty::Array(a) => (FieldType::Unit, &a.description),
 
             ObjectProperty::Unknown(u) => (FieldType::Unknown, &u.description),
 
@@ -152,6 +152,19 @@ impl FieldType {
             ParameterProperty::String(s) => Self::string(s),
             ParameterProperty::Unknown(_) => todo!(),
             ParameterProperty::Array(_) => todo!(),
+        }
+    }
+
+    fn from_array_items<'a>(prop: &'a ArrayItem, doc_id: &str) -> (Self, &'a Option<String>) {
+        match prop {
+            ArrayItem::Boolean(b) => Self::bool(b),
+            ArrayItem::Integer(i) => Self::integer(i),
+            ArrayItem::String(s) => Self::string(s),
+            ArrayItem::Ref(r) => Self::ref_(r, doc_id),
+
+            // TODO: This needs a major refractor so we can insert a enum into the compiller map here.
+            ArrayItem::Union(_) => (Self::Unit, &None),
+            _ => todo!("{prop:?}"),
         }
     }
 
@@ -187,6 +200,18 @@ impl FieldType {
         // TODO: Use default, const.
         (Self::Bool, &b.description)
     }
+
+    fn array<'a>(a: &'a crate::lexicon::Array, doc_id: &str) -> (FieldType, &'a Option<String>) {
+        let (inner, desc) = FieldType::from_array_items(&a.items, doc_id);
+
+        assert_eq!(desc, &None); // TODO: What if both have docs??
+
+        (FieldType::Vec(Box::new(inner)), &a.description)
+    }
+
+    fn ref_<'a>(path: &'a crate::lexicon::Ref, doc_id: &str) -> (FieldType, &'a Option<String>) {
+        (FieldType::Ref(type_ref(path, doc_id)), &path.description)
+    }
 }
 
 fn type_ref(path: &crate::lexicon::Ref, doc_id: &str) -> ItemPath {
@@ -221,6 +246,11 @@ impl ToTokens for FieldType {
             FieldType::Bool => quote!(bool).to_tokens(tokens),
             FieldType::U64 => quote!(u64).to_tokens(tokens),
             FieldType::I64 => quote!(i64).to_tokens(tokens),
+
+            FieldType::Vec(inner) => {
+                let inner = inner.to_token_stream();
+                quote!(Vec<#inner>).to_tokens(tokens)
+            }
         }
     }
 }

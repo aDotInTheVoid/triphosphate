@@ -12,13 +12,13 @@ pub struct Post {
     pub embed: Option<()>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     ///Deprecated: replaced by app.bsky.richtext.facet.
-    pub entities: Option<()>,
+    pub entities: Option<Vec<_lex::app::bsky::feed::post::Entity>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub facets: Option<()>,
+    pub facets: Option<Vec<_lex::app::bsky::richtext::Facet>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub labels: Option<()>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub langs: Option<()>,
+    pub langs: Option<Vec<_lex::_rt::Language>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub reply: Option<_lex::app::bsky::feed::post::ReplyRef>,
     pub text: ::std::string::String,

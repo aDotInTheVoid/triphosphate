@@ -25,7 +25,7 @@ pub struct ListView {
     pub description: Option<::std::string::String>,
     #[serde(rename = "descriptionFacets")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub description_facets: Option<()>,
+    pub description_facets: Option<Vec<_lex::app::bsky::richtext::Facet>>,
     #[serde(rename = "indexedAt")]
     pub indexed_at: _lex::_rt::Datetime,
     pub name: ::std::string::String,

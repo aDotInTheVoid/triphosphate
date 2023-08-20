@@ -16,7 +16,7 @@ impl _lex::_rt::LexItem for External {
 
 #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Images {
-    pub images: (),
+    pub images: Vec<_lex::app::bsky::embed::images::Image>,
 }
 impl _lex::_rt::LexItem for Images {
     const URI: &'static str = "app.bsky.embed.images";

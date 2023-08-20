@@ -3,6 +3,7 @@ pub mod actor;
 pub mod embed;
 pub mod feed;
 pub mod graph;
+pub mod richtext;
 
 #[allow(unused_imports)]
 use super::super::_lex;

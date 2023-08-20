@@ -13,7 +13,7 @@ impl _lex::_rt::LexItem for Image {
 
 #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct View {
-    pub images: (),
+    pub images: Vec<_lex::app::bsky::embed::images::ViewImage>,
 }
 impl _lex::_rt::LexItem for View {
     const URI: &'static str = "app.bsky.embed.images#view";

@@ -136,7 +136,7 @@ impl Compiler {
 
         quote!(
             #docs
-            pub type #name = ::std::vec::Vec<#field>;
+            pub type #name = #field;
         )
         .to_token_stream()
     }
