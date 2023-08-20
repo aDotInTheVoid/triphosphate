@@ -3,9 +3,6 @@ use std::fmt;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Deserialize, Serialize)]
-pub struct Cid;
-
-#[derive(Clone, Deserialize, Serialize)]
 pub struct Uri;
 
 #[derive(Clone, Deserialize, Serialize)]
@@ -32,11 +29,13 @@ impl fmt::Display for ParseError {
 impl std::error::Error for ParseError {}
 
 mod at_uri;
+mod cid;
 mod datetime;
 mod did;
 mod handle;
 mod nsid;
 
+pub use self::cid::Cid;
 pub use at_uri::AtUri;
 pub use datetime::Datetime;
 pub use did::Did;
@@ -78,6 +77,7 @@ macro_rules! serde_impls {
 
 serde_impls! {
     AtUri
+    Cid
     Datetime
     Did
     Handle
