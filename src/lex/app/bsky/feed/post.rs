@@ -2,19 +2,20 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[doc = "Deprecated: use facets instead."]
-#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
+///Deprecated: use facets instead.
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Entity {
     pub index: _lex::app::bsky::feed::post::TextSlice,
     #[serde(rename = "type")]
-    #[doc = "Expected values are 'mention' and 'link'."]
+    ///Expected values are 'mention' and 'link'.
     pub type_: ::std::string::String,
     pub value: ::std::string::String,
 }
 impl _lex::_rt::LexItem for Entity {
     const URI: &'static str = "app.bsky.feed.post#entity";
 }
-#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
+
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ReplyRef {
     pub parent: _lex::com::atproto::repo::StrongRef,
     pub root: _lex::com::atproto::repo::StrongRef,
@@ -22,8 +23,9 @@ pub struct ReplyRef {
 impl _lex::_rt::LexItem for ReplyRef {
     const URI: &'static str = "app.bsky.feed.post#replyRef";
 }
-#[doc = "Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings."]
-#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
+
+///Deprecated. Use app.bsky.richtext instead -- A text segment. Start is inclusive, end is exclusive. Indices are for utf16-encoded strings.
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct TextSlice {
     pub end: u64,
     pub start: u64,

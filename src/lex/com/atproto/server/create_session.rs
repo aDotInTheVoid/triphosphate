@@ -2,13 +2,14 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Args {
-    #[doc = "Handle or other identifier supported by the server for the authenticating user."]
+    ///Handle or other identifier supported by the server for the authenticating user.
     pub identifier: ::std::string::String,
     pub password: ::std::string::String,
 }
-#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
+
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Responce {
     #[serde(rename = "accessJwt")]
     pub access_jwt: ::std::string::String,

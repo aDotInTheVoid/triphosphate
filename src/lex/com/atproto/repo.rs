@@ -4,7 +4,7 @@ pub mod get_record;
 
 #[allow(unused_imports)]
 use super::super::super::_lex;
-#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct StrongRef {
     pub cid: _lex::_rt::Cid,
     pub uri: _lex::_rt::AtUri,
@@ -12,7 +12,8 @@ pub struct StrongRef {
 impl _lex::_rt::LexItem for StrongRef {
     const URI: &'static str = "com.atproto.repo.strongRef";
 }
-#[doc = "Create a new record."]
+
+///Create a new record.
 pub async fn create_record(
     client: &_lex::_rt::Client,
     args: &_lex::com::atproto::repo::create_record::Args,
@@ -21,7 +22,8 @@ pub async fn create_record(
         .do_procedure("com.atproto.repo.createRecord", args)
         .await
 }
-#[doc = "Get a record."]
+
+///Get a record.
 pub async fn get_record(
     client: &_lex::_rt::Client,
     args: &_lex::com::atproto::repo::get_record::Params,

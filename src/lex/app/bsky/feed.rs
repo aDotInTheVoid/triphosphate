@@ -4,14 +4,14 @@ pub mod post;
 
 #[allow(unused_imports)]
 use super::super::super::_lex;
-#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Post {
     #[serde(rename = "createdAt")]
     pub created_at: _lex::_rt::Datetime,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub embed: Option<()>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[doc = "Deprecated: replaced by app.bsky.richtext.facet."]
+    ///Deprecated: replaced by app.bsky.richtext.facet.
     pub entities: Option<()>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub facets: Option<()>,

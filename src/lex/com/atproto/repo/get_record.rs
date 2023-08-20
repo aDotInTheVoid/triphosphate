@@ -2,19 +2,20 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Params {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[doc = "The CID of the version of the record. If not specified, then return the most recent version."]
+    ///The CID of the version of the record. If not specified, then return the most recent version.
     pub cid: Option<_lex::_rt::Cid>,
-    #[doc = "The NSID of the record collection."]
+    ///The NSID of the record collection.
     pub collection: _lex::_rt::Nsid,
-    #[doc = "The handle or DID of the repo."]
+    ///The handle or DID of the repo.
     pub repo: _lex::_rt::AtIdentifier,
-    #[doc = "The key of the record."]
+    ///The key of the record.
     pub rkey: ::std::string::String,
 }
-#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
+
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Responce {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cid: Option<_lex::_rt::Cid>,

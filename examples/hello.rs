@@ -37,7 +37,7 @@ async fn main() -> anyhow::Result<()> {
     )
     .await?;
 
-    dbg!(resp);
+    // dbg!(resp);
 
     Ok(())
 }

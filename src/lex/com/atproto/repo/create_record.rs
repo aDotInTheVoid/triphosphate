@@ -2,26 +2,27 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Args {
-    #[doc = "The NSID of the record collection."]
+    ///The NSID of the record collection.
     pub collection: _lex::_rt::Nsid,
-    #[doc = "The record to create."]
+    ///The record to create.
     pub record: _lex::_rt::Unknown,
-    #[doc = "The handle or DID of the repo."]
+    ///The handle or DID of the repo.
     pub repo: _lex::_rt::AtIdentifier,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[doc = "The key of the record."]
+    ///The key of the record.
     pub rkey: Option<::std::string::String>,
     #[serde(rename = "swapCommit")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[doc = "Compare and swap with the previous commit by cid."]
+    ///Compare and swap with the previous commit by cid.
     pub swap_commit: Option<_lex::_rt::Cid>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[doc = "Validate the record?"]
+    ///Validate the record?
     pub validate: Option<bool>,
 }
-#[derive(:: std :: clone :: Clone, :: serde :: Deserialize, :: serde :: Serialize)]
+
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Responce {
     pub cid: _lex::_rt::Cid,
     pub uri: _lex::_rt::AtUri,

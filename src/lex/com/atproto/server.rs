@@ -3,7 +3,7 @@ pub mod create_session;
 
 #[allow(unused_imports)]
 use super::super::super::_lex;
-#[doc = "Create an authentication session."]
+///Create an authentication session.
 pub async fn create_session(
     client: &_lex::_rt::Client,
     args: &_lex::com::atproto::server::create_session::Args,
