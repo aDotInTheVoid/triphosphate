@@ -180,7 +180,7 @@ impl Compiler {
         // TODO: Error handling.
         quote! {
             #docs
-            pub async fn #name(client: &_lex::_rt::Client, args: &_lex::#params_ty) -> _lex::_rt::Result<_lex::#ret_type> {
+            pub async fn #name(client: &_lex::_rt::Client, args: &#params_ty) -> _lex::_rt::Result<#ret_type> {
                 client.do_query(#xrpc_id, args).await
             }
         }
@@ -204,7 +204,7 @@ impl Compiler {
 
         quote! {
             #docs
-            pub async fn #name(client: &_lex::_rt::Client, args: &_lex::#input_type) -> _lex::_rt::Result<_lex::#output_type> {
+            pub async fn #name(client: &_lex::_rt::Client, args: &#input_type) -> _lex::_rt::Result<#output_type> {
                 client.do_procedure(#xrpc_id, args).await
             }
         }
@@ -269,7 +269,7 @@ impl Compiler {
 
             self.insert_item(&params_path, obj);
 
-            Some(params_path)
+            Some(params_path.prepend_lex())
         } else {
             None
         }
@@ -284,8 +284,9 @@ impl Compiler {
                     let path = xrpc_path.extend(kind);
                     let resp = self.lower_object(&path, o, &o.description);
                     self.insert_item(&path, resp);
-                    path
+                    path.prepend_lex()
                 }
+                Some(XrpcBodySchema::Ref(r)) => field::type_ref(r, &self.doc.id),
                 other => todo!("{other:?}"),
             }
         } else {
@@ -325,6 +326,12 @@ impl ItemPath {
         this.0 .0.push(mem::replace(&mut this.1, extra.to_owned()));
 
         this
+    }
+
+    fn prepend_lex(mut self) -> ItemPath {
+        assert_ne!(self.0 .0[0], "_lex");
+        self.0 .0.insert(0, "_lex".to_owned());
+        self
     }
 }
 

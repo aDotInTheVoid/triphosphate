@@ -214,7 +214,8 @@ impl FieldType {
     }
 }
 
-fn type_ref(path: &crate::lexicon::Ref, doc_id: &str) -> ItemPath {
+// TODO: Put on compiller.
+pub(crate) fn type_ref(path: &crate::lexicon::Ref, doc_id: &str) -> ItemPath {
     let refpath = &path.r#ref;
 
     let (mod_, name) = refpath.split_once('#').unwrap_or((refpath, ""));
