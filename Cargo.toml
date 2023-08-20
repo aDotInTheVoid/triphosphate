@@ -22,4 +22,5 @@ tokio = { version = "1.29.1", features = ["rt", "macros"] }
 winnow = "0.5.10"
 
 [dev-dependencies]
+anyhow = "1.0.75"
 rquickjs = "0.3.1"

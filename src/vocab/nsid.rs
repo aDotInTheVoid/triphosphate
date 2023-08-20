@@ -7,6 +7,7 @@ use super::{ParseError, StringFormat};
 /// A [Namespaced Identifier](atproto_docs).
 ///
 /// [atproto_docs]: https://atproto.com/specs/nsid
+#[derive(Debug, Clone)]
 pub struct Nsid {
     repr: String,
     last_dot: usize,

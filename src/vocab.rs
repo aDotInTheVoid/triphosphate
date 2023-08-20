@@ -2,10 +2,10 @@ use std::fmt;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Uri;
 
-#[derive(Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct Blob;
 
 pub type Unknown = serde_json::Value; // TODO
@@ -28,6 +28,7 @@ impl fmt::Display for ParseError {
 }
 impl std::error::Error for ParseError {}
 
+mod at_identifer;
 mod at_uri;
 mod cid;
 mod datetime;
@@ -36,6 +37,7 @@ mod handle;
 mod nsid;
 
 pub use self::cid::Cid;
+pub use at_identifer::AtIdentifier;
 pub use at_uri::AtUri;
 pub use datetime::Datetime;
 pub use did::Did;
@@ -77,6 +79,7 @@ macro_rules! serde_impls {
 
 serde_impls! {
     AtUri
+    AtIdentifier
     Cid
     Datetime
     Did

@@ -1,11 +1,17 @@
-use triphosphate::{lex::app::bsky::feed::Post, vocab::Datetime};
+use triphosphate::{
+    lex::{app::bsky::feed::Post, com::atproto::repo::create_record},
+    vocab::{AtIdentifier, Datetime, Nsid, StringFormat},
+    LexItem,
+};
 
 #[tokio::main(flavor = "current_thread")]
-async fn main() {
-    let client = reqwest::Client::builder()
-        .user_agent("triphsphate")
-        .build()
-        .unwrap();
+async fn main() -> anyhow::Result<()> {
+    let mut client = triphosphate::client::Client::new()?;
+
+    let handle = std::env::var("ATP_USERNAME").unwrap();
+    let password = std::env::var("ATP_PASSWORD").unwrap();
+
+    let creds = client.login(&handle, &password).await?;
 
     let post = Post {
         created_at: Datetime::now(),
@@ -15,58 +21,23 @@ async fn main() {
         langs: None,
         reply: None,
         labels: None,
-        text: "Hello from Triphosphate!!".to_string(),
+        text: "Hello from Triphosphate! Now contains procedures!".to_string(),
     };
 
-    let post_json = serde_json::to_string_pretty(&post).unwrap();
+    let resp = create_record(
+        &client,
+        &create_record::Args {
+            collection: Nsid::from_str(Post::URI).unwrap(),
+            record: serde_json::to_value(&post)?,
+            repo: AtIdentifier::Did(creds.did),
+            validate: Some(true),
+            rkey: None,
+            swap_commit: None,
+        },
+    )
+    .await?;
 
-    println!("{}", post_json);
+    dbg!(resp);
 
-    let resp = client
-        .post("https://bsky.social/xrpc/com.atproto.server.createSession")
-        .json(&LoginBody {
-            identifier: std::env::var("ATP_USERNAME").unwrap(),
-            password: std::env::var("ATP_PASSWORD").unwrap(),
-        })
-        .send()
-        .await
-        .unwrap();
-
-    dbg!(resp.status());
-    let creds = resp.json::<LoginResponse>().await.unwrap();
-
-    let resp = client
-        .post("https://bsky.social/xrpc/com.atproto.repo.createRecord")
-        .bearer_auth(&creds.access_jwt)
-        .json(&CreateRecord {
-            repo: creds.did,
-            collection: "app.bsky.feed.post".to_string(),
-            record: post,
-        })
-        .send()
-        .await
-        .unwrap();
-
-    dbg!(resp.status());
-    dbg!(resp.text().await.unwrap());
-}
-
-// TODO: Derive these from createSession.json
-#[derive(serde::Serialize)]
-struct LoginBody {
-    identifier: String,
-    password: String,
-}
-#[derive(serde::Deserialize, Debug)]
-struct LoginResponse {
-    #[serde(rename = "accessJwt")]
-    access_jwt: String,
-    did: String,
-}
-
-#[derive(serde::Serialize)]
-struct CreateRecord<T> {
-    repo: String,
-    collection: String,
-    record: T,
+    Ok(())
 }

@@ -1,13 +1,14 @@
 use std::{
     collections::{btree_map::Entry, BTreeMap},
     fmt::{self, Debug},
+    mem,
     sync::Arc,
 };
 
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote, ToTokens};
 
-use crate::lexicon::{self, Array, Token, UserType};
+use crate::lexicon::{self, Array, Token, UserType, XrpcBody, XrpcBodySchema, XrpcParameters};
 
 use self::field::FieldType;
 
@@ -31,43 +32,53 @@ pub(crate) fn lower_lexicon(
     for (name, ty) in &lex.defs {
         let path = compiler.path_for_def(name, ty.item_kind());
 
-        let item = compiler.lower_item(&path, ty, name);
-
-        insert_new(&mut compiler.items, path, item);
+        compiler.lower_item(&path, ty, name);
     }
 
     compiler.items
 }
 
 impl Compiler {
-    fn lower_item(
-        &self,
-        path: &ItemPath,
-        ty: &lexicon::UserType,
-        lex_name: &str,
-    ) -> proc_macro2::TokenStream {
+    fn insert_item(&mut self, p: &ItemPath, toks: proc_macro2::TokenStream) {
+        insert_new(&mut self.items, p.clone(), toks);
+    }
+
+    fn lower_item(&mut self, path: &ItemPath, ty: &lexicon::UserType, lex_name: &str) {
         let item = match ty {
             UserType::Record(r) => self.lower_record(path, r),
             UserType::Object(o) => self.lower_object(path, o, &o.description),
             UserType::Array(arr) => self.lower_array(path, arr),
             UserType::String(str) => self.lower_string(path, str),
             UserType::Token(t) => self.lower_token(path, t),
+            UserType::Query(q) => {
+                // lower_query get's the URL of the method to call from the id
+                // of the lexicon document, so THERE CAN ONLY BE ONE.
+                assert_eq!(lex_name, "main");
+                self.lower_query(path, q)
+            }
+            UserType::Procedure(p) => {
+                assert_eq!(lex_name, "main");
+                self.lower_procedure(path, p)
+            }
             _ => todo!("lower_item: {ty:?}"),
         };
 
-        let name = path.name();
-        let uri = self.uri(lex_name);
+        let toks = match ty.item_kind() {
+            ItemKind::Func => item,
+            ItemKind::Type => {
+                let name = path.name();
+                let uri = self.uri(lex_name);
 
-        let lex_impl = quote! {
-            impl _lex::_rt::LexItem for #name {
-                const URI: &'static str = #uri;
+                quote! {
+                    #item
+                    impl _lex::_rt::LexItem for #name {
+                        const URI: &'static str = #uri;
+                    }
+                }
             }
         };
 
-        quote! {
-            #item
-            #lex_impl
-        }
+        self.insert_item(path, toks);
     }
 
     fn lower_record(&self, path: &ItemPath, r: &lexicon::Record) -> proc_macro2::TokenStream {
@@ -137,6 +148,88 @@ impl Compiler {
         )
         .to_token_stream()
     }
+
+    fn lower_query(&mut self, path: &ItemPath, query: &lexicon::XrpcQuery) -> TokenStream {
+        let name = path.name();
+
+        let docs = doc_comment(&query.description);
+
+        let params_type = self.xrpc_parameter(&query.parameters, path);
+
+        let ret_type = self.xrpc_body(&query.output, path, "Responce");
+        let params_ty = params_type.unwrap();
+        let xrpc_id = &self.doc.id;
+
+        // TODO: Error handling.
+        quote! {
+            #docs
+            pub async fn #name(client: &_lex::_rt::Client, args: &_lex::#params_ty) -> ::reqwest::Result<_lex::#ret_type> {
+                client.do_query(#xrpc_id, args).await
+            }
+        }
+    }
+
+    fn lower_procedure(
+        &mut self,
+        path: &ItemPath,
+        proc: &lexicon::XprcProcedure,
+    ) -> proc_macro2::TokenStream {
+        let docs = doc_comment(&proc.description);
+        let name = path.name();
+
+        assert_eq!(proc.parameters, None);
+
+        let output_type = self.xrpc_body(&proc.output, path, "Responce");
+        let input_type = self.xrpc_body(&proc.input, path, "Args");
+        let xrpc_id = &self.doc.id;
+
+        // TODO: Error Handling
+
+        quote! {
+            #docs
+            pub async fn #name(client: &_lex::_rt::Client, args: &_lex::#input_type) -> ::reqwest::Result<_lex::#output_type> {
+                client.do_procedure(#xrpc_id, args).await
+            }
+        }
+    }
+
+    fn xrpc_parameter(
+        &mut self,
+        params: &Option<XrpcParameters>,
+        path: &ItemPath,
+    ) -> Option<ItemPath> {
+        if let Some(params) = params {
+            let object = conv::params_as_object(params.clone());
+
+            let params_path = path.extend("Params");
+
+            let obj = self.lower_object(&params_path, &object, &object.description);
+
+            self.insert_item(&params_path, obj);
+
+            Some(params_path)
+        } else {
+            None
+        }
+    }
+
+    fn xrpc_body(&mut self, body: &Option<XrpcBody>, xrpc_path: &ItemPath, kind: &str) -> ItemPath {
+        if let Some(resp) = body {
+            match &resp.schema {
+                Some(XrpcBodySchema::Object(o)) => {
+                    assert_eq!(resp.encoding, "application/json");
+
+                    let path = xrpc_path.extend(kind);
+                    let resp = self.lower_object(&path, o, &o.description);
+                    self.insert_item(&path, resp);
+                    path
+                }
+                other => todo!("{other:?}"),
+            }
+        } else {
+            todo!();
+        }
+    }
 }
 
 /////
@@ -162,6 +255,14 @@ impl fmt::Display for ItemPath {
 impl ItemPath {
     fn name(&self) -> Ident {
         ident(&self.1)
+    }
+
+    fn extend(&self, extra: &str) -> Self {
+        let mut this = self.clone();
+
+        this.0 .0.push(mem::replace(&mut this.1, extra.to_owned()));
+
+        this
     }
 }
 
@@ -257,6 +358,8 @@ fn doc_comment(desc: &Option<String>) -> proc_macro2::TokenStream {
         None => quote! {},
     }
 }
+
+mod conv;
 
 #[cfg(test)]
 mod tests {

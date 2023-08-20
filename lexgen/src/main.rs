@@ -19,7 +19,10 @@ fn main() {
         include_str!("../lexicons/app/bsky/feed/defs.json"),
         include_str!("../lexicons/app/bsky/feed/post.json"),
         include_str!("../lexicons/app/bsky/graph/defs.json"),
+        include_str!("../lexicons/com/atproto/repo/createRecord.json"),
+        include_str!("../lexicons/com/atproto/repo/getRecord.json"),
         include_str!("../lexicons/com/atproto/repo/strongRef.json"),
+        include_str!("../lexicons/com/atproto/server/createSession.json"),
     ] {
         let d: LexiconDoc = serde_json::from_str(s).unwrap();
 

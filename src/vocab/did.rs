@@ -5,7 +5,7 @@ use crate::parsing;
 use super::{ParseError, StringFormat};
 
 #[derive(Clone, Debug)]
-pub struct Did(String);
+pub struct Did(pub(super) String);
 
 impl StringFormat for Did {
     fn as_str(&self) -> &str {

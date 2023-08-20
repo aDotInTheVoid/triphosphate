@@ -5,7 +5,8 @@ use crate::parsing;
 use super::{ParseError, StringFormat};
 
 #[derive(Debug, Clone)]
-pub struct Handle(String);
+// TODO: Reduce visibiltiy
+pub struct Handle(pub(super) String);
 
 impl StringFormat for Handle {
     fn as_str(&self) -> &str {

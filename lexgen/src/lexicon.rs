@@ -208,7 +208,7 @@ pub struct Object {
     pub properties: BTreeMap<String, ObjectProperty>,
 
     #[serde(default, rename = "type", skip_serializing_if = "String::is_empty")]
-    _type: String, // Hacky hackity hack
+    pub _type: String, // Hacky hackity hack
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
