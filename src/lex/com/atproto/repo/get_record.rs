@@ -2,7 +2,7 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Params {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     ///The CID of the version of the record. If not specified, then return the most recent version.
@@ -15,7 +15,7 @@ pub struct Params {
     pub rkey: ::std::string::String,
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Responce {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cid: Option<_lex::_rt::Cid>,

@@ -2,7 +2,7 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct AdultContentPref {
     pub enabled: bool,
 }
@@ -10,7 +10,7 @@ impl _lex::_rt::LexItem for AdultContentPref {
     const URI: &'static str = "app.bsky.actor.defs#adultContentPref";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ContentLabelPref {
     pub label: ::std::string::String,
     pub visibility: ::std::string::String,
@@ -24,7 +24,7 @@ impl _lex::_rt::LexItem for Preferences {
     const URI: &'static str = "app.bsky.actor.defs#preferences";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ProfileView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<::std::string::String>,
@@ -47,7 +47,7 @@ impl _lex::_rt::LexItem for ProfileView {
     const URI: &'static str = "app.bsky.actor.defs#profileView";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ProfileViewBasic {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<::std::string::String>,
@@ -65,7 +65,7 @@ impl _lex::_rt::LexItem for ProfileViewBasic {
     const URI: &'static str = "app.bsky.actor.defs#profileViewBasic";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ProfileViewDetailed {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<::std::string::String>,
@@ -99,7 +99,7 @@ impl _lex::_rt::LexItem for ProfileViewDetailed {
     const URI: &'static str = "app.bsky.actor.defs#profileViewDetailed";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct SavedFeedsPref {
     pub pinned: (),
     pub saved: (),
@@ -108,7 +108,7 @@ impl _lex::_rt::LexItem for SavedFeedsPref {
     const URI: &'static str = "app.bsky.actor.defs#savedFeedsPref";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ViewerState {
     #[serde(rename = "blockedBy")]
     #[serde(default, skip_serializing_if = "Option::is_none")]

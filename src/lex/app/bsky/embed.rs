@@ -6,7 +6,7 @@ pub mod record_with_media;
 
 #[allow(unused_imports)]
 use super::super::super::_lex;
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct External {
     pub external: _lex::app::bsky::embed::external::External,
 }
@@ -14,7 +14,7 @@ impl _lex::_rt::LexItem for External {
     const URI: &'static str = "app.bsky.embed.external";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Images {
     pub images: (),
 }
@@ -22,7 +22,7 @@ impl _lex::_rt::LexItem for Images {
     const URI: &'static str = "app.bsky.embed.images";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Record {
     pub record: _lex::com::atproto::repo::StrongRef,
 }
@@ -30,7 +30,7 @@ impl _lex::_rt::LexItem for Record {
     const URI: &'static str = "app.bsky.embed.record";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct RecordWithMedia {
     pub media: (),
     pub record: _lex::app::bsky::embed::Record,

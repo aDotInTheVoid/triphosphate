@@ -101,7 +101,7 @@ impl Compiler {
 
         quote!(
             #doc
-            #[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+            #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
             pub struct #name {
                 #(#fields),*
             }

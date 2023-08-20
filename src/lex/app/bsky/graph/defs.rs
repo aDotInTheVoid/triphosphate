@@ -2,7 +2,7 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ListItemView {
     pub subject: _lex::app::bsky::actor::defs::ProfileView,
 }
@@ -15,7 +15,7 @@ impl _lex::_rt::LexItem for ListPurpose {
     const URI: &'static str = "app.bsky.graph.defs#listPurpose";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ListView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<::std::string::String>,
@@ -38,7 +38,7 @@ impl _lex::_rt::LexItem for ListView {
     const URI: &'static str = "app.bsky.graph.defs#listView";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ListViewBasic {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<::std::string::String>,
@@ -56,7 +56,7 @@ impl _lex::_rt::LexItem for ListViewBasic {
     const URI: &'static str = "app.bsky.graph.defs#listViewBasic";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ListViewerState {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub muted: Option<bool>,

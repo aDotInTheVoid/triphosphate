@@ -2,7 +2,7 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Image {
     pub alt: ::std::string::String,
     pub image: _lex::_rt::Blob,
@@ -11,7 +11,7 @@ impl _lex::_rt::LexItem for Image {
     const URI: &'static str = "app.bsky.embed.images#image";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct View {
     pub images: (),
 }
@@ -19,7 +19,7 @@ impl _lex::_rt::LexItem for View {
     const URI: &'static str = "app.bsky.embed.images#view";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ViewImage {
     pub alt: ::std::string::String,
     pub fullsize: ::std::string::String,

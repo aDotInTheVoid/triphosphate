@@ -2,7 +2,7 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct BlockedAuthor {
     pub did: _lex::_rt::Did,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -12,7 +12,7 @@ impl _lex::_rt::LexItem for BlockedAuthor {
     const URI: &'static str = "app.bsky.feed.defs#blockedAuthor";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct BlockedPost {
     pub author: _lex::app::bsky::feed::defs::BlockedAuthor,
     pub blocked: bool,
@@ -22,7 +22,7 @@ impl _lex::_rt::LexItem for BlockedPost {
     const URI: &'static str = "app.bsky.feed.defs#blockedPost";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct FeedViewPost {
     pub post: _lex::app::bsky::feed::defs::PostView,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -34,7 +34,7 @@ impl _lex::_rt::LexItem for FeedViewPost {
     const URI: &'static str = "app.bsky.feed.defs#feedViewPost";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct GeneratorView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<::std::string::String>,
@@ -61,7 +61,7 @@ impl _lex::_rt::LexItem for GeneratorView {
     const URI: &'static str = "app.bsky.feed.defs#generatorView";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct GeneratorViewerState {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub like: Option<_lex::_rt::AtUri>,
@@ -70,7 +70,7 @@ impl _lex::_rt::LexItem for GeneratorViewerState {
     const URI: &'static str = "app.bsky.feed.defs#generatorViewerState";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct NotFoundPost {
     #[serde(rename = "notFound")]
     pub not_found: bool,
@@ -80,7 +80,7 @@ impl _lex::_rt::LexItem for NotFoundPost {
     const URI: &'static str = "app.bsky.feed.defs#notFoundPost";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct PostView {
     pub author: _lex::app::bsky::actor::defs::ProfileViewBasic,
     pub cid: _lex::_rt::Cid,
@@ -108,7 +108,7 @@ impl _lex::_rt::LexItem for PostView {
     const URI: &'static str = "app.bsky.feed.defs#postView";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ReasonRepost {
     pub by: _lex::app::bsky::actor::defs::ProfileViewBasic,
     #[serde(rename = "indexedAt")]
@@ -118,7 +118,7 @@ impl _lex::_rt::LexItem for ReasonRepost {
     const URI: &'static str = "app.bsky.feed.defs#reasonRepost";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ReplyRef {
     pub parent: (),
     pub root: (),
@@ -127,7 +127,7 @@ impl _lex::_rt::LexItem for ReplyRef {
     const URI: &'static str = "app.bsky.feed.defs#replyRef";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct SkeletonFeedPost {
     pub post: _lex::_rt::AtUri,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -137,7 +137,7 @@ impl _lex::_rt::LexItem for SkeletonFeedPost {
     const URI: &'static str = "app.bsky.feed.defs#skeletonFeedPost";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct SkeletonReasonRepost {
     pub repost: _lex::_rt::AtUri,
 }
@@ -145,7 +145,7 @@ impl _lex::_rt::LexItem for SkeletonReasonRepost {
     const URI: &'static str = "app.bsky.feed.defs#skeletonReasonRepost";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ThreadViewPost {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub parent: Option<()>,
@@ -157,7 +157,7 @@ impl _lex::_rt::LexItem for ThreadViewPost {
     const URI: &'static str = "app.bsky.feed.defs#threadViewPost";
 }
 
-#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ViewerState {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub like: Option<_lex::_rt::AtUri>,
