@@ -223,7 +223,8 @@ pub(crate) fn type_ref(path: &crate::lexicon::Ref, doc_id: &str) -> ItemPath {
     let mod_ = if mod_.is_empty() { doc_id } else { mod_ };
     let name = if name.is_empty() { "main" } else { name };
 
-    let mut p = path_for_def(mod_, name, super::ItemKind::Type);
+    // TODO: We're just quessing the type, but it *probably* doesn't matter.
+    let mut p = path_for_def(mod_, name, super::ItemKind::OtherType);
     p.0 .0.insert(0, "_lex".to_owned());
     p
 }

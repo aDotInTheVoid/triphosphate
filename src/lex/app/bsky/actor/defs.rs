@@ -20,9 +20,6 @@ impl _lex::_rt::LexItem for ContentLabelPref {
 }
 
 pub type Preferences = Vec<()>;
-impl _lex::_rt::LexItem for Preferences {
-    const URI: &'static str = "app.bsky.actor.defs#preferences";
-}
 
 #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ProfileView {

@@ -1,4 +1,4 @@
-use rquickjs::{Context, Exception, Function, Object, Runtime};
+use rquickjs::{Context, Exception, FromJs, Function, Object, Runtime};
 use serde::Serialize;
 use triphosphate::LexItem;
 
@@ -31,7 +31,23 @@ fn validate<T: Serialize>(uri: &str, item: &T) -> ValidationResult {
 
         let object = ctx.json_parse(serde_json::to_vec(item).unwrap()).unwrap();
 
-        let result = validator.call::<_, Object>((uri, object)).unwrap();
+        let result = match validator.call::<_, Object>((uri, object)) {
+            Ok(r) => r,
+            Err(e) => {
+                if let rquickjs::Error::Exception = e {
+                    let exc = ctx.catch();
+                    let exc = Exception::from_js(ctx, exc).unwrap();
+
+                    panic!(
+                        "exception when calling validation: {}\n{:?}",
+                        exc.message().unwrap_or_default(),
+                        exc
+                    );
+                } else {
+                    panic!("failed to call validator: {e}")
+                }
+            }
+        };
 
         if result.get::<_, bool>("success").unwrap() {
             ValidationResult::Valid

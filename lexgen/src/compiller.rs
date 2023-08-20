@@ -69,8 +69,8 @@ impl Compiler {
         };
 
         let toks = match ty.item_kind() {
-            ItemKind::Func => item,
-            ItemKind::Type => {
+            ItemKind::Func | ItemKind::OtherType => item,
+            ItemKind::Record | ItemKind::Object => {
                 let name = path.name();
                 let uri = self.uri(lex_name);
 
@@ -149,7 +149,8 @@ impl Compiler {
 
         quote!(
             #docs
-            pub type #name = ::std::string::String;
+            #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+            pub struct #name(::std::string::String);
         )
         .to_token_stream()
     }
@@ -336,7 +337,9 @@ impl ItemPath {
 }
 
 enum ItemKind {
-    Type,
+    Record,
+    Object,
+    OtherType,
     Func,
 }
 
@@ -347,7 +350,10 @@ impl lexicon::UserType {
             | lexicon::UserType::Procedure(_)
             | lexicon::UserType::Subscription(_) => ItemKind::Func,
 
-            _ => ItemKind::Type,
+            lexicon::UserType::Object(_) => ItemKind::Object,
+            lexicon::UserType::Record(_) => ItemKind::Record,
+
+            _ => ItemKind::OtherType,
         }
     }
 }
@@ -364,8 +370,8 @@ fn path_for_def(lex_id: &str, def_name: &str, kind: ItemKind) -> ItemPath {
     ItemPath(
         Mod(mod_parts.iter().map(|s| snake(s)).collect()),
         match kind {
-            ItemKind::Type => pascal(main_part),
             ItemKind::Func => snake(main_part),
+            ItemKind::Object | ItemKind::Record | ItemKind::OtherType => pascal(main_part),
         },
     )
 }
@@ -460,14 +466,14 @@ mod tests {
         check(
             "app.bsky.actor.defs",
             "profileViewDetailed",
-            ItemKind::Type,
+            ItemKind::Object,
             "app::bsky::actor::defs::ProfileViewDetailed",
         );
 
         check(
             "app.bsky.actor.profile",
             "main",
-            ItemKind::Type,
+            ItemKind::Record,
             "app::bsky::actor::Profile",
         );
     }

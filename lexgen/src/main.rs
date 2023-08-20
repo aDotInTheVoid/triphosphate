@@ -90,7 +90,7 @@ fn main() {
         // include_str!("../lexicons/com/atproto/label/queryLabels.json"),
         // include_str!("../lexicons/com/atproto/label/subscribeLabels.json"),
         // include_str!("../lexicons/com/atproto/moderation/createReport.json"),
-        // include_str!("../lexicons/com/atproto/moderation/defs.json"),
+        include_str!("../lexicons/com/atproto/moderation/defs.json"),
         // include_str!("../lexicons/com/atproto/repo/applyWrites.json"),
         include_str!("../lexicons/com/atproto/repo/createRecord.json"),
         // include_str!("../lexicons/com/atproto/repo/deleteRecord.json"),

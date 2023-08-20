@@ -10,10 +10,8 @@ impl _lex::_rt::LexItem for ListItemView {
     const URI: &'static str = "app.bsky.graph.defs#listItemView";
 }
 
-pub type ListPurpose = ::std::string::String;
-impl _lex::_rt::LexItem for ListPurpose {
-    const URI: &'static str = "app.bsky.graph.defs#listPurpose";
-}
+#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+pub struct ListPurpose(::std::string::String);
 
 #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ListView {
@@ -68,6 +66,3 @@ impl _lex::_rt::LexItem for ListViewerState {
 ///A list of actors to apply an aggregate moderation action (mute/block) on
 #[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct Modlist;
-impl _lex::_rt::LexItem for Modlist {
-    const URI: &'static str = "app.bsky.graph.defs#modlist";
-}
