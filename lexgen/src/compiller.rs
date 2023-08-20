@@ -7,6 +7,7 @@ use std::{
 
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote, ToTokens};
+use triphosphate::vocab::StringFormat;
 
 use crate::lexicon::{self, Array, Token, UserType, XrpcBody, XrpcBodySchema, XrpcParameters};
 
@@ -45,7 +46,6 @@ impl Compiler {
 
     fn lower_item(&mut self, path: &ItemPath, ty: &lexicon::UserType, lex_name: &str) {
         let item = match ty {
-            UserType::Record(r) => self.lower_record(path, r),
             UserType::Object(o) => self.lower_object(path, o, &o.description),
             UserType::Array(arr) => self.lower_array(path, arr),
             UserType::String(str) => self.lower_string(path, str),
@@ -60,6 +60,11 @@ impl Compiler {
                 assert_eq!(lex_name, "main");
                 self.lower_procedure(path, p)
             }
+            UserType::Record(r) => {
+                assert_eq!(lex_name, "main");
+                self.lower_record(path, r)
+            }
+
             _ => todo!("lower_item: {ty:?}"),
         };
 
@@ -82,7 +87,19 @@ impl Compiler {
     }
 
     fn lower_record(&self, path: &ItemPath, r: &lexicon::Record) -> proc_macro2::TokenStream {
-        self.lower_object(path, &r.record, &r.description)
+        let obj = self.lower_object(path, &r.record, &r.description);
+        let nsid = triphosphate::vocab::Nsid::from_str(&self.doc.id).unwrap();
+
+        let name = path.name();
+        let nsid_repr = nsid.as_str();
+        let last_dot = nsid.authority().len();
+
+        quote! {
+            #obj
+            impl _lex::_rt::LexRecord for #name {
+                const NSID: _lex::_rt::Nsid = _lex::_rt::Nsid::__new_unchecked(#nsid_repr, #last_dot);
+            }
+        }
     }
 
     fn lower_object(

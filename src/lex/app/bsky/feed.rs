@@ -23,6 +23,9 @@ pub struct Post {
     pub reply: Option<_lex::app::bsky::feed::post::ReplyRef>,
     pub text: ::std::string::String,
 }
+impl _lex::_rt::LexRecord for Post {
+    const NSID: _lex::_rt::Nsid = _lex::_rt::Nsid::__new_unchecked("app.bsky.feed.post", 13usize);
+}
 impl _lex::_rt::LexItem for Post {
     const URI: &'static str = "app.bsky.feed.post";
 }

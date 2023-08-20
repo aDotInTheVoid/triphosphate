@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use winnow::Parser;
 
 use crate::parsing;
@@ -9,7 +11,7 @@ use super::{ParseError, StringFormat};
 /// [atproto_docs]: https://atproto.com/specs/nsid
 #[derive(Debug, Clone)]
 pub struct Nsid {
-    repr: String,
+    repr: Cow<'static, str>,
     last_dot: usize,
 }
 
@@ -36,6 +38,17 @@ impl Nsid {
     pub fn name(&self) -> &str {
         &self.repr[self.last_dot + 1..]
     }
+
+    #[doc(hidden)]
+    pub(crate) const fn __new_unchecked(s: &'static str, last_dot: usize) -> Self {
+        let repr = Cow::Borrowed(s);
+
+        if s.as_bytes()[last_dot] != b'.' {
+            panic!("invalid last_dot index");
+        }
+
+        Self { repr, last_dot }
+    }
 }
 
 impl StringFormat for Nsid {
@@ -51,7 +64,7 @@ impl StringFormat for Nsid {
                 let last_dot = s.rfind('.').unwrap();
 
                 Ok(Nsid {
-                    repr: s.to_owned(),
+                    repr: Cow::Owned(s.to_owned()),
                     last_dot,
                 })
             }
