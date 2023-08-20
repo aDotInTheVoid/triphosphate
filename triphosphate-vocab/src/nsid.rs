@@ -18,7 +18,7 @@ pub struct Nsid {
 impl Nsid {
     /// The domain authority of the NSID.
     /// ```
-    /// # use triphosphate::vocab::{Nsid, StringFormat};
+    /// # use triphosphate_vocab::{Nsid, StringFormat};
     /// let nsid = Nsid::from_str("com.atproto.sync.getHead").unwrap();
     ///
     /// assert_eq!(nsid.authority(), "com.atproto.sync");
@@ -30,7 +30,7 @@ impl Nsid {
     /// The name of the identifier.
     ///
     /// ```
-    /// # use triphosphate::vocab::{Nsid, StringFormat};
+    /// # use triphosphate_vocab::{Nsid, StringFormat};
     /// let nsid = Nsid::from_str("com.atproto.sync.getHead").unwrap();
     ///
     /// assert_eq!(nsid.name(), "getHead");
