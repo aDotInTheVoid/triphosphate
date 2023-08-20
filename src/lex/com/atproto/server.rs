@@ -7,7 +7,7 @@ use super::super::super::_lex;
 pub async fn create_session(
     client: &_lex::_rt::Client,
     args: &_lex::com::atproto::server::create_session::Args,
-) -> ::reqwest::Result<_lex::com::atproto::server::create_session::Responce> {
+) -> _lex::_rt::Result<_lex::com::atproto::server::create_session::Responce> {
     client
         .do_procedure("com.atproto.server.createSession", args)
         .await

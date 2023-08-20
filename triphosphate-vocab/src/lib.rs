@@ -35,6 +35,7 @@ mod datetime;
 mod did;
 mod handle;
 mod nsid;
+mod parsing;
 
 pub use self::cid::Cid;
 pub use at_identifer::AtIdentifier;
@@ -48,7 +49,7 @@ macro_rules! serde_impls {
     ($($name:path)*) => {$(
         impl ::serde::Serialize for $name {
             fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-                ::serde::Serialize::serialize($crate::vocab::StringFormat::as_str(self), serializer)
+                ::serde::Serialize::serialize($crate::StringFormat::as_str(self), serializer)
             }
         }
 
@@ -67,7 +68,7 @@ macro_rules! serde_impls {
                     }
 
                     fn visit_str<E: serde::de::Error>(self, v: &str) -> Result<Self::Value, E> {
-                        $crate::vocab::StringFormat::from_str(v).map_err(E::custom)
+                        $crate::StringFormat::from_str(v).map_err(E::custom)
                     }
                 }
 

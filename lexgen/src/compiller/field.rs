@@ -1,12 +1,12 @@
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote, ToTokens};
 
-use crate::lexicon::{ObjectProperty, StringFormat};
+use crate::lexicon::{Boolean, ObjectProperty, ParameterProperty, StringFormat, XrpcParameters};
 
 use super::{doc_comment, ident, path_for_def, snake, Compiler, ItemPath};
 
 impl Compiler {
-    pub(super) fn lower_field(
+    pub(super) fn lower_obj_prop(
         &self,
         name: &str,
         prop: &ObjectProperty,
@@ -14,22 +14,44 @@ impl Compiler {
     ) -> Field {
         let required = o.required.contains(&name.to_owned());
 
-        let (ty, docs) = FieldType::from_prop(prop, &self.doc.id);
+        let (ty, docs) = FieldType::from_obj_prop(prop, &self.doc.id);
 
         Field {
             name: name.to_owned(),
             docs: docs.to_owned(),
             ty,
             required,
+            use_serde: true,
+        }
+    }
+
+    pub(super) fn lower_param_prop(
+        &self,
+        name: &str,
+        prop: &ParameterProperty,
+        ps: &XrpcParameters,
+    ) -> Field {
+        let required = ps.required.contains(&name.to_owned());
+
+        let (ty, docs) = FieldType::from_param_prop(prop);
+
+        Field {
+            name: name.to_owned(),
+            docs: docs.to_owned(),
+            required,
+            ty,
+            use_serde: false,
         }
     }
 }
 
+#[derive(Debug)]
 pub(super) struct Field {
-    name: String,
+    pub name: String,
     docs: Option<String>,
-    required: bool,
-    ty: FieldType,
+    pub required: bool,
+    pub ty: FieldType,
+    use_serde: bool,
 }
 
 impl quote::ToTokens for Field {
@@ -40,16 +62,20 @@ impl quote::ToTokens for Field {
             let ty = &self.ty;
             (
                 quote!(Option<#ty>),
-                quote!(#[serde(default, skip_serializing_if = "Option::is_none")]),
+                if self.use_serde {
+                    quote!(#[serde(default, skip_serializing_if = "Option::is_none")])
+                } else {
+                    quote!()
+                },
             )
         };
 
-        let (name, serde_name) = field_name(&self.name);
+        let (name, serde_rename) = field_name(&self.name);
 
         let doc = doc_comment(&self.docs);
 
         quote!(
-            #serde_name
+            #serde_rename
             #serde_optional
             #doc
             pub #name: #ty
@@ -76,6 +102,7 @@ fn field_name(name: &str) -> (Ident, TokenStream) {
     )
 }
 
+#[derive(Debug)]
 pub(super) enum FieldType {
     Ref(ItemPath),
 
@@ -94,19 +121,20 @@ pub(super) enum FieldType {
 }
 
 impl FieldType {
-    pub fn from_prop<'a>(prop: &'a ObjectProperty, doc_id: &str) -> (Self, &'a Option<String>) {
+    pub fn from_obj_prop<'a>(prop: &'a ObjectProperty, doc_id: &str) -> (Self, &'a Option<String>) {
         match prop {
             ObjectProperty::Ref(path) => {
                 (FieldType::Ref(type_ref(path, doc_id)), &path.description)
             }
 
-            ObjectProperty::String(s) => (Self::str(s), &s.description),
-            ObjectProperty::Integer(i) => (Self::int(i), &i.description),
+            // Shared with param_prop
+            ObjectProperty::Boolean(b) => Self::bool(b),
+            ObjectProperty::String(s) => Self::string(s),
+            ObjectProperty::Integer(i) => Self::integer(i),
+
+            // TODO: Implement.
             ObjectProperty::Union(u) => (FieldType::Unit, &u.description),
             ObjectProperty::Array(a) => (FieldType::Unit, &a.description),
-
-            // TODO: Handle default, const
-            ObjectProperty::Boolean(b) => (FieldType::Bool, &b.description),
 
             ObjectProperty::Unknown(u) => (FieldType::Unknown, &u.description),
 
@@ -117,30 +145,30 @@ impl FieldType {
         }
     }
 
-    fn str(s: &crate::lexicon::LexString) -> FieldType {
-        if let Some(format) = &s.format {
-            return FieldType::RtType(*format);
+    fn from_param_prop<'a>(prop: &'a ParameterProperty) -> (Self, &'a Option<String>) {
+        match prop {
+            ParameterProperty::Boolean(b) => Self::bool(b),
+            ParameterProperty::Integer(i) => Self::integer(i),
+            ParameterProperty::String(s) => Self::string(s),
+            ParameterProperty::Unknown(_) => todo!(),
+            ParameterProperty::Array(_) => todo!(),
         }
-
-        // TODO: Do more here.
-
-        FieldType::StdString
     }
 
-    fn int(i: &crate::lexicon::Integer) -> FieldType {
-        // if i.minimum == Some(0) {
-        //     if i.maximum.is_none() {
-        //         FieldType::U64 // Sensible fallback.
-        //     } else {
-        //         todo!()
-        //     }
-        // } else {
-        //     todo!("{i:?}");
-        // }
+    fn string(s: &crate::lexicon::LexString) -> (FieldType, &Option<String>) {
+        let this = if let Some(format) = &s.format {
+            FieldType::RtType(*format)
+        } else {
+            // TODO: Do more here.
+            FieldType::StdString
+        };
 
+        (this, &s.description)
+    }
+
+    fn integer(i: &crate::lexicon::Integer) -> (Self, &Option<String>) {
         // Max int size is 64 bits when not stated: https://atproto.com/specs/data-model#data-types.
-
-        match i.minimum {
+        let this = match i.minimum {
             Some(0) => match i.maximum {
                 None => FieldType::U64,
                 _ => todo!(),
@@ -150,7 +178,14 @@ impl FieldType {
                 _ => todo!(),
             },
             _ => todo!(),
-        }
+        };
+
+        (this, &i.description)
+    }
+
+    fn bool(b: &Boolean) -> (Self, &Option<String>) {
+        // TODO: Use default, const.
+        (Self::Bool, &b.description)
     }
 }
 
@@ -187,5 +222,11 @@ impl ToTokens for FieldType {
             FieldType::U64 => quote!(u64).to_tokens(tokens),
             FieldType::I64 => quote!(i64).to_tokens(tokens),
         }
+    }
+}
+
+impl Field {
+    pub fn name(&self) -> Ident {
+        field_name(&self.name).0
     }
 }

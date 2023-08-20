@@ -40,12 +40,14 @@ impl Nsid {
     }
 
     #[doc(hidden)]
-    pub(crate) const fn __new_unchecked(s: &'static str, last_dot: usize) -> Self {
+    /// Only to be used by lexgen, where it knows that's it's parsed.
+    pub const fn __new_unchecked(s: &'static str, last_dot: usize) -> Self {
         let repr = Cow::Borrowed(s);
 
         if s.as_bytes()[last_dot] != b'.' {
             panic!("invalid last_dot index");
         }
+        // TODO: More asserts here
 
         Self { repr, last_dot }
     }

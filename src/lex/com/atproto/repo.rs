@@ -17,7 +17,7 @@ impl _lex::_rt::LexItem for StrongRef {
 pub async fn create_record(
     client: &_lex::_rt::Client,
     args: &_lex::com::atproto::repo::create_record::Args,
-) -> ::reqwest::Result<_lex::com::atproto::repo::create_record::Responce> {
+) -> _lex::_rt::Result<_lex::com::atproto::repo::create_record::Responce> {
     client
         .do_procedure("com.atproto.repo.createRecord", args)
         .await
@@ -27,6 +27,6 @@ pub async fn create_record(
 pub async fn get_record(
     client: &_lex::_rt::Client,
     args: &_lex::com::atproto::repo::get_record::Params,
-) -> ::reqwest::Result<_lex::com::atproto::repo::get_record::Responce> {
+) -> _lex::_rt::Result<_lex::com::atproto::repo::get_record::Responce> {
     client.do_query("com.atproto.repo.getRecord", args).await
 }

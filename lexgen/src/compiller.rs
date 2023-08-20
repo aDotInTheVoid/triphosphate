@@ -7,7 +7,7 @@ use std::{
 
 use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote, ToTokens};
-use triphosphate::vocab::StringFormat;
+use triphosphate_vocab::{Nsid, StringFormat};
 
 use crate::lexicon::{self, Array, Token, UserType, XrpcBody, XrpcBodySchema, XrpcParameters};
 
@@ -88,7 +88,7 @@ impl Compiler {
 
     fn lower_record(&self, path: &ItemPath, r: &lexicon::Record) -> proc_macro2::TokenStream {
         let obj = self.lower_object(path, &r.record, &r.description);
-        let nsid = triphosphate::vocab::Nsid::from_str(&self.doc.id).unwrap();
+        let nsid = Nsid::from_str(&self.doc.id).unwrap();
 
         let name = path.name();
         let nsid_repr = nsid.as_str();
@@ -114,7 +114,7 @@ impl Compiler {
         let fields = o
             .properties
             .iter()
-            .map(|(name, prop)| self.lower_field(name, prop, o));
+            .map(|(name, prop)| self.lower_obj_prop(name, prop, o));
 
         quote!(
             #doc
@@ -128,7 +128,7 @@ impl Compiler {
     fn lower_array(&self, path: &ItemPath, arr: &Array) -> TokenStream {
         let op = &lexicon::ObjectProperty::Array(arr.clone());
 
-        let (field, desc) = FieldType::from_prop(op, &self.doc.id);
+        let (field, desc) = FieldType::from_obj_prop(op, &self.doc.id);
 
         let name = path.name();
 
@@ -180,7 +180,7 @@ impl Compiler {
         // TODO: Error handling.
         quote! {
             #docs
-            pub async fn #name(client: &_lex::_rt::Client, args: &_lex::#params_ty) -> ::reqwest::Result<_lex::#ret_type> {
+            pub async fn #name(client: &_lex::_rt::Client, args: &_lex::#params_ty) -> _lex::_rt::Result<_lex::#ret_type> {
                 client.do_query(#xrpc_id, args).await
             }
         }
@@ -204,7 +204,7 @@ impl Compiler {
 
         quote! {
             #docs
-            pub async fn #name(client: &_lex::_rt::Client, args: &_lex::#input_type) -> ::reqwest::Result<_lex::#output_type> {
+            pub async fn #name(client: &_lex::_rt::Client, args: &_lex::#input_type) -> _lex::_rt::Result<_lex::#output_type> {
                 client.do_procedure(#xrpc_id, args).await
             }
         }
@@ -216,11 +216,56 @@ impl Compiler {
         path: &ItemPath,
     ) -> Option<ItemPath> {
         if let Some(params) = params {
-            let object = conv::params_as_object(params.clone());
+            // Parameters get serialized to a query string, not json.
 
             let params_path = path.extend("Params");
 
-            let obj = self.lower_object(&params_path, &object, &object.description);
+            let mut fields = Vec::new();
+            let mut inserters = Vec::new();
+            for (lex_name, prop) in &params.properties {
+                let ty = self.lower_param_prop(lex_name, prop, &params);
+
+                let name = ty.name();
+
+                let do_access = match &ty.ty {
+                    FieldType::StdString => quote!(#name.clone()),
+                    FieldType::RtType(_) => {
+                        quote!(_lex::_rt::StringFormat::as_str(#name).to_owned())
+                    }
+                    _ => todo!("{ty:?}"),
+                };
+
+                let run_push = if ty.required {
+                    quote!({
+                            let #name = &self.#name;
+                            r.push((#lex_name, #do_access));
+                    })
+                } else {
+                    quote!(if let Some(#name) = &self.#name {
+                        r.push((#lex_name, #do_access));
+                    } )
+                };
+
+                inserters.push(run_push);
+
+                fields.push(ty);
+            }
+
+            let n_required = params.required.len();
+
+            let obj = quote!(
+                pub struct Params {
+                    #(#fields),*
+                }
+
+                impl _lex::_rt::AsParams for Params {
+                    fn as_params(&self) -> Vec<(&'static str, String)> {
+                        let mut r: Vec<(&'static str, String)> = Vec::with_capacity(#n_required); // TODO: Look at optionals.
+                        #(#inserters)*
+                        r
+                    }
+                }
+            );
 
             self.insert_item(&params_path, obj);
 
@@ -375,8 +420,6 @@ fn doc_comment(desc: &Option<String>) -> proc_macro2::TokenStream {
         None => quote! {},
     }
 }
-
-mod conv;
 
 #[cfg(test)]
 mod tests {

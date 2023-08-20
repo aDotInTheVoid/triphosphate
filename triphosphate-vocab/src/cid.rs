@@ -20,9 +20,15 @@ impl super::StringFormat for Cid {
     }
 }
 
+impl Cid {
+    pub fn version(&self) -> cid::Version {
+        self.cid.version()
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::vocab::StringFormat;
+    use crate::StringFormat;
 
     use super::*;
 
@@ -30,9 +36,10 @@ mod tests {
 
     #[test]
     fn valid() {
-        for s in ["bafyreidfayvfuwqa7qlnopdjiqrxzs6blmoeu4rujcjtnci5beludirz2a"] {
-            // let cid = Cid::from_str(s).unwrap();
-            // assert_eq!(cid.as_str(), s);
+        for s in [
+            "bafyreidfayvfuwqa7qlnopdjiqrxzs6blmoeu4rujcjtnci5beludirz2a",
+            "bafyreifi5bqq7og5qxedc5xllono4vlpnfvl4pcbskymzcm5kjmbhgobmu",
+        ] {
             match Cid::from_str(s) {
                 Ok(cid) => assert_eq!(cid.as_str(), s),
                 Err(e) => panic!("failed to parse {s:?}: {e}"),

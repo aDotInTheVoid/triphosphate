@@ -4,7 +4,8 @@ use crate::parsing;
 
 use super::{ParseError, StringFormat};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
+// TODO: Don't be vis here
 pub struct Did(pub(super) String);
 
 impl StringFormat for Did {

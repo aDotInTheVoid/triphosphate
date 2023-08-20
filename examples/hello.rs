@@ -1,8 +1,5 @@
-use triphosphate::{
-    lex::{app::bsky::feed::Post, com::atproto::repo::create_record},
-    vocab::{AtIdentifier, Datetime, Nsid, StringFormat},
-    LexItem,
-};
+use triphosphate::lex::app::bsky::feed::Post;
+use triphosphate_vocab::{AtIdentifier, Datetime};
 
 #[tokio::main(flavor = "current_thread")]
 async fn main() -> anyhow::Result<()> {
@@ -21,21 +18,11 @@ async fn main() -> anyhow::Result<()> {
         langs: None,
         reply: None,
         labels: None,
-        text: "Hello from Triphosphate! Now contains procedures!".to_string(),
+        text: "Now no longer hard coding NSID's into createRecord!".to_string(),
     };
 
-    let resp = create_record(
-        &client,
-        &create_record::Args {
-            collection: Nsid::from_str(Post::URI).unwrap(),
-            record: serde_json::to_value(&post)?,
-            repo: AtIdentifier::Did(creds.did),
-            validate: Some(true),
-            rkey: None,
-            swap_commit: None,
-        },
-    )
-    .await?;
+    let my_repo = AtIdentifier::Did(creds.did);
+    let resp = client.create_record(&post, my_repo).await?;
 
     dbg!(resp);
 

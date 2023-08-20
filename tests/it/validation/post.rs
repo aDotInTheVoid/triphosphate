@@ -1,5 +1,6 @@
 use chrono::{FixedOffset, TimeZone};
-use triphosphate::{lex::app::bsky::feed::Post, vocab::Datetime};
+use triphosphate::lex::app::bsky::feed::Post;
+use triphosphate_vocab::Datetime;
 
 use super::check;
 
