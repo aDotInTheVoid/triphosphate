@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-chrono = { version = "0.4.26", features = ["serde"] }
+chrono = { version = "0.4.28" }
 cid = "0.10.1"
 oxilangtag = "0.1.3"
 regex = "1.9.3"

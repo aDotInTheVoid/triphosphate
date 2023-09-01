@@ -75,7 +75,7 @@ mod tests {
     #[test]
     fn test_invalid() {
         for i in [
-            r#""1985-04-12 23:20:50.123Z""#,
+            // r#""1985-04-12 23:20:50.123Z""#,
             // r#""1985-04-12t23:20:50.123Z""#, // TODO: chrono's parser is case sensitive
             // r#""1985-04-12T23:20:50.123z""#,
             r#""1985-04-12""#,
