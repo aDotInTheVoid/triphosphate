@@ -14,7 +14,7 @@ pub struct Args {
     ///The NSID of the record collection.
     pub collection: _lex::_rt::Nsid,
     ///The record to create.
-    pub record: _lex::_rt::Unknown,
+    pub record: _lex::_rt::Any,
     ///The handle or DID of the repo.
     pub repo: _lex::_rt::AtIdentifier,
     #[serde(default, skip_serializing_if = "Option::is_none")]

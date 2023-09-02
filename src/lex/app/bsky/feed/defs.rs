@@ -142,7 +142,7 @@ pub struct PostView {
     #[serde(rename = "likeCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub like_count: Option<i64>,
-    pub record: _lex::_rt::Unknown,
+    pub record: _lex::_rt::Any,
     #[serde(rename = "replyCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub reply_count: Option<i64>,

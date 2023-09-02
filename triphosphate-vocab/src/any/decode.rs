@@ -10,7 +10,7 @@ use libipld::cbor::error::{UnexpectedCode, UnknownTag};
 use libipld::cbor::DagCborCodec as DagCbor;
 use libipld::codec::Decode;
 
-impl Decode<DagCbor> for super::Unknown {
+impl Decode<DagCbor> for super::Any {
     fn decode<R: Read + Seek>(_: DagCbor, r: &mut R) -> libipld::Result<Self> {
         let major = read_major(r)?;
         let ipld = match major.kind() {

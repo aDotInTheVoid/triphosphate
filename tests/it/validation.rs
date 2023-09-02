@@ -97,8 +97,8 @@ fn check_json_str_roundtrip<T: Serialize + DeserializeOwned + PartialEq + Debug>
 }
 
 fn check_unknown_roundtrip<T: Serialize + DeserializeOwned + PartialEq + Debug>(item: &T) {
-    let unknown = triphosphate_vocab::to_unknown(item).unwrap();
-    let new_item: T = triphosphate_vocab::from_unknown(unknown).unwrap();
+    let unknown = triphosphate_vocab::to_any(item).unwrap();
+    let new_item: T = triphosphate_vocab::from_any(unknown).unwrap();
 
     assert_eq!(item, &new_item);
 }

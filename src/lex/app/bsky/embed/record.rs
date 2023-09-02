@@ -69,7 +69,7 @@ pub struct ViewRecord {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<_lex::com::atproto::label::defs::Label>>,
     pub uri: _lex::_rt::AtUri,
-    pub value: _lex::_rt::Unknown,
+    pub value: _lex::_rt::Any,
 }
 impl _lex::_rt::LexItem for ViewRecord {
     const URI: &'static str = "app.bsky.embed.record#viewRecord";

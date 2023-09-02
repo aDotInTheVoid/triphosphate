@@ -2,7 +2,7 @@ use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote, ToTokens};
 
 use crate::lexicon::{
-    ArrayItem, Boolean, Bytes, CidLink, ObjectProperty, ParameterProperty, StringFormat,
+    ArrayItem, Boolean, Bytes, CidLink, ObjectProperty, ParameterProperty, StringFormat, Unknown,
     XrpcParameters,
 };
 
@@ -121,7 +121,7 @@ pub(super) enum FieldType {
     I64,
     U64,
     Blob,
-    Unknown,
+    Any,
     Bool,
     CidLink,
     Bytes,
@@ -136,6 +136,7 @@ impl FieldType {
             ObjectProperty::Integer(i) => Self::integer(i),
             ObjectProperty::Bytes(b) => Self::bytes(b),
             ObjectProperty::CidLink(c) => Self::cid_link(c),
+            ObjectProperty::Unknown(u) => Self::unknown(u),
 
             ObjectProperty::Array(a) => Self::array(a, doc_id),
 
@@ -144,7 +145,6 @@ impl FieldType {
 
             // TODO: Implement.
             ObjectProperty::Union(u) => (FieldType::Unit, &u.description),
-            ObjectProperty::Unknown(u) => (FieldType::Unknown, &u.description),
         }
     }
 
@@ -153,7 +153,7 @@ impl FieldType {
             ParameterProperty::Boolean(b) => Self::bool(b),
             ParameterProperty::Integer(i) => Self::integer(i),
             ParameterProperty::String(s) => Self::string(s),
-            ParameterProperty::Unknown(_) => todo!(),
+            ParameterProperty::Unknown(u) => Self::unknown(u),
             ParameterProperty::Array(_) => todo!(),
         }
     }
@@ -210,6 +210,9 @@ impl FieldType {
     fn cid_link(c: &CidLink) -> (Self, &Option<String>) {
         (Self::CidLink, &c.description)
     }
+    fn unknown(u: &Unknown) -> (Self, &Option<String>) {
+        (Self::Any, &u.description)
+    }
 
     fn bytes(b: &Bytes) -> (Self, &Option<String>) {
         // TODO: min and max lenght
@@ -258,7 +261,7 @@ impl ToTokens for FieldType {
 
             FieldType::Blob => quote!(_lex::_rt::Blob).to_tokens(tokens),
             FieldType::Bytes => quote!(_lex::_rt::Bytes).to_tokens(tokens),
-            FieldType::Unknown => quote!(_lex::_rt::Unknown).to_tokens(tokens),
+            FieldType::Any => quote!(_lex::_rt::Any).to_tokens(tokens),
             FieldType::CidLink => quote!(_lex::_rt::CidLink).to_tokens(tokens),
 
             FieldType::StdString => quote!(::std::string::String).to_tokens(tokens),

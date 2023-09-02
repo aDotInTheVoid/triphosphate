@@ -102,7 +102,7 @@ impl Client {
             self,
             &create_record::Args {
                 collection: R::NSID,
-                record: triphosphate_vocab::to_unknown(record)?, // PERF: Avoid this
+                record: triphosphate_vocab::to_any(record)?, // PERF: Avoid this
                 repo,
                 // TODO: Make configurable
                 rkey: None,
@@ -130,7 +130,7 @@ impl Client {
         .await
         .context("failed to make XRPC call")?;
 
-        let value = triphosphate_vocab::from_unknown(resp.value)
+        let value = triphosphate_vocab::from_any(resp.value)
             .context("failed to convert responce to expected type")?;
 
         Ok(GetRecord {

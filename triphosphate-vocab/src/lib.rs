@@ -30,6 +30,7 @@ impl fmt::Display for ParseError {
 }
 impl std::error::Error for ParseError {}
 
+mod any;
 mod at_identifer;
 mod at_uri;
 mod bytes;
@@ -41,9 +42,9 @@ mod handle;
 mod language;
 mod nsid;
 mod parsing;
-mod unknown;
 
 pub use self::cid::Cid;
+pub use any::{from_any, to_any, Any};
 pub use at_identifer::AtIdentifier;
 pub use at_uri::AtUri;
 pub use bytes::Bytes;
@@ -53,7 +54,6 @@ pub use did::Did;
 pub use handle::Handle;
 pub use language::Language;
 pub use nsid::Nsid;
-pub use unknown::{from_unknown, to_unknown, Unknown};
 
 macro_rules! serde_impls {
     ($($name:path)*) => {$(
