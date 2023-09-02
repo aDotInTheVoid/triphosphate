@@ -11,8 +11,6 @@ cd ..
 rm -rf ./lexicons/
 mv atproto/lexicons/ ./lexicons/
 
-curl "https://raw.githubusercontent.com/bluesky-social/atproto/main/LICENSE" > ./lexicons/LICENSE
-
 git add ./lexicons/
 
 cargo r --bin lexgen
@@ -22,9 +20,9 @@ cargo fmt --all
 git add ./validator/
 git add ../src/lex/
 
-git commit -m "Update lexicons to commit ${commit}
+# git commit -m "Update lexicons to commit ${commit}
 
-See https://github.com/bluesky-social/atproto/commit/${commit}
-"
+# See https://github.com/bluesky-social/atproto/commit/${commit}
+# "
 
 rm -rf atproto/

@@ -1,0 +1,29 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Triphosphate
+Upstream-Contact: Alona Enraght-Moony <contact@alona.page>
+Source: https://github.com/aDotInTheVoid/triphosphate
+
+
+Files: lexgen/lexicons/*
+License: MIT
+Copyright: 2022-2023 Bluesky PBLLC
+
+Files: *
+License: MPL-2.0
+Copyright: Triphosphate Developers
+
+Files: src/lex/*
+License: MIT
+Copyright: IDK, there generated from Bluesky's lexicons by my compiller.
+
+Files:
+  triphosphate-vocab/src/any/ser.rs
+  triphosphate-vocab/src/any/de.rs
+License: MIT or Apache-2.0
+Copyright: Serde Developers
+
+Files:
+  triphosphate-vocab/src/any/encode.rs
+  triphosphate-vocab/src/any/decode.rs
+License: MIT or Apache-2.0
+Copyright: libipld Developers
