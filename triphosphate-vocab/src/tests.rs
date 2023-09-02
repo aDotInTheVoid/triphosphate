@@ -40,7 +40,7 @@ pub fn valids<
     }
 }
 
-fn to_cbor<T: Encode<DagCborCodec>>(t: T) -> libipld::Result<Vec<u8>> {
+pub fn to_cbor<T: Encode<DagCborCodec>>(t: T) -> libipld::Result<Vec<u8>> {
     let mut r = Vec::new();
     t.encode(DagCborCodec, &mut r)?;
     Ok(r)

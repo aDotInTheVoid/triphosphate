@@ -2,8 +2,8 @@ use std::fmt;
 
 #[derive(Clone, PartialEq)]
 pub struct Cid {
-    repr: String,
-    cid: cid::Cid,
+    repr: String, // TODO: Is this needed?
+    pub(crate) cid: cid::Cid,
 }
 
 impl super::StringFormat for Cid {
@@ -25,6 +25,12 @@ impl super::StringFormat for Cid {
 impl Cid {
     pub fn version(&self) -> cid::Version {
         self.cid.version()
+    }
+
+    pub(crate) fn from_cid(cid: cid::Cid) -> Self {
+        let repr = cid.to_string();
+
+        Self { cid, repr }
     }
 }
 
