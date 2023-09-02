@@ -54,7 +54,8 @@ impl Client {
     ) -> anyhow::Result<Resp> {
         // TODO: Error handling.
 
-        let url = reqwest::Url::parse_with_params(&self.xrpc_url(id), params.as_params())?;
+        let url = reqwest::Url::parse_with_params(&self.xrpc_url(id), params.as_params())
+            .context("failed to build URL")?;
 
         self.exec(self.http.get(url)).await
     }
@@ -87,7 +88,7 @@ impl Client {
             return Err(e).with_context(|| format!("got {body:?}"));
         }
 
-        let resp_body = resp.json::<T>().await?;
+        let resp_body = resp.json::<T>().await.context("failed to decode to json")?;
 
         Ok(resp_body)
     }
@@ -101,7 +102,7 @@ impl Client {
             self,
             &create_record::Args {
                 collection: R::NSID,
-                record: serde_json::to_value(record)?, // PERF: Avoid this
+                record: triphosphate_vocab::to_unknown(record)?, // PERF: Avoid this
                 repo,
                 // TODO: Make configurable
                 rkey: None,
@@ -126,9 +127,11 @@ impl Client {
                 rkey,
             },
         )
-        .await?;
+        .await
+        .context("failed to make XRPC call")?;
 
-        let value = serde_json::from_value(resp.value)?;
+        let value = triphosphate_vocab::from_unknown(resp.value)
+            .context("failed to convert responce to expected type")?;
 
         Ok(GetRecord {
             cid: resp.cid,

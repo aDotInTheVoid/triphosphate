@@ -2,7 +2,8 @@ use proc_macro2::{Ident, TokenStream};
 use quote::{format_ident, quote, ToTokens};
 
 use crate::lexicon::{
-    ArrayItem, Boolean, ObjectProperty, ParameterProperty, StringFormat, XrpcParameters,
+    ArrayItem, Boolean, Bytes, CidLink, ObjectProperty, ParameterProperty, StringFormat,
+    XrpcParameters,
 };
 
 use super::{doc_comment, ident, path_for_def, snake, Compiler, ItemPath};
@@ -122,6 +123,8 @@ pub(super) enum FieldType {
     Blob,
     Unknown,
     Bool,
+    CidLink,
+    Bytes,
 }
 
 impl FieldType {
@@ -131,17 +134,17 @@ impl FieldType {
             ObjectProperty::Boolean(b) => Self::bool(b),
             ObjectProperty::String(s) => Self::string(s),
             ObjectProperty::Integer(i) => Self::integer(i),
+            ObjectProperty::Bytes(b) => Self::bytes(b),
+            ObjectProperty::CidLink(c) => Self::cid_link(c),
+
             ObjectProperty::Array(a) => Self::array(a, doc_id),
-
-            // TODO: Implement.
-            ObjectProperty::Union(u) => (FieldType::Unit, &u.description),
-
-            ObjectProperty::Unknown(u) => (FieldType::Unknown, &u.description),
 
             // TODO: Blob details.
             ObjectProperty::Blob(b) => (FieldType::Blob, &b.description),
 
-            _ => todo!("FieldType::from_prop: {prop:?}"),
+            // TODO: Implement.
+            ObjectProperty::Union(u) => (FieldType::Unit, &u.description),
+            ObjectProperty::Unknown(u) => (FieldType::Unknown, &u.description),
         }
     }
 
@@ -160,10 +163,13 @@ impl FieldType {
             ArrayItem::Boolean(b) => Self::bool(b),
             ArrayItem::Integer(i) => Self::integer(i),
             ArrayItem::String(s) => Self::string(s),
+            ArrayItem::CidLink(c) => Self::cid_link(c),
+
             ArrayItem::Ref(r) => Self::ref_(r, doc_id),
 
             // TODO: This needs a major refractor so we can insert a enum into the compiller map here.
             ArrayItem::Union(_) => (Self::Unit, &None),
+
             _ => todo!("{prop:?}"),
         }
     }
@@ -199,6 +205,15 @@ impl FieldType {
     fn bool(b: &Boolean) -> (Self, &Option<String>) {
         // TODO: Use default, const.
         (Self::Bool, &b.description)
+    }
+
+    fn cid_link(c: &CidLink) -> (Self, &Option<String>) {
+        (Self::CidLink, &c.description)
+    }
+
+    fn bytes(b: &Bytes) -> (Self, &Option<String>) {
+        // TODO: min and max lenght
+        (Self::Bytes, &b.description)
     }
 
     fn array<'a>(a: &'a crate::lexicon::Array, doc_id: &str) -> (FieldType, &'a Option<String>) {
@@ -242,7 +257,9 @@ impl ToTokens for FieldType {
             }
 
             FieldType::Blob => quote!(_lex::_rt::Blob).to_tokens(tokens),
+            FieldType::Bytes => quote!(_lex::_rt::Bytes).to_tokens(tokens),
             FieldType::Unknown => quote!(_lex::_rt::Unknown).to_tokens(tokens),
+            FieldType::CidLink => quote!(_lex::_rt::CidLink).to_tokens(tokens),
 
             FieldType::StdString => quote!(::std::string::String).to_tokens(tokens),
             FieldType::Bool => quote!(bool).to_tokens(tokens),

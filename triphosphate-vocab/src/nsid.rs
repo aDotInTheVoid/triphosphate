@@ -6,7 +6,7 @@ use crate::parsing;
 
 use super::{ParseError, StringFormat};
 
-/// A [Namespaced Identifier](atproto_docs).
+/// A [Namespaced Identifier][atproto_docs].
 ///
 /// [atproto_docs]: https://atproto.com/specs/nsid
 #[derive(Debug, Clone, PartialEq)]

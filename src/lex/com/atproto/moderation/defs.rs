@@ -22,7 +22,13 @@ pub struct ReasonSexual;
 #[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
 pub struct ReasonSpam;
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ReasonType(::std::string::String);
 
 ///Direct violation of server rules, laws, terms of service

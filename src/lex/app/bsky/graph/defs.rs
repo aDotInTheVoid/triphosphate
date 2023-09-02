@@ -2,7 +2,13 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ListItemView {
     pub subject: _lex::app::bsky::actor::defs::ProfileView,
 }
@@ -10,10 +16,22 @@ impl _lex::_rt::LexItem for ListItemView {
     const URI: &'static str = "app.bsky.graph.defs#listItemView";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ListPurpose(::std::string::String);
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ListView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<::std::string::String>,
@@ -36,7 +54,13 @@ impl _lex::_rt::LexItem for ListView {
     const URI: &'static str = "app.bsky.graph.defs#listView";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ListViewBasic {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub avatar: Option<::std::string::String>,
@@ -54,7 +78,13 @@ impl _lex::_rt::LexItem for ListViewBasic {
     const URI: &'static str = "app.bsky.graph.defs#listViewBasic";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ListViewerState {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub muted: Option<bool>,

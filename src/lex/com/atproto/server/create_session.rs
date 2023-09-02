@@ -2,14 +2,26 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Args {
     ///Handle or other identifier supported by the server for the authenticating user.
     pub identifier: ::std::string::String,
     pub password: ::std::string::String,
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Responce {
     #[serde(rename = "accessJwt")]
     pub access_jwt: ::std::string::String,

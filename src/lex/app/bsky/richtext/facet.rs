@@ -3,7 +3,13 @@
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
 ///A text segment. Start is inclusive, end is exclusive. Indices are for utf8-encoded strings.
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ByteSlice {
     #[serde(rename = "byteEnd")]
     pub byte_end: u64,
@@ -15,7 +21,13 @@ impl _lex::_rt::LexItem for ByteSlice {
 }
 
 ///A facet feature for links.
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Link {
     pub uri: _lex::_rt::Uri,
 }
@@ -24,7 +36,13 @@ impl _lex::_rt::LexItem for Link {
 }
 
 ///A facet feature for actor mentions.
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Mention {
     pub did: _lex::_rt::Did,
 }

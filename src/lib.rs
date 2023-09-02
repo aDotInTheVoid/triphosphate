@@ -18,6 +18,9 @@ pub(crate) mod rt {
     pub use crate::{AsParams, LexItem, LexRecord};
     pub use triphosphate_vocab::*;
 
+    // Is this right??
+    pub type Bytes = Blob;
+
     // TODO: Error handling.
     pub use anyhow::Result;
 }

@@ -3,7 +3,13 @@ pub mod facet;
 
 #[allow(unused_imports)]
 use super::super::super::_lex;
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Facet {
     pub features: Vec<()>,
     pub index: _lex::app::bsky::richtext::facet::ByteSlice,

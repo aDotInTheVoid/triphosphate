@@ -2,7 +2,13 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct View {
     pub record: (),
 }
@@ -10,7 +16,13 @@ impl _lex::_rt::LexItem for View {
     const URI: &'static str = "app.bsky.embed.record#view";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ViewBlocked {
     pub author: _lex::app::bsky::feed::defs::BlockedAuthor,
     pub blocked: bool,
@@ -20,7 +32,13 @@ impl _lex::_rt::LexItem for ViewBlocked {
     const URI: &'static str = "app.bsky.embed.record#viewBlocked";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ViewNotFound {
     #[serde(rename = "notFound")]
     pub not_found: bool,
@@ -30,7 +48,13 @@ impl _lex::_rt::LexItem for ViewNotFound {
     const URI: &'static str = "app.bsky.embed.record#viewNotFound";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ViewRecord {
     pub author: _lex::app::bsky::actor::defs::ProfileViewBasic,
     pub cid: _lex::_rt::Cid,

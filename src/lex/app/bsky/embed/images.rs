@@ -2,7 +2,13 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Image {
     pub alt: ::std::string::String,
     pub image: _lex::_rt::Blob,
@@ -11,7 +17,13 @@ impl _lex::_rt::LexItem for Image {
     const URI: &'static str = "app.bsky.embed.images#image";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct View {
     pub images: Vec<_lex::app::bsky::embed::images::ViewImage>,
 }
@@ -19,7 +31,13 @@ impl _lex::_rt::LexItem for View {
     const URI: &'static str = "app.bsky.embed.images#view";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ViewImage {
     pub alt: ::std::string::String,
     pub fullsize: ::std::string::String,

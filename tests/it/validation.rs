@@ -4,6 +4,7 @@ use triphosphate::LexItem;
 
 mod bridge;
 mod post;
+mod subscribe_repo;
 
 const BUNDLE_JS: &str = include_str!("../../lexgen/dist/bundle.js");
 

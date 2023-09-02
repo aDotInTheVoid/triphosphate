@@ -3,10 +3,10 @@ use libipld::codec::{Decode, Encode};
 
 mod base64;
 
-#[derive(Debug, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct Bytes {
     #[serde(rename = "$bytes", with = "base64")]
-    bytes: Vec<u8>,
+    pub(crate) bytes: Vec<u8>,
 }
 
 impl Bytes {

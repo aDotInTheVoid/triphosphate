@@ -11,8 +11,6 @@ pub struct Uri;
 #[derive(Debug, Clone, Deserialize, Serialize, libipld::DagCbor)]
 pub struct Blob;
 
-pub type Unknown = serde_json::Value;
-
 // TODO: Should this be pub?
 // TODO: Require Serde+CBOR traits?
 pub trait StringFormat: Sized {
@@ -43,7 +41,7 @@ mod handle;
 mod language;
 mod nsid;
 mod parsing;
-// mod unknown;
+mod unknown;
 
 pub use self::cid::Cid;
 pub use at_identifer::AtIdentifier;
@@ -55,7 +53,7 @@ pub use did::Did;
 pub use handle::Handle;
 pub use language::Language;
 pub use nsid::Nsid;
-// pub use unknown::Unknown;
+pub use unknown::{from_unknown, to_unknown, Unknown};
 
 macro_rules! serde_impls {
     ($($name:path)*) => {$(
@@ -76,7 +74,7 @@ macro_rules! serde_impls {
                     type Value = $name;
 
                     fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-                        ::std::write!(f, "a string") // TODO: More specific
+                        ::std::write!(f, concat!("a string for ", stringify!($name)))
                     }
 
                     fn visit_str<E: serde::de::Error>(self, v: &str) -> Result<Self::Value, E> {

@@ -2,7 +2,13 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Args {
     ///The NSID of the record collection.
     pub collection: _lex::_rt::Nsid,
@@ -22,7 +28,13 @@ pub struct Args {
     pub validate: Option<bool>,
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Responce {
     pub cid: _lex::_rt::Cid,
     pub uri: _lex::_rt::AtUri,

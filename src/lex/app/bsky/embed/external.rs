@@ -2,7 +2,13 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct External {
     pub description: ::std::string::String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -14,7 +20,13 @@ impl _lex::_rt::LexItem for External {
     const URI: &'static str = "app.bsky.embed.external#external";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct View {
     pub external: _lex::app::bsky::embed::external::ViewExternal,
 }
@@ -22,7 +34,13 @@ impl _lex::_rt::LexItem for View {
     const URI: &'static str = "app.bsky.embed.external#view";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct ViewExternal {
     pub description: ::std::string::String,
     #[serde(default, skip_serializing_if = "Option::is_none")]

@@ -17,7 +17,13 @@ impl _lex::_rt::AsParams for Params {
     }
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Responce {
     pub root: _lex::_rt::Cid,
 }

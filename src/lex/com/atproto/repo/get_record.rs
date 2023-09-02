@@ -37,7 +37,13 @@ impl _lex::_rt::AsParams for Params {
     }
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Responce {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cid: Option<_lex::_rt::Cid>,

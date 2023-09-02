@@ -129,7 +129,7 @@ fn main() {
         // include_str!("../lexicons/com/atproto/sync/listRepos.json"),
         // include_str!("../lexicons/com/atproto/sync/notifyOfUpdate.json"),
         // include_str!("../lexicons/com/atproto/sync/requestCrawl.json"),
-        // include_str!("../lexicons/com/atproto/sync/subscribeRepos.json"),
+        include_str!("../lexicons/com/atproto/sync/subscribeRepos.json"),
     ] {
         let d: LexiconDoc = serde_json::from_str(s).unwrap();
 

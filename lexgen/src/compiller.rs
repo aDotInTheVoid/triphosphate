@@ -65,6 +65,11 @@ impl Compiler {
                 self.lower_record(path, r)
             }
 
+            UserType::Subscription(s) => {
+                assert_eq!(lex_name, "main");
+                quote!()
+            }
+
             _ => todo!("lower_item: {ty:?}"),
         };
 
@@ -118,7 +123,7 @@ impl Compiler {
 
         quote!(
             #doc
-            #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+            #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize, ::libipld::DagCbor)]
             pub struct #name {
                 #(#fields),*
             }
@@ -149,7 +154,7 @@ impl Compiler {
 
         quote!(
             #docs
-            #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+            #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize, ::libipld::DagCbor)]
             pub struct #name(::std::string::String);
         )
         .to_token_stream()

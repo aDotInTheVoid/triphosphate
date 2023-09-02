@@ -3,7 +3,13 @@
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
 ///Metadata tag on an atproto resource (eg, repo or record)
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Label {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     ///optionally, CID specifying the specific version of 'uri' resource this label applies to
@@ -25,7 +31,13 @@ impl _lex::_rt::LexItem for Label {
 }
 
 ///Metadata tag on an atproto record, published by the author within the record. Note -- schemas should use #selfLabels, not #selfLabel.
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct SelfLabel {
     ///the short string name of the value or type of this label
     pub val: ::std::string::String,
@@ -35,7 +47,13 @@ impl _lex::_rt::LexItem for SelfLabel {
 }
 
 ///Metadata tags on an atproto record, published by the author within the record.
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct SelfLabels {
     pub values: Vec<_lex::com::atproto::label::defs::SelfLabel>,
 }

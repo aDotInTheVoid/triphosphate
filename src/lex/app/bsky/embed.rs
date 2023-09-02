@@ -6,7 +6,13 @@ pub mod record_with_media;
 
 #[allow(unused_imports)]
 use super::super::super::_lex;
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct External {
     pub external: _lex::app::bsky::embed::external::External,
 }
@@ -14,7 +20,13 @@ impl _lex::_rt::LexItem for External {
     const URI: &'static str = "app.bsky.embed.external";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Images {
     pub images: Vec<_lex::app::bsky::embed::images::Image>,
 }
@@ -22,7 +34,13 @@ impl _lex::_rt::LexItem for Images {
     const URI: &'static str = "app.bsky.embed.images";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct Record {
     pub record: _lex::com::atproto::repo::StrongRef,
 }
@@ -30,7 +48,13 @@ impl _lex::_rt::LexItem for Record {
     const URI: &'static str = "app.bsky.embed.record";
 }
 
-#[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct RecordWithMedia {
     pub media: (),
     pub record: _lex::app::bsky::embed::Record,
