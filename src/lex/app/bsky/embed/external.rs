@@ -13,6 +13,7 @@ use super::super::super::super::_lex;
 pub struct External {
     pub description: ::std::string::String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub thumb: Option<_lex::_rt::Blob>,
     pub title: ::std::string::String,
     pub uri: _lex::_rt::Uri,
@@ -47,6 +48,7 @@ impl _lex::_rt::LexItem for View {
 pub struct ViewExternal {
     pub description: ::std::string::String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub thumb: Option<::std::string::String>,
     pub title: ::std::string::String,
     pub uri: _lex::_rt::Uri,

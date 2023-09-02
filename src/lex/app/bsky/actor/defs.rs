@@ -45,20 +45,26 @@ pub type Preferences = Vec<()>;
 )]
 pub struct ProfileView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub avatar: Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub description: Option<::std::string::String>,
     pub did: _lex::_rt::Did,
     #[serde(rename = "displayName")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub display_name: Option<::std::string::String>,
     pub handle: _lex::_rt::Handle,
     #[serde(rename = "indexedAt")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub indexed_at: Option<_lex::_rt::Datetime>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub labels: Option<Vec<_lex::com::atproto::label::defs::Label>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub viewer: Option<_lex::app::bsky::actor::defs::ViewerState>,
 }
 impl _lex::_rt::LexItem for ProfileView {
@@ -75,15 +81,19 @@ impl _lex::_rt::LexItem for ProfileView {
 )]
 pub struct ProfileViewBasic {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub avatar: Option<::std::string::String>,
     pub did: _lex::_rt::Did,
     #[serde(rename = "displayName")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub display_name: Option<::std::string::String>,
     pub handle: _lex::_rt::Handle,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub labels: Option<Vec<_lex::com::atproto::label::defs::Label>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub viewer: Option<_lex::app::bsky::actor::defs::ViewerState>,
 }
 impl _lex::_rt::LexItem for ProfileViewBasic {
@@ -100,31 +110,41 @@ impl _lex::_rt::LexItem for ProfileViewBasic {
 )]
 pub struct ProfileViewDetailed {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub avatar: Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub banner: Option<::std::string::String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub description: Option<::std::string::String>,
     pub did: _lex::_rt::Did,
     #[serde(rename = "displayName")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub display_name: Option<::std::string::String>,
     #[serde(rename = "followersCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub followers_count: Option<i64>,
     #[serde(rename = "followsCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub follows_count: Option<i64>,
     pub handle: _lex::_rt::Handle,
     #[serde(rename = "indexedAt")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub indexed_at: Option<_lex::_rt::Datetime>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub labels: Option<Vec<_lex::com::atproto::label::defs::Label>>,
     #[serde(rename = "postsCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub posts_count: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub viewer: Option<_lex::app::bsky::actor::defs::ViewerState>,
 }
 impl _lex::_rt::LexItem for ProfileViewDetailed {
@@ -158,18 +178,24 @@ impl _lex::_rt::LexItem for SavedFeedsPref {
 pub struct ViewerState {
     #[serde(rename = "blockedBy")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub blocked_by: Option<bool>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub blocking: Option<_lex::_rt::AtUri>,
     #[serde(rename = "followedBy")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub followed_by: Option<_lex::_rt::AtUri>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub following: Option<_lex::_rt::AtUri>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub muted: Option<bool>,
     #[serde(rename = "mutedByList")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub muted_by_list: Option<_lex::app::bsky::graph::defs::ListViewBasic>,
 }
 impl _lex::_rt::LexItem for ViewerState {

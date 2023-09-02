@@ -37,13 +37,16 @@ pub struct ListPurpose(::std::string::String);
 )]
 pub struct ListView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub avatar: Option<::std::string::String>,
     pub cid: _lex::_rt::Cid,
     pub creator: _lex::app::bsky::actor::defs::ProfileView,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub description: Option<::std::string::String>,
     #[serde(rename = "descriptionFacets")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub description_facets: Option<Vec<_lex::app::bsky::richtext::Facet>>,
     #[serde(rename = "indexedAt")]
     pub indexed_at: _lex::_rt::Datetime,
@@ -51,6 +54,7 @@ pub struct ListView {
     pub purpose: _lex::app::bsky::graph::defs::ListPurpose,
     pub uri: _lex::_rt::AtUri,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub viewer: Option<_lex::app::bsky::graph::defs::ListViewerState>,
 }
 impl _lex::_rt::LexItem for ListView {
@@ -67,15 +71,18 @@ impl _lex::_rt::LexItem for ListView {
 )]
 pub struct ListViewBasic {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub avatar: Option<::std::string::String>,
     pub cid: _lex::_rt::Cid,
     #[serde(rename = "indexedAt")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub indexed_at: Option<_lex::_rt::Datetime>,
     pub name: ::std::string::String,
     pub purpose: _lex::app::bsky::graph::defs::ListPurpose,
     pub uri: _lex::_rt::AtUri,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub viewer: Option<_lex::app::bsky::graph::defs::ListViewerState>,
 }
 impl _lex::_rt::LexItem for ListViewBasic {
@@ -92,6 +99,7 @@ impl _lex::_rt::LexItem for ListViewBasic {
 )]
 pub struct ListViewerState {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub muted: Option<bool>,
 }
 impl _lex::_rt::LexItem for ListViewerState {

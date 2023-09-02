@@ -13,11 +13,13 @@ use super::super::super::super::_lex;
 )]
 pub struct Label {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     ///optionally, CID specifying the specific version of 'uri' resource this label applies to
     pub cid: Option<_lex::_rt::Cid>,
     ///timestamp when this label was created
     pub cts: _lex::_rt::Datetime,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     ///if true, this is a negation label, overwriting a previous label
     pub neg: Option<bool>,
     ///DID of the actor who created this label

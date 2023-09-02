@@ -29,6 +29,7 @@ pub struct Responce {
     pub access_jwt: ::std::string::String,
     pub did: _lex::_rt::Did,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub email: Option<::std::string::String>,
     pub handle: _lex::_rt::Handle,
     #[serde(rename = "refreshJwt")]

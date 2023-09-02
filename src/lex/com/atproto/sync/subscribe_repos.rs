@@ -17,6 +17,7 @@ pub struct Commit {
     pub commit: _lex::_rt::CidLink,
     pub ops: Vec<_lex::com::atproto::sync::subscribe_repos::RepoOp>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub prev: Option<_lex::_rt::CidLink>,
     pub rebase: bool,
     pub repo: _lex::_rt::Did,
@@ -61,6 +62,7 @@ impl _lex::_rt::LexItem for Handle {
 )]
 pub struct Info {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub message: Option<::std::string::String>,
     pub name: ::std::string::String,
 }

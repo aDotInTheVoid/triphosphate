@@ -18,13 +18,16 @@ pub struct Args {
     ///The handle or DID of the repo.
     pub repo: _lex::_rt::AtIdentifier,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     ///The key of the record.
     pub rkey: Option<::std::string::String>,
     #[serde(rename = "swapCommit")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     ///Compare and swap with the previous commit by cid.
     pub swap_commit: Option<_lex::_rt::Cid>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     ///Validate the record?
     pub validate: Option<bool>,
 }

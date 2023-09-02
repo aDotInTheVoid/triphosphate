@@ -66,7 +66,10 @@ impl quote::ToTokens for Field {
             (
                 quote!(Option<#ty>),
                 if self.use_serde {
-                    quote!(#[serde(default, skip_serializing_if = "Option::is_none")])
+                    quote!(
+                        #[serde(default, skip_serializing_if = "Option::is_none")]
+                        #[ipld(default = None)]
+                    )
                 } else {
                     quote!()
                 },

@@ -13,6 +13,7 @@ use super::super::super::super::_lex;
 pub struct BlockedAuthor {
     pub did: _lex::_rt::Did,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub viewer: Option<_lex::app::bsky::actor::defs::ViewerState>,
 }
 impl _lex::_rt::LexItem for BlockedAuthor {
@@ -47,8 +48,10 @@ impl _lex::_rt::LexItem for BlockedPost {
 pub struct FeedViewPost {
     pub post: _lex::app::bsky::feed::defs::PostView,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub reason: Option<()>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub reply: Option<_lex::app::bsky::feed::defs::ReplyRef>,
 }
 impl _lex::_rt::LexItem for FeedViewPost {
@@ -65,13 +68,16 @@ impl _lex::_rt::LexItem for FeedViewPost {
 )]
 pub struct GeneratorView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub avatar: Option<::std::string::String>,
     pub cid: _lex::_rt::Cid,
     pub creator: _lex::app::bsky::actor::defs::ProfileView,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub description: Option<::std::string::String>,
     #[serde(rename = "descriptionFacets")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub description_facets: Option<Vec<_lex::app::bsky::richtext::Facet>>,
     pub did: _lex::_rt::Did,
     #[serde(rename = "displayName")]
@@ -80,9 +86,11 @@ pub struct GeneratorView {
     pub indexed_at: _lex::_rt::Datetime,
     #[serde(rename = "likeCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub like_count: Option<u64>,
     pub uri: _lex::_rt::AtUri,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub viewer: Option<_lex::app::bsky::feed::defs::GeneratorViewerState>,
 }
 impl _lex::_rt::LexItem for GeneratorView {
@@ -99,6 +107,7 @@ impl _lex::_rt::LexItem for GeneratorView {
 )]
 pub struct GeneratorViewerState {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub like: Option<_lex::_rt::AtUri>,
 }
 impl _lex::_rt::LexItem for GeneratorViewerState {
@@ -134,23 +143,29 @@ pub struct PostView {
     pub author: _lex::app::bsky::actor::defs::ProfileViewBasic,
     pub cid: _lex::_rt::Cid,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub embed: Option<()>,
     #[serde(rename = "indexedAt")]
     pub indexed_at: _lex::_rt::Datetime,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub labels: Option<Vec<_lex::com::atproto::label::defs::Label>>,
     #[serde(rename = "likeCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub like_count: Option<i64>,
     pub record: _lex::_rt::Any,
     #[serde(rename = "replyCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub reply_count: Option<i64>,
     #[serde(rename = "repostCount")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub repost_count: Option<i64>,
     pub uri: _lex::_rt::AtUri,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub viewer: Option<_lex::app::bsky::feed::defs::ViewerState>,
 }
 impl _lex::_rt::LexItem for PostView {
@@ -201,6 +216,7 @@ impl _lex::_rt::LexItem for ReplyRef {
 pub struct SkeletonFeedPost {
     pub post: _lex::_rt::AtUri,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub reason: Option<()>,
 }
 impl _lex::_rt::LexItem for SkeletonFeedPost {
@@ -232,9 +248,11 @@ impl _lex::_rt::LexItem for SkeletonReasonRepost {
 )]
 pub struct ThreadViewPost {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub parent: Option<()>,
     pub post: _lex::app::bsky::feed::defs::PostView,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub replies: Option<Vec<()>>,
 }
 impl _lex::_rt::LexItem for ThreadViewPost {
@@ -251,8 +269,10 @@ impl _lex::_rt::LexItem for ThreadViewPost {
 )]
 pub struct ViewerState {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub like: Option<_lex::_rt::AtUri>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub repost: Option<_lex::_rt::AtUri>,
 }
 impl _lex::_rt::LexItem for ViewerState {

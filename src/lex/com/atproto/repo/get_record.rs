@@ -47,6 +47,7 @@ impl _lex::_rt::AsParams for Params {
 )]
 pub struct Responce {
     #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub cid: Option<_lex::_rt::Cid>,
     pub uri: _lex::_rt::AtUri,
     pub value: _lex::_rt::Any,
