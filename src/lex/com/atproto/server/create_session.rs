@@ -5,6 +5,7 @@ use super::super::super::super::_lex;
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -18,6 +19,7 @@ pub struct Args {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,

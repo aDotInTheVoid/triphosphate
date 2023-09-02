@@ -123,7 +123,14 @@ impl Compiler {
 
         quote!(
             #doc
-            #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize, ::libipld::DagCbor)]
+            #[derive(
+                ::std::fmt::Debug,
+                ::std::clone::Clone,
+                ::std::cmp::PartialEq,
+                ::serde::Deserialize,
+                ::serde::Serialize,
+                ::libipld::DagCbor
+            )]
             pub struct #name {
                 #(#fields),*
             }
@@ -154,7 +161,14 @@ impl Compiler {
 
         quote!(
             #docs
-            #[derive(::std::fmt::Debug, ::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize, ::libipld::DagCbor)]
+            #[derive(
+                ::std::fmt::Debug,
+                ::std::clone::Clone,
+                ::std::cmp::PartialEq,
+                ::serde::Deserialize,
+                ::serde::Serialize,
+                ::libipld::DagCbor
+            )]
             pub struct #name(::std::string::String);
         )
         .to_token_stream()

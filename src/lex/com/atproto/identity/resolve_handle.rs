@@ -20,6 +20,7 @@ impl _lex::_rt::AsParams for Params {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,

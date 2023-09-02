@@ -5,6 +5,7 @@ use super::super::super::super::_lex;
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -35,6 +36,7 @@ impl _lex::_rt::LexItem for Commit {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -52,6 +54,7 @@ impl _lex::_rt::LexItem for Handle {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -68,6 +71,7 @@ impl _lex::_rt::LexItem for Info {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -87,6 +91,7 @@ impl _lex::_rt::LexItem for Migrate {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -103,6 +108,7 @@ impl _lex::_rt::LexItem for RepoOp {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,

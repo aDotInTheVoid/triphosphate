@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use serde::{de::DeserializeOwned, Serialize};
 
 /// An unholy fussion of [serde_json::Value] and [libipld::Ipld]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Unknown {
     Null,
     Bool(bool),
@@ -20,6 +20,8 @@ mod de;
 mod decode;
 mod encode;
 mod ser;
+#[cfg(test)]
+mod tests;
 
 pub fn to_unknown<T>(value: T) -> Result<Unknown, serde_json::Error>
 where

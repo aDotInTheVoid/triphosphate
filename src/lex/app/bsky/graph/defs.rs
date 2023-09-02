@@ -5,6 +5,7 @@ use super::super::super::super::_lex;
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -19,6 +20,7 @@ impl _lex::_rt::LexItem for ListItemView {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -28,6 +30,7 @@ pub struct ListPurpose(::std::string::String);
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -57,6 +60,7 @@ impl _lex::_rt::LexItem for ListView {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -81,6 +85,7 @@ impl _lex::_rt::LexItem for ListViewBasic {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,

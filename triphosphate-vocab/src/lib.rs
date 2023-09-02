@@ -5,10 +5,10 @@ use serde::{Deserialize, Serialize};
 #[cfg(test)]
 mod tests;
 
-#[derive(Debug, Clone, Deserialize, Serialize, libipld::DagCbor)]
+#[derive(Debug, Clone, Deserialize, Serialize, libipld::DagCbor, PartialEq)]
 pub struct Uri;
 
-#[derive(Debug, Clone, Deserialize, Serialize, libipld::DagCbor)]
+#[derive(Debug, Clone, Deserialize, Serialize, libipld::DagCbor, PartialEq)]
 pub struct Blob;
 
 // TODO: Should this be pub?

@@ -5,6 +5,7 @@ use super::super::super::super::_lex;
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -19,6 +20,7 @@ impl _lex::_rt::LexItem for AdultContentPref {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -36,6 +38,7 @@ pub type Preferences = Vec<()>;
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -65,6 +68,7 @@ impl _lex::_rt::LexItem for ProfileView {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -89,6 +93,7 @@ impl _lex::_rt::LexItem for ProfileViewBasic {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -129,6 +134,7 @@ impl _lex::_rt::LexItem for ProfileViewDetailed {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,
@@ -144,6 +150,7 @@ impl _lex::_rt::LexItem for SavedFeedsPref {
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
+    ::std::cmp::PartialEq,
     ::serde::Deserialize,
     ::serde::Serialize,
     ::libipld::DagCbor,

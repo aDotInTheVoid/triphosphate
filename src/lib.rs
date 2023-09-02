@@ -1,7 +1,9 @@
+use libipld::cbor::DagCbor;
+
 pub mod client;
 pub mod lex;
 
-pub trait LexItem: serde::Serialize + serde::de::DeserializeOwned {
+pub trait LexItem: serde::Serialize + serde::de::DeserializeOwned + DagCbor {
     const URI: &'static str;
 }
 
@@ -17,9 +19,6 @@ pub(crate) mod rt {
     pub use crate::client::Client;
     pub use crate::{AsParams, LexItem, LexRecord};
     pub use triphosphate_vocab::*;
-
-    // Is this right??
-    pub type Bytes = Blob;
 
     // TODO: Error handling.
     pub use anyhow::Result;

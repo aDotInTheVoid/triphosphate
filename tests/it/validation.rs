@@ -1,3 +1,6 @@
+use std::{fmt::Debug, io::Cursor};
+
+use libipld::cbor::{DagCbor, DagCborCodec};
 use rquickjs::{Context, Exception, FromJs, Function, Object, Runtime};
 use serde::Serialize;
 use triphosphate::LexItem;
@@ -65,10 +68,21 @@ fn validate<T: Serialize>(uri: &str, item: &T) -> ValidationResult {
 }
 
 #[track_caller]
-fn check<T: LexItem>(item: &T) {
+fn check<T: LexItem + PartialEq + Debug>(item: &T) {
     let result = validate(T::URI, item);
     match result {
         ValidationResult::Valid => {}
         ValidationResult::Invalid(err) => panic!("validation failed: {}", err),
     }
+
+    check_cbor_roundtrip(item);
+}
+
+fn check_cbor_roundtrip<T: DagCbor + PartialEq + Debug>(item: &T) {
+    let mut bytes: Vec<_> = Vec::new();
+    item.encode(DagCborCodec, &mut bytes).unwrap();
+
+    let new_item = T::decode(DagCborCodec, &mut Cursor::new(bytes)).unwrap();
+
+    assert_eq!(item, &new_item);
 }

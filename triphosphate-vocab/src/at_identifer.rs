@@ -5,7 +5,7 @@ use crate::parsing;
 
 use super::{Did, Handle, StringFormat};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum AtIdentifier {
     Handle(Handle),
     Did(Did),
