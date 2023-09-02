@@ -1,9 +1,11 @@
 import { ValidationError, ValidationResult } from '@atproto/lexicon';
-import { lexicons } from './lexicon/lexicons';
-import { jsonToIpld } from '@atproto/common-web';
-
+import { jsonToIpld, ipldToJson } from '@atproto/common-web';
 import * as cbor from '@ipld/dag-cbor'
 import * as ui8 from 'uint8arrays'
+import isEqual from 'lodash.isequal';
+
+import { lexicons } from './lexicon/lexicons';
+
 
 function array_equal(x: Uint8Array, y: Uint8Array): boolean {
     if (x.length != y.length) {
@@ -36,6 +38,17 @@ export default function triphosphate_bridge_validate(type: string, input: any, i
         }
     }
 
+    const decode_in_js = ipldToJson(cbor.decode(input_bytes));
+
+    if (!isEqual(decode_in_js, input)) {
+        const input_json = JSON.stringify(input);
+        const roundtrip_json = JSON.stringify(decode_in_js);
+
+        return {
+            success: false,
+            error: new ValidationError(`JSON not equal: ${input_json} != ${roundtrip_json}`)
+        }
+    }
 
     return lexicons.validate(type, input_fixed);
 }
