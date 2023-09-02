@@ -4,7 +4,7 @@ use crate::parsing;
 
 use super::{ParseError, StringFormat};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct AtUri {
     s: String,
 }
@@ -30,28 +30,22 @@ mod tests {
 
     #[test]
     fn valid() {
-        for s in [
+        crate::tests::valids::<AtUri>(&[
             "at://did:plc:44ybard66vv44zksje25o7dz/app.bsky.feed.post/3jwdwj2ctlk26",
             "at://bnewbold.bsky.team/app.bsky.feed.post/3jwdwj2ctlk26",
             "at://foo.com/com.example.foo/123",
-        ] {
-            let at_uri = AtUri::from_str(s).unwrap();
-
-            assert_eq!(at_uri.as_str(), s);
-        }
+        ]);
     }
 
     #[test]
     fn invalid() {
-        for s in [
+        crate::tests::invalids::<AtUri>(&[
             "at://foo.com/example/123",
             "at://computer",
             "at://example.com:3000",
             "at://foo.com/",
             "at://user:pass@foo.com",
-        ] {
-            AtUri::from_str(s).unwrap_err();
-        }
+        ]);
     }
 
     // TODO: Import https://github.com/bluesky-social/atproto/blob/main/packages/uri/tests/uri.test.ts

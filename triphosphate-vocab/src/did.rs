@@ -30,7 +30,7 @@ mod tests {
 
     #[test]
     fn valid() {
-        for s in [
+        crate::tests::valids::<Did>(&[
             "did:method:val",
             "did:method:VAL",
             "did:method:val123",
@@ -59,16 +59,12 @@ mod tests {
             "did:web:localhost%3A1234",
             "did:key:zQ3shZc2QzApp2oymGvQbzP8eKheVshBHbU4ZYjeXqwSKEn6N",
             "did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a",
-        ] {
-            let d = Did::from_str(s).unwrap();
-
-            assert_eq!(d.as_str(), s);
-        }
+        ]);
     }
 
     #[test]
     fn invalid() {
-        for s in [
+        crate::tests::invalids::<Did>(&[
             "did",
             "didmethodval",
             "method:did:val",
@@ -196,8 +192,6 @@ vvvvvvvvvvvvvvvvvvvvvv",
             "did:method:val?two",
             "did:method:val#two",
             "did:method:val%",
-        ] {
-            Did::from_str(s).unwrap_err();
-        }
+        ]);
     }
 }

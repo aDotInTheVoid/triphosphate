@@ -2,7 +2,7 @@ use oxilangtag::LanguageTag;
 
 use crate::StringFormat;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Language {
     // TODO: Cow?
     tag: LanguageTag<String>,
@@ -29,7 +29,7 @@ mod tests {
     // https://github.com/bluesky-social/atproto/blob/8de64178c07b07ffcdaf25ae5afa78831168d02f/packages/common-web/tests/strings.test.ts#L30
     #[test]
     fn valid() {
-        for s in [
+        crate::tests::valids::<Language>(&[
             "de",
             "de-CH",
             "de-DE-1901",
@@ -41,11 +41,7 @@ mod tests {
             "sr-Cyrl",
             "hy-Latn-IT-arevela",
             "i-klingon",
-        ] {
-            let l = Language::from_str(s).unwrap();
-
-            assert_eq!(l.as_str(), s);
-        }
+        ]);
     }
 
     #[test]

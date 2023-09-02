@@ -9,7 +9,7 @@ use super::{ParseError, StringFormat};
 /// A [Namespaced Identifier](atproto_docs).
 ///
 /// [atproto_docs]: https://atproto.com/specs/nsid
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Nsid {
     repr: Cow<'static, str>,
     last_dot: usize,
@@ -83,7 +83,7 @@ mod tests {
 
     #[test]
     fn valid() {
-        for i in [
+        crate::tests::valids::<Nsid>(&[
             "com.example.foo",
             "com.example.fooBar",
             "net.users.bob.ping",
@@ -107,15 +107,7 @@ mod tests {
             "com.ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo.foo",
             "com.example.ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo",
             "com.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.middle.foo",
-        ] {
-            match Nsid::from_str(i) {
-                Ok(nsid) => {
-                    assert_eq!(nsid.as_str(), i);
-                    assert_eq!(format!("{}.{}", nsid.authority(), nsid.name()), i);
-                }
-                Err(e) => panic!("Failed to parse {i:?}: {e:?}"),
-            }
-        }
+        ])
     }
 
     #[test]

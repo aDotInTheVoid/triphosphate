@@ -1,6 +1,6 @@
 use std::fmt;
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub struct Cid {
     repr: String,
     cid: cid::Cid,
@@ -36,32 +36,20 @@ impl fmt::Debug for Cid {
 
 #[cfg(test)]
 mod tests {
-    use crate::StringFormat;
-
     use super::*;
 
     // Takend from https://github.com/bluesky-social/atproto/blob/main/packages/lexicon/tests/general.test.ts
 
     #[test]
     fn valid() {
-        for s in [
+        crate::tests::valids::<Cid>(&[
             "bafyreidfayvfuwqa7qlnopdjiqrxzs6blmoeu4rujcjtnci5beludirz2a",
             "bafyreifi5bqq7og5qxedc5xllono4vlpnfvl4pcbskymzcm5kjmbhgobmu",
-        ] {
-            match Cid::from_str(s) {
-                Ok(cid) => assert_eq!(cid.as_str(), s),
-                Err(e) => panic!("failed to parse {s:?}: {e}"),
-            }
-        }
+        ]);
     }
 
     #[test]
     fn invalid() {
-        for s in ["https://github.com/", "abapsdofiuwrpoiasdfuaspdfoiu"] {
-            match Cid::from_str(s) {
-                Err(_) => {}
-                Ok(cid) => panic!("cid {s:?} unexpectedly parsed to {cid:?}"),
-            }
-        }
+        crate::tests::invalids::<Cid>(&["https://github.com/", "abapsdofiuwrpoiasdfuaspdfoiu"]);
     }
 }

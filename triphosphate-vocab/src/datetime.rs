@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)] // TODO: What't the right PartialEq here?
+#[derive(Debug, Clone, PartialEq)] // TODO: What't the right PartialEq here?
 pub struct Datetime {
     time: chrono::DateTime<chrono::FixedOffset>,
     /// Only used for serialization, to ensure round tripping.
@@ -49,45 +49,37 @@ mod tests {
 
     #[test]
     fn valid_roundtrip() {
-        for i in [
+        crate::tests::valids::<Datetime>(&[
             // preferred
-            r#""1985-04-12T23:20:50.123Z""#,
-            r#""1985-04-12T23:20:50.123456Z""#,
-            r#""1985-04-12T23:20:50.120Z""#,
-            r#""1985-04-12T23:20:50.120000Z""#,
+            "1985-04-12T23:20:50.123Z",
+            "1985-04-12T23:20:50.123456Z",
+            "1985-04-12T23:20:50.120Z",
+            "1985-04-12T23:20:50.120000Z",
             // supported
-            r#""1985-04-12T23:20:50.1235678912345Z""#,
-            r#""1985-04-12T23:20:50.100Z""#,
-            r#""1985-04-12T23:20:50Z""#,
-            r#""1985-04-12T23:20:50.0Z""#,
-            r#""1985-04-12T23:20:50.123+00:00""#,
-            r#""1985-04-12T23:20:50.123-07:00""#,
+            "1985-04-12T23:20:50.1235678912345Z",
+            "1985-04-12T23:20:50.100Z",
+            "1985-04-12T23:20:50Z",
+            "1985-04-12T23:20:50.0Z",
+            "1985-04-12T23:20:50.123+00:00",
+            "1985-04-12T23:20:50.123-07:00",
             // Ensure timezone is preserved.
-            r#""2023-08-05T00:10:41.220151955+01:00""#,
-            r#""2023-08-05T00:10:41.220151955+06:00""#,
-        ] {
-            let d: Datetime = serde_json::from_str(i).unwrap();
-            let d2 = serde_json::to_string(&d).unwrap();
-            assert_eq!(i, d2);
-        }
+            "2023-08-05T00:10:41.220151955+01:00",
+            "2023-08-05T00:10:41.220151955+06:00",
+        ]);
     }
 
     #[test]
     fn test_invalid() {
-        for i in [
-            // r#""1985-04-12 23:20:50.123Z""#,
-            // r#""1985-04-12t23:20:50.123Z""#, // TODO: chrono's parser is case sensitive
-            // r#""1985-04-12T23:20:50.123z""#,
-            r#""1985-04-12""#,
-            r#""1985-04-12T23:20Z""#,
-            r#""1985-04-12T23:20:5Z""#,
-            r#""1985-04-12T23:20:50.123""#,
-            r#""+001985-04-12T23:20:50.123Z""#,
-            r#""23:20:50.123Z""#,
-        ] {
-            if let Ok(d) = serde_json::from_str::<Datetime>(i) {
-                panic!("expected error for {i}, got {d:?}");
-            }
-        }
+        crate::tests::invalids::<Datetime>(&[
+            // "1985-04-12 23:20:50.123Z",
+            // "1985-04-12t23:20:50.123Z", // TODO: chrono's parser is case sensitive
+            // "1985-04-12T23:20:50.123z",
+            "1985-04-12",
+            "1985-04-12T23:20Z",
+            "1985-04-12T23:20:5Z",
+            "1985-04-12T23:20:50.123",
+            "+001985-04-12T23:20:50.123Z",
+            "23:20:50.123Z",
+        ]);
     }
 }

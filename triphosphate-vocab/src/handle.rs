@@ -4,7 +4,7 @@ use crate::parsing;
 
 use super::{ParseError, StringFormat};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 // TODO: Reduce visibiltiy
 pub struct Handle(pub(super) String);
 
@@ -31,7 +31,7 @@ mod tests {
 
     #[test]
     fn valid() {
-        for s in [
+        crate::tests::valids::<Handle>(&[
             "A.ISI.EDU",
             "XX.LCS.MIT.EDU",
             "SRI-NIC.ARPA",
@@ -103,15 +103,12 @@ mod tests {
             "stackoverflow.co.uk",
             "xn--masekowski-d0b.pl",
             "xn--fiqa61au8b7zsevnm8ak20mc4a87e.xn--fiqs8s",
-        ] {
-            let h = Handle::from_str(s).unwrap();
-            assert_eq!(h.as_str(), s);
-        }
+        ]);
     }
 
     #[test]
     fn invalid() {
-        for s in [
+        crate::tests::invalids::<Handle>(&[
             "did:thing.test",
             "did:thing",
             "john-.test",
@@ -160,8 +157,6 @@ mod tests {
             "-notvalid.at-all",
             "-thing.com",
             "www.masełkowski.pl.com",
-        ] {
-            Handle::from_str(s).unwrap_err();
-        }
+        ]);
     }
 }
