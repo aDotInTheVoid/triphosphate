@@ -1,3 +1,4 @@
+use std::collections::BTreeMap;
 use std::fmt::Debug;
 use std::io::Cursor;
 
@@ -5,7 +6,7 @@ use libipld::cbor::DagCborCodec;
 use libipld::codec::{Decode, Encode};
 use serde::{de::DeserializeOwned, Serialize};
 
-use crate::StringFormat;
+use crate::{Any, StringFormat};
 
 #[track_caller]
 pub fn valids<
@@ -56,4 +57,23 @@ pub fn invalids<T: Debug + StringFormat + DeserializeOwned + Decode<DagCborCodec
         let json = serde_json::to_string(s).unwrap();
         serde_json::from_str::<T>(&json).unwrap_err();
     }
+}
+
+#[test]
+fn any_macro() {
+    assert_eq!(any!(10), Any::Integer(10));
+    assert_eq!(any!(true), Any::Bool(true));
+
+    assert_eq!(
+        any!({
+            "x": 1,
+            "y": "2"
+        }),
+        Any::Map({
+            let mut m = BTreeMap::new();
+            m.insert("x".into(), Any::Integer(1));
+            m.insert("y".into(), Any::String("2".into()));
+            m
+        })
+    )
 }

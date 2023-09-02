@@ -17,9 +17,12 @@ enum ValidationResult {
     Invalid(String),
 }
 
-fn validate<T: Serialize>(uri: &str, item: &T) -> ValidationResult {
+fn validate<T: Serialize + DagCbor>(uri: &str, item: &T) -> ValidationResult {
     let runtime = Runtime::new().unwrap();
     let context = Context::full(&runtime).unwrap();
+
+    let mut bytes = Vec::new();
+    item.encode(DagCborCodec, &mut bytes).unwrap();
 
     context.with(|ctx| {
         ctx.eval::<(), _>(BUNDLE_JS).unwrap();
@@ -34,8 +37,9 @@ fn validate<T: Serialize>(uri: &str, item: &T) -> ValidationResult {
             .unwrap();
 
         let object = ctx.json_parse(serde_json::to_vec(item).unwrap()).unwrap();
+        let byte_array = ctx.json_parse(serde_json::to_vec(&bytes).unwrap()).unwrap();
 
-        let result = match validator.call::<_, Object>((uri, object)) {
+        let result = match validator.call::<_, Object>((uri, object, byte_array)) {
             Ok(r) => r,
             Err(e) => {
                 if let rquickjs::Error::Exception = e {
@@ -77,7 +81,7 @@ fn check<T: LexItem + PartialEq + Debug>(item: &T) {
 
     check_cbor_roundtrip(item);
     check_json_str_roundtrip(item);
-    check_unknown_roundtrip(item);
+    check_any_roundtrip(item);
 }
 
 fn check_cbor_roundtrip<T: DagCbor + PartialEq + Debug>(item: &T) {
@@ -96,7 +100,7 @@ fn check_json_str_roundtrip<T: Serialize + DeserializeOwned + PartialEq + Debug>
     assert_eq!(item, &new_item);
 }
 
-fn check_unknown_roundtrip<T: Serialize + DeserializeOwned + PartialEq + Debug>(item: &T) {
+fn check_any_roundtrip<T: Serialize + DeserializeOwned + PartialEq + Debug>(item: &T) {
     let unknown = triphosphate_vocab::to_any(item).unwrap();
     let new_item: T = triphosphate_vocab::from_any(unknown).unwrap();
 

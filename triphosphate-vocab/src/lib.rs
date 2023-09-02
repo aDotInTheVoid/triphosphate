@@ -2,9 +2,6 @@ use std::fmt;
 
 use serde::{Deserialize, Serialize};
 
-#[cfg(test)]
-mod tests;
-
 #[derive(Debug, Clone, Deserialize, Serialize, libipld::DagCbor, PartialEq)]
 pub struct Uri;
 
@@ -120,3 +117,19 @@ serde_impls! {
     Language
     Nsid
 }
+
+#[doc(hidden)]
+pub use any::ipld_to_any as _ipld_to_any;
+#[doc(hidden)]
+pub use libipld::ipld as _ipld;
+
+#[macro_export]
+/// Construct an [`Any`]
+macro_rules! any {
+    ($t:tt) => {
+        $crate::_ipld_to_any($crate::_ipld!($t))
+    };
+}
+
+#[cfg(test)]
+mod tests;

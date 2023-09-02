@@ -3,7 +3,8 @@
   "dependencies": {
     "@atproto/common-web": "^0.2.0",
     "@atproto/lexicon": "^0.2.0",
-    "text-encoding-utf-8": "^1.0.2"
+    "text-encoding-utf-8": "^1.0.2",
+    "uint8arrays": "^4.0.6"
   },
   "devDependencies": {
     "@atproto/lex-cli": "^0.2.0",

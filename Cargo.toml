@@ -23,6 +23,8 @@ triphosphate-vocab = { version = "0.0.0", path = "triphosphate-vocab" }
 
 [dev-dependencies]
 anyhow = "1.0.75"
+base64 = "0.21.3"
 chrono = "0.4.26"
 cid = "0.10.1"
+debug3 = { git = "https://github.com/aDotInTheVoid/debug3", rev = "ea4f30a", features = ["libipld-core"] }
 rquickjs = "0.3.1"
