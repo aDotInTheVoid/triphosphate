@@ -2,7 +2,7 @@ use std::{fmt::Debug, io::Cursor};
 
 use libipld::cbor::{DagCbor, DagCborCodec};
 use rquickjs::{Context, Exception, FromJs, Function, Object, Runtime};
-use serde::Serialize;
+use serde::{de::DeserializeOwned, Serialize};
 use triphosphate::LexItem;
 
 mod bridge;
@@ -76,6 +76,8 @@ fn check<T: LexItem + PartialEq + Debug>(item: &T) {
     }
 
     check_cbor_roundtrip(item);
+    check_json_str_roundtrip(item);
+    check_unknown_roundtrip(item);
 }
 
 fn check_cbor_roundtrip<T: DagCbor + PartialEq + Debug>(item: &T) {
@@ -83,6 +85,20 @@ fn check_cbor_roundtrip<T: DagCbor + PartialEq + Debug>(item: &T) {
     item.encode(DagCborCodec, &mut bytes).unwrap();
 
     let new_item = T::decode(DagCborCodec, &mut Cursor::new(bytes)).unwrap();
+
+    assert_eq!(item, &new_item);
+}
+
+fn check_json_str_roundtrip<T: Serialize + DeserializeOwned + PartialEq + Debug>(item: &T) {
+    let json_s = serde_json::to_string(item).unwrap();
+    let new_item: T = serde_json::from_str(&json_s).unwrap();
+
+    assert_eq!(item, &new_item);
+}
+
+fn check_unknown_roundtrip<T: Serialize + DeserializeOwned + PartialEq + Debug>(item: &T) {
+    let unknown = triphosphate_vocab::to_unknown(item).unwrap();
+    let new_item: T = triphosphate_vocab::from_unknown(unknown).unwrap();
 
     assert_eq!(item, &new_item);
 }
