@@ -33,6 +33,25 @@ impl _lex::_rt::LexItem for ContentLabelPref {
     const URI: &'static str = "app.bsky.actor.defs#contentLabelPref";
 }
 
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::std::cmp::PartialEq,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
+pub struct PersonalDetailsPref {
+    #[serde(rename = "birthDate")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    ///The birth date of the owner of the account.
+    pub birth_date: Option<_lex::_rt::Datetime>,
+}
+impl _lex::_rt::LexItem for PersonalDetailsPref {
+    const URI: &'static str = "app.bsky.actor.defs#personalDetailsPref";
+}
+
 pub type Preferences = Vec<()>;
 
 #[derive(

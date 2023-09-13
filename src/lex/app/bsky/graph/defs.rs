@@ -100,6 +100,9 @@ impl _lex::_rt::LexItem for ListViewBasic {
 pub struct ListViewerState {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ipld(default = None)]
+    pub blocked: Option<_lex::_rt::AtUri>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
     pub muted: Option<bool>,
 }
 impl _lex::_rt::LexItem for ListViewerState {

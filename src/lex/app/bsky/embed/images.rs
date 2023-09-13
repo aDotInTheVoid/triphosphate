@@ -2,6 +2,23 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
+///width:height represents an aspect ratio. It may be approximate, and may not correspond to absolute dimensions in any given unit.
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::std::cmp::PartialEq,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
+pub struct AspectRatio {
+    pub height: ::std::num::NonZeroU64,
+    pub width: ::std::num::NonZeroU64,
+}
+impl _lex::_rt::LexItem for AspectRatio {
+    const URI: &'static str = "app.bsky.embed.images#aspectRatio";
+}
+
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
@@ -12,6 +29,10 @@ use super::super::super::super::_lex;
 )]
 pub struct Image {
     pub alt: ::std::string::String,
+    #[serde(rename = "aspectRatio")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    pub aspect_ratio: Option<_lex::app::bsky::embed::images::AspectRatio>,
     pub image: _lex::_rt::Blob,
 }
 impl _lex::_rt::LexItem for Image {
@@ -43,6 +64,10 @@ impl _lex::_rt::LexItem for View {
 )]
 pub struct ViewImage {
     pub alt: ::std::string::String,
+    #[serde(rename = "aspectRatio")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    pub aspect_ratio: Option<_lex::app::bsky::embed::images::AspectRatio>,
     pub fullsize: ::std::string::String,
     pub thumb: ::std::string::String,
 }
