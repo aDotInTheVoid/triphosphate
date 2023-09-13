@@ -123,6 +123,7 @@ pub(super) enum FieldType {
     // U32,
     I64,
     U64,
+    NonZeroU64,
     Blob,
     Any,
     Bool,
@@ -195,11 +196,15 @@ impl FieldType {
                 None => FieldType::U64,
                 _ => todo!(),
             },
+            Some(1) => match i.maximum {
+                None => FieldType::NonZeroU64,
+                _ => todo!(),
+            },
             None => match i.maximum {
                 None => FieldType::I64,
                 _ => todo!(),
             },
-            _ => todo!(),
+            _ => todo!("{i:?}"),
         };
 
         (this, &i.description)
@@ -271,6 +276,7 @@ impl ToTokens for FieldType {
             FieldType::Bool => quote!(bool).to_tokens(tokens),
             FieldType::U64 => quote!(u64).to_tokens(tokens),
             FieldType::I64 => quote!(i64).to_tokens(tokens),
+            FieldType::NonZeroU64 => quote!(::std::num::NonZeroU64).to_tokens(tokens),
 
             FieldType::Vec(inner) => {
                 let inner = inner.to_token_stream();
