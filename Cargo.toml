@@ -17,6 +17,10 @@ git = "https://github.com/aDotInTheVoid/libipld.git"
 # branch = "nonzero"
 rev = "f146fac848dadc6d2326aca750d2476a4274bafb"
 
+[patch.crates-io.libipld-core]
+git = "https://github.com/aDotInTheVoid/libipld.git"
+rev = "f146fac848dadc6d2326aca750d2476a4274bafb"
+
 
 [dependencies]
 anyhow = "1.0.75"
