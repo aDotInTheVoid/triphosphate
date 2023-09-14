@@ -12,6 +12,12 @@ members = [
     "triphosphate-vocab",
 ]
 
+[patch.crates-io.libipld]
+git = "https://github.com/aDotInTheVoid/libipld.git"
+# branch = "nonzero"
+rev = "f146fac848dadc6d2326aca750d2476a4274bafb"
+
+
 [dependencies]
 anyhow = "1.0.75"
 libipld = { version = "0.16.0", default-features = false, features = ["dag-cbor", "derive"] }
