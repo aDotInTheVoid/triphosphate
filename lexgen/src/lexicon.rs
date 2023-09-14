@@ -417,6 +417,7 @@ mod tests {
         "app/bsky/feed/getPostThread.json",
         "app/bsky/feed/getPosts.json",
         "app/bsky/feed/getRepostedBy.json",
+        "app/bsky/feed/getSuggestedFeeds.json",
         "app/bsky/feed/getTimeline.json",
         "app/bsky/feed/like.json",
         "app/bsky/feed/post.json",
@@ -428,10 +429,13 @@ mod tests {
         "app/bsky/graph/getFollowers.json",
         "app/bsky/graph/getFollows.json",
         "app/bsky/graph/getList.json",
+        "app/bsky/graph/getListBlocks.json",
         "app/bsky/graph/getListMutes.json",
         "app/bsky/graph/getLists.json",
         "app/bsky/graph/getMutes.json",
+        "app/bsky/graph/getSuggestedFollowsByActor.json",
         "app/bsky/graph/list.json",
+        "app/bsky/graph/listblock.json",
         "app/bsky/graph/listitem.json",
         "app/bsky/graph/muteActor.json",
         "app/bsky/graph/muteActorList.json",
@@ -509,7 +513,6 @@ mod tests {
         "com/atproto/sync/notifyOfUpdate.json",
         "com/atproto/sync/requestCrawl.json",
         "com/atproto/sync/subscribeRepos.json",
-        "com/atproto/temp/upgradeRepoVersion.json",
     ];
 
     #[test]
