@@ -163,6 +163,9 @@ pub struct PostView {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ipld(default = None)]
     pub repost_count: Option<i64>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    pub threadgate: Option<_lex::app::bsky::feed::defs::ThreadgateView>,
     pub uri: _lex::_rt::AtUri,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ipld(default = None)]
@@ -254,9 +257,38 @@ pub struct ThreadViewPost {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ipld(default = None)]
     pub replies: Option<Vec<()>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    pub viewer: Option<_lex::app::bsky::feed::defs::ViewerThreadState>,
 }
 impl _lex::_rt::LexItem for ThreadViewPost {
     const URI: &'static str = "app.bsky.feed.defs#threadViewPost";
+}
+
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::std::cmp::PartialEq,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
+pub struct ThreadgateView {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    pub cid: Option<_lex::_rt::Cid>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    pub lists: Option<Vec<_lex::app::bsky::graph::defs::ListViewBasic>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    pub record: Option<_lex::_rt::Any>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    pub uri: Option<_lex::_rt::AtUri>,
+}
+impl _lex::_rt::LexItem for ThreadgateView {
+    const URI: &'static str = "app.bsky.feed.defs#threadgateView";
 }
 
 #[derive(
@@ -277,4 +309,22 @@ pub struct ViewerState {
 }
 impl _lex::_rt::LexItem for ViewerState {
     const URI: &'static str = "app.bsky.feed.defs#viewerState";
+}
+
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::std::cmp::PartialEq,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
+pub struct ViewerThreadState {
+    #[serde(rename = "canReply")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    pub can_reply: Option<bool>,
+}
+impl _lex::_rt::LexItem for ViewerThreadState {
+    const URI: &'static str = "app.bsky.feed.defs#viewerThreadState";
 }

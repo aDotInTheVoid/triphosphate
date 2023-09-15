@@ -2,6 +2,10 @@
 
 #[allow(unused_imports)]
 use super::super::super::super::_lex;
+///A list of actors used for curation purposes such as list feeds or interaction gating
+#[derive(::std::clone::Clone, ::serde::Deserialize, ::serde::Serialize)]
+pub struct Curatelist;
+
 #[derive(
     ::std::fmt::Debug,
     ::std::clone::Clone,
