@@ -41,6 +41,47 @@ impl _lex::_rt::LexItem for ContentLabelPref {
     ::serde::Serialize,
     ::libipld::DagCbor,
 )]
+pub struct FeedViewPref {
+    ///The URI of the feed, or an identifier which describes the feed.
+    pub feed: ::std::string::String,
+    #[serde(rename = "hideQuotePosts")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    ///Hide quote posts in the feed.
+    pub hide_quote_posts: Option<bool>,
+    #[serde(rename = "hideReplies")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    ///Hide replies in the feed.
+    pub hide_replies: Option<bool>,
+    #[serde(rename = "hideRepliesByLikeCount")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    ///Hide replies in the feed if they do not have this number of likes.
+    pub hide_replies_by_like_count: Option<i64>,
+    #[serde(rename = "hideRepliesByUnfollowed")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    ///Hide replies in the feed if they are not by followed users.
+    pub hide_replies_by_unfollowed: Option<bool>,
+    #[serde(rename = "hideReposts")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    ///Hide reposts in the feed.
+    pub hide_reposts: Option<bool>,
+}
+impl _lex::_rt::LexItem for FeedViewPref {
+    const URI: &'static str = "app.bsky.actor.defs#feedViewPref";
+}
+
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::std::cmp::PartialEq,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
 pub struct PersonalDetailsPref {
     #[serde(rename = "birthDate")]
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -184,6 +225,29 @@ pub struct SavedFeedsPref {
 }
 impl _lex::_rt::LexItem for SavedFeedsPref {
     const URI: &'static str = "app.bsky.actor.defs#savedFeedsPref";
+}
+
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::std::cmp::PartialEq,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
+pub struct ThreadViewPref {
+    #[serde(rename = "prioritizeFollowedUsers")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    ///Show followed users at the top of all replies.
+    pub prioritize_followed_users: Option<bool>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    ///Sorting mode.
+    pub sort: Option<::std::string::String>,
+}
+impl _lex::_rt::LexItem for ThreadViewPref {
+    const URI: &'static str = "app.bsky.actor.defs#threadViewPref";
 }
 
 #[derive(

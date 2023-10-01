@@ -30,6 +30,7 @@ async fn main() -> anyhow::Result<()> {
         entities: None,
         facets: None,
         labels: None,
+        tags: None,
 
         langs: Some(vec![]),
 

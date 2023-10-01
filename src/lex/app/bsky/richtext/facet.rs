@@ -52,3 +52,19 @@ pub struct Mention {
 impl _lex::_rt::LexItem for Mention {
     const URI: &'static str = "app.bsky.richtext.facet#mention";
 }
+
+///A hashtag.
+#[derive(
+    ::std::fmt::Debug,
+    ::std::clone::Clone,
+    ::std::cmp::PartialEq,
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    ::libipld::DagCbor,
+)]
+pub struct Tag {
+    pub tag: ::std::string::String,
+}
+impl _lex::_rt::LexItem for Tag {
+    const URI: &'static str = "app.bsky.richtext.facet#tag";
+}

@@ -20,6 +20,7 @@ fn basic() {
         langs: None,
         reply: None,
         labels: None,
+        tags: None,
     })
 }
 

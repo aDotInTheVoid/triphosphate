@@ -39,6 +39,7 @@ async fn put_record() -> Result<()> {
         labels: None,
         langs: None,
         reply: None,
+        tags: None,
 
         text: "It's a bad idea to call prod in tests, but lol lmao.".to_owned(),
     };

@@ -18,6 +18,7 @@ async fn main() -> anyhow::Result<()> {
         langs: None,
         reply: None,
         labels: None,
+        tags: None,
         text: "test, langs=None".to_string(),
     };
 

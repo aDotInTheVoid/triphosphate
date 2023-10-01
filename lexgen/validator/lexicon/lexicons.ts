@@ -174,6 +174,8 @@ export const schemaDict = {
             'lex:app.bsky.actor.defs#contentLabelPref',
             'lex:app.bsky.actor.defs#savedFeedsPref',
             'lex:app.bsky.actor.defs#personalDetailsPref',
+            'lex:app.bsky.actor.defs#feedViewPref',
+            'lex:app.bsky.actor.defs#threadViewPref',
           ],
         },
       },
@@ -227,6 +229,53 @@ export const schemaDict = {
             type: 'string',
             format: 'datetime',
             description: 'The birth date of the owner of the account.',
+          },
+        },
+      },
+      feedViewPref: {
+        type: 'object',
+        required: ['feed'],
+        properties: {
+          feed: {
+            type: 'string',
+            description:
+              'The URI of the feed, or an identifier which describes the feed.',
+          },
+          hideReplies: {
+            type: 'boolean',
+            description: 'Hide replies in the feed.',
+          },
+          hideRepliesByUnfollowed: {
+            type: 'boolean',
+            description:
+              'Hide replies in the feed if they are not by followed users.',
+          },
+          hideRepliesByLikeCount: {
+            type: 'integer',
+            description:
+              'Hide replies in the feed if they do not have this number of likes.',
+          },
+          hideReposts: {
+            type: 'boolean',
+            description: 'Hide reposts in the feed.',
+          },
+          hideQuotePosts: {
+            type: 'boolean',
+            description: 'Hide quote posts in the feed.',
+          },
+        },
+      },
+      threadViewPref: {
+        type: 'object',
+        properties: {
+          sort: {
+            type: 'string',
+            description: 'Sorting mode.',
+            knownValues: ['oldest', 'newest', 'most-likes', 'random'],
+          },
+          prioritizeFollowedUsers: {
+            type: 'boolean',
+            description: 'Show followed users at the top of all replies.',
           },
         },
       },
@@ -436,18 +485,24 @@ export const schemaDict = {
     defs: {
       main: {
         type: 'query',
-        description: 'Find actors matching search criteria.',
+        description: 'Find actors (profiles) matching search criteria.',
         parameters: {
           type: 'params',
           properties: {
             term: {
               type: 'string',
+              description: "DEPRECATED: use 'q' instead",
+            },
+            q: {
+              type: 'string',
+              description:
+                'search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended',
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 25,
             },
             cursor: {
               type: 'string',
@@ -488,12 +543,17 @@ export const schemaDict = {
           properties: {
             term: {
               type: 'string',
+              description: "DEPRECATED: use 'q' instead",
+            },
+            q: {
+              type: 'string',
+              description: 'search query prefix; not a full query string',
             },
             limit: {
               type: 'integer',
               minimum: 1,
               maximum: 100,
-              default: 50,
+              default: 10,
             },
           },
         },
@@ -2060,6 +2120,16 @@ export const schemaDict = {
               type: 'union',
               refs: ['lex:com.atproto.label.defs#selfLabels'],
             },
+            tags: {
+              type: 'array',
+              maxLength: 8,
+              items: {
+                type: 'string',
+                maxLength: 640,
+                maxGraphemes: 64,
+              },
+              description: 'Additional non-inline tags describing this post.',
+            },
             createdAt: {
               type: 'string',
               format: 'datetime',
@@ -2141,6 +2211,67 @@ export const schemaDict = {
       },
     },
   },
+  AppBskyFeedSearchPosts: {
+    lexicon: 1,
+    id: 'app.bsky.feed.searchPosts',
+    defs: {
+      main: {
+        type: 'query',
+        description: 'Find posts matching search criteria',
+        parameters: {
+          type: 'params',
+          required: ['q'],
+          properties: {
+            q: {
+              type: 'string',
+              description:
+                'search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended',
+            },
+            limit: {
+              type: 'integer',
+              minimum: 1,
+              maximum: 100,
+              default: 25,
+            },
+            cursor: {
+              type: 'string',
+              description:
+                'optional pagination mechanism; may not necessarily allow scrolling through entire result set',
+            },
+          },
+        },
+        output: {
+          encoding: 'application/json',
+          schema: {
+            type: 'object',
+            required: ['posts'],
+            properties: {
+              cursor: {
+                type: 'string',
+              },
+              hitsTotal: {
+                type: 'integer',
+                description:
+                  'count of search hits. optional, may be rounded/truncated, and may not be possible to paginate through all hits',
+              },
+              posts: {
+                type: 'array',
+                items: {
+                  type: 'ref',
+                  ref: 'lex:app.bsky.feed.defs#postView',
+                },
+              },
+            },
+          },
+        },
+        errors: [
+          {
+            name: 'BadQueryString',
+          },
+        ],
+      },
+    },
+  },
   AppBskyFeedThreadgate: {
     lexicon: 1,
     id: 'app.bsky.feed.threadgate',
@@ -2180,10 +2311,12 @@ export const schemaDict = {
       mentionRule: {
         type: 'object',
         description: 'Allow replies from actors mentioned in your post.',
+        properties: {},
       },
       followingRule: {
         type: 'object',
         description: 'Allow replies from actors you follow.',
+        properties: {},
       },
       listRule: {
         type: 'object',
@@ -3197,6 +3330,7 @@ export const schemaDict = {
               refs: [
                 'lex:app.bsky.richtext.facet#mention',
                 'lex:app.bsky.richtext.facet#link',
+                'lex:app.bsky.richtext.facet#tag',
               ],
             },
           },
@@ -3224,6 +3358,18 @@ export const schemaDict = {
           },
         },
       },
+      tag: {
+        type: 'object',
+        description: 'A hashtag.',
+        required: ['tag'],
+        properties: {
+          tag: {
+            type: 'string',
+            maxLength: 640,
+            maxGraphemes: 64,
+          },
+        },
+      },
       byteSlice: {
         type: 'object',
         description:
@@ -3242,27 +3388,27 @@ export const schemaDict = {
       },
     },
   },
-  AppBskyUnspeccedApplyLabels: {
+  AppBskyUnspeccedDefs: {
     lexicon: 1,
-    id: 'app.bsky.unspecced.applyLabels',
+    id: 'app.bsky.unspecced.defs',
     defs: {
-      main: {
-        type: 'procedure',
-        description: 'Allow a labeler to apply labels directly.',
-        input: {
-          encoding: 'application/json',
-          schema: {
-            type: 'object',
-            required: ['labels'],
-            properties: {
-              labels: {
-                type: 'array',
-                items: {
-                  type: 'ref',
-                  ref: 'lex:com.atproto.label.defs#label',
-                },
-              },
-            },
+      skeletonSearchPost: {
+        type: 'object',
+        required: ['uri'],
+        properties: {
+          uri: {
+            type: 'string',
+            format: 'at-uri',
+          },
+        },
+      },
+      skeletonSearchActor: {
+        type: 'object',
+        required: ['did'],
+        properties: {
+          did: {
+            type: 'string',
+            format: 'did',
           },
         },
       },
@@ -3274,7 +3420,8 @@ export const schemaDict = {
     defs: {
       main: {
         type: 'query',
-        description: 'An unspecced view of globally popular items',
+        description:
+          'DEPRECATED: will be removed soon, please find a feed generator alternative',
         parameters: {
           type: 'params',
           properties: {
@@ -3404,6 +3551,132 @@ export const schemaDict = {
         errors: [
           {
             name: 'UnknownFeed',
+          },
+        ],
+      },
+    },
+  },
+  AppBskyUnspeccedSearchActorsSkeleton: {
+    lexicon: 1,
+    id: 'app.bsky.unspecced.searchActorsSkeleton',
+    defs: {
+      main: {
+        type: 'query',
+        description: 'Backend Actors (profile) search, returning only skeleton',
+        parameters: {
+          type: 'params',
+          required: ['q'],
+          properties: {
+            q: {
+              type: 'string',
+              description:
+                'search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended. For typeahead search, only simple term match is supported, not full syntax',
+            },
+            typeahead: {
+              type: 'boolean',
+              description: "if true, acts as fast/simple 'typeahead' query",
+            },
+            limit: {
+              type: 'integer',
+              minimum: 1,
+              maximum: 100,
+              default: 25,
+            },
+            cursor: {
+              type: 'string',
+              description:
+                'optional pagination mechanism; may not necessarily allow scrolling through entire result set',
+            },
+          },
+        },
+        output: {
+          encoding: 'application/json',
+          schema: {
+            type: 'object',
+            required: ['actors'],
+            properties: {
+              cursor: {
+                type: 'string',
+              },
+              hitsTotal: {
+                type: 'integer',
+                description:
+                  'count of search hits. optional, may be rounded/truncated, and may not be possible to paginate through all hits',
+              },
+              actors: {
+                type: 'array',
+                items: {
+                  type: 'ref',
+                  ref: 'lex:app.bsky.unspecced.defs#skeletonSearchActor',
+                },
+              },
+            },
+          },
+        },
+        errors: [
+          {
+            name: 'BadQueryString',
+          },
+        ],
+      },
+    },
+  },
+  AppBskyUnspeccedSearchPostsSkeleton: {
+    lexicon: 1,
+    id: 'app.bsky.unspecced.searchPostsSkeleton',
+    defs: {
+      main: {
+        type: 'query',
+        description: 'Backend Posts search, returning only skeleton',
+        parameters: {
+          type: 'params',
+          required: ['q'],
+          properties: {
+            q: {
+              type: 'string',
+              description:
+                'search query string; syntax, phrase, boolean, and faceting is unspecified, but Lucene query syntax is recommended',
+            },
+            limit: {
+              type: 'integer',
+              minimum: 1,
+              maximum: 100,
+              default: 25,
+            },
+            cursor: {
+              type: 'string',
+              description:
+                'optional pagination mechanism; may not necessarily allow scrolling through entire result set',
+            },
+          },
+        },
+        output: {
+          encoding: 'application/json',
+          schema: {
+            type: 'object',
+            required: ['posts'],
+            properties: {
+              cursor: {
+                type: 'string',
+              },
+              hitsTotal: {
+                type: 'integer',
+                description:
+                  'count of search hits. optional, may be rounded/truncated, and may not be possible to paginate through all hits',
+              },
+              posts: {
+                type: 'array',
+                items: {
+                  type: 'ref',
+                  ref: 'lex:app.bsky.unspecced.defs#skeletonSearchPost',
+                },
+              },
+            },
+          },
+        },
+        errors: [
+          {
+            name: 'BadQueryString',
           },
         ],
       },
@@ -4517,6 +4790,10 @@ export const schemaDict = {
           type: 'params',
           properties: {
             term: {
+              type: 'string',
+              description: "DEPRECATED: use 'q' instead",
+            },
+            q: {
               type: 'string',
             },
             invitedBy: {
@@ -5643,6 +5920,46 @@ export const schemaDict = {
       },
     },
   },
+  ComAtprotoServerConfirmEmail: {
+    lexicon: 1,
+    id: 'com.atproto.server.confirmEmail',
+    defs: {
+      main: {
+        type: 'procedure',
+        description:
+          'Confirm an email using a token from com.atproto.server.requestEmailConfirmation.',
+        input: {
+          encoding: 'application/json',
+          schema: {
+            type: 'object',
+            required: ['email', 'token'],
+            properties: {
+              email: {
+                type: 'string',
+              },
+              token: {
+                type: 'string',
+              },
+            },
+          },
+        },
+        errors: [
+          {
+            name: 'AccountNotFound',
+          },
+          {
+            name: 'ExpiredToken',
+          },
+          {
+            name: 'InvalidToken',
+          },
+          {
+            name: 'InvalidEmail',
+          },
+        ],
+      },
+    },
+  },
   ComAtprotoServerCreateAccount: {
     lexicon: 1,
     id: 'com.atproto.server.createAccount',
@@ -5927,6 +6244,9 @@ export const schemaDict = {
               email: {
                 type: 'string',
               },
+              emailConfirmed: {
+                type: 'boolean',
+              },
             },
           },
         },
@@ -6157,6 +6477,9 @@ export const schemaDict = {
               email: {
                 type: 'string',
               },
+              emailConfirmed: {
+                type: 'boolean',
+              },
             },
           },
         },
@@ -6255,6 +6578,39 @@ export const schemaDict = {
       },
     },
   },
+  ComAtprotoServerRequestEmailConfirmation: {
+    lexicon: 1,
+    id: 'com.atproto.server.requestEmailConfirmation',
+    defs: {
+      main: {
+        type: 'procedure',
+        description:
+          'Request an email with a code to confirm ownership of email',
+      },
+    },
+  },
+  ComAtprotoServerRequestEmailUpdate: {
+    lexicon: 1,
+    id: 'com.atproto.server.requestEmailUpdate',
+    defs: {
+      main: {
+        type: 'procedure',
+        description: 'Request a token in order to update email.',
+        output: {
+          encoding: 'application/json',
+          schema: {
+            type: 'object',
+            required: ['tokenRequired'],
+            properties: {
+              tokenRequired: {
+                type: 'boolean',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
   ComAtprotoServerRequestPasswordReset: {
     lexicon: 1,
     id: 'com.atproto.server.requestPasswordReset',
@@ -6329,6 +6685,44 @@ export const schemaDict = {
             },
           },
         },
+      },
+    },
+  },
+  ComAtprotoServerUpdateEmail: {
+    lexicon: 1,
+    id: 'com.atproto.server.updateEmail',
+    defs: {
+      main: {
+        type: 'procedure',
+        description: "Update an account's email.",
+        input: {
+          encoding: 'application/json',
+          schema: {
+            type: 'object',
+            required: ['email'],
+            properties: {
+              email: {
+                type: 'string',
+              },
+              token: {
+                type: 'string',
+                description:
+                  "Requires a token from com.atproto.sever.requestEmailUpdate if the account's email has been confirmed.",
+              },
+            },
+          },
+        },
+        errors: [
+          {
+            name: 'ExpiredToken',
+          },
+          {
+            name: 'InvalidToken',
+          },
+          {
+            name: 'TokenRequired',
+          },
+        ],
       },
     },
   },
@@ -6959,6 +7353,7 @@ export const ids = {
   AppBskyFeedLike: 'app.bsky.feed.like',
   AppBskyFeedPost: 'app.bsky.feed.post',
   AppBskyFeedRepost: 'app.bsky.feed.repost',
+  AppBskyFeedSearchPosts: 'app.bsky.feed.searchPosts',
   AppBskyFeedThreadgate: 'app.bsky.feed.threadgate',
   AppBskyGraphBlock: 'app.bsky.graph.block',
   AppBskyGraphDefs: 'app.bsky.graph.defs',
@@ -6986,11 +7381,14 @@ export const ids = {
   AppBskyNotificationRegisterPush: 'app.bsky.notification.registerPush',
   AppBskyNotificationUpdateSeen: 'app.bsky.notification.updateSeen',
   AppBskyRichtextFacet: 'app.bsky.richtext.facet',
-  AppBskyUnspeccedApplyLabels: 'app.bsky.unspecced.applyLabels',
+  AppBskyUnspeccedDefs: 'app.bsky.unspecced.defs',
   AppBskyUnspeccedGetPopular: 'app.bsky.unspecced.getPopular',
   AppBskyUnspeccedGetPopularFeedGenerators:
     'app.bsky.unspecced.getPopularFeedGenerators',
   AppBskyUnspeccedGetTimelineSkeleton: 'app.bsky.unspecced.getTimelineSkeleton',
+  AppBskyUnspeccedSearchActorsSkeleton:
+    'app.bsky.unspecced.searchActorsSkeleton',
+  AppBskyUnspeccedSearchPostsSkeleton: 'app.bsky.unspecced.searchPostsSkeleton',
   ComAtprotoAdminDefs: 'com.atproto.admin.defs',
   ComAtprotoAdminDisableAccountInvites:
     'com.atproto.admin.disableAccountInvites',
@@ -7028,6 +7426,7 @@ export const ids = {
   ComAtprotoRepoPutRecord: 'com.atproto.repo.putRecord',
   ComAtprotoRepoStrongRef: 'com.atproto.repo.strongRef',
   ComAtprotoRepoUploadBlob: 'com.atproto.repo.uploadBlob',
+  ComAtprotoServerConfirmEmail: 'com.atproto.server.confirmEmail',
   ComAtprotoServerCreateAccount: 'com.atproto.server.createAccount',
   ComAtprotoServerCreateAppPassword: 'com.atproto.server.createAppPassword',
   ComAtprotoServerCreateInviteCode: 'com.atproto.server.createInviteCode',
@@ -7044,10 +7443,14 @@ export const ids = {
   ComAtprotoServerRefreshSession: 'com.atproto.server.refreshSession',
   ComAtprotoServerRequestAccountDelete:
     'com.atproto.server.requestAccountDelete',
+  ComAtprotoServerRequestEmailConfirmation:
+    'com.atproto.server.requestEmailConfirmation',
+  ComAtprotoServerRequestEmailUpdate: 'com.atproto.server.requestEmailUpdate',
   ComAtprotoServerRequestPasswordReset:
     'com.atproto.server.requestPasswordReset',
   ComAtprotoServerResetPassword: 'com.atproto.server.resetPassword',
   ComAtprotoServerRevokeAppPassword: 'com.atproto.server.revokeAppPassword',
+  ComAtprotoServerUpdateEmail: 'com.atproto.server.updateEmail',
   ComAtprotoSyncGetBlob: 'com.atproto.sync.getBlob',
   ComAtprotoSyncGetBlocks: 'com.atproto.sync.getBlocks',
   ComAtprotoSyncGetCheckout: 'com.atproto.sync.getCheckout',

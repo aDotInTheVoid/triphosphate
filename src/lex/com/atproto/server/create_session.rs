@@ -31,6 +31,10 @@ pub struct Responce {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ipld(default = None)]
     pub email: Option<::std::string::String>,
+    #[serde(rename = "emailConfirmed")]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    pub email_confirmed: Option<bool>,
     pub handle: _lex::_rt::Handle,
     #[serde(rename = "refreshJwt")]
     pub refresh_jwt: ::std::string::String,

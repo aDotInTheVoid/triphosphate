@@ -34,6 +34,10 @@ pub struct Post {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[ipld(default = None)]
     pub reply: Option<_lex::app::bsky::feed::post::ReplyRef>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    #[ipld(default = None)]
+    ///Additional non-inline tags describing this post.
+    pub tags: Option<Vec<::std::string::String>>,
     pub text: ::std::string::String,
 }
 impl _lex::_rt::LexRecord for Post {
